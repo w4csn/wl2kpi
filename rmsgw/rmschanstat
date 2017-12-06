@@ -1,0 +1,228 @@
+#!/bin/bash
+#			r m s c h a n s t a t
+# $Revision: 71 $
+# $Author: eckertb $
+# $Id: rmschanstat 71 2009-08-06 23:16:49Z eckertb $
+#
+# RMS Gateway
+#
+# Copyright (c) 2004-2008 Hans-J. Barthen - DL5DI
+# Copyright (c) 2008 Brian R. Eckert - W3SG
+#
+# Questions or problems regarding this program can be emailed
+# to linux-rmsgw@w3sg.org
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# Description:
+#	Basic channel status checker script for Linux RMS Gateway ACI
+#	operations.
+#
+# To support the ACI, the program exits with a status of zero (0) if the
+# channel is available and non-zero exit status if the channel is not
+# deemed available. The ACI uses this fact to determine what to do for
+# the status update to the Winlink 2000 system.
+#
+# The channel definitions found in /etc/rmsgw/channels.xml have 
+# a <statuschecker> element which provides the name of the 
+# script/program and arguments for the ACI to call to query the 
+# availablity of the channel.
+#
+#set -x
+
+export LC_ALL=C
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+
+declare -a CHANNEL
+declare -a INTERFACE
+declare -a IP
+
+# grab arguments and assign to meaningful variables
+TYPE="$1"
+NAME="$2"
+CALL="$3"
+
+AXPORTS=/etc/ax25/axports
+NRPORTS=/etc/ax25/nrports
+
+
+if [ $# -ne 3 ]; then
+	echo "Usage: $0 <type> <name> <call>"
+	echo ""
+	echo "    where:"
+	echo "    type: the type of channel (e.g., ax25, kiss, scc, tnt, fpac, netrom)"
+	echo "    name: the name of the channel"
+	echo "    call: the callsign associated with the channel"
+	echo ""
+	exit 2
+fi
+
+
+
+function check_ax25_file
+{
+if [ ! -r "${AXPORTS}" ]; then
+	echo "This system does not have AX25 capabilities, ${AXPORTS} unavailable"
+	exit 2
+fi
+}
+
+
+
+function check_port
+{
+
+if [ "${TYPE}" = "kiss" ] || [ "${TYPE}" = "ax25" ]; then
+	# NOTE: there is a space and a tab between the []'s below
+	CHANNEL=($(egrep "^${NAME}[ 	]+" ${AXPORTS}))
+
+	if [ -z "${CHANNEL}" ]; then
+		echo "channel ${NAME} unavailable"
+		exit 1
+	fi
+        
+	set -o noglob
+	IP=($(ps ax | grep attach | egrep "${NAME}[ 	]+" | egrep -o '[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}' ))
+        
+	set +o noglob
+    
+	if [ -z "${IP}" ]; then
+		echo "port ${NAME} unavailable"
+		exit 1
+	fi
+
+elif [ "${TYPE}" = "tnt" ]; then
+
+	if 	[ -e /var/run/tnt-pt.pid ]; then
+		echo "${TYPE} channel available"
+		exit 0
+	else
+		echo "channel ${TYPE} unavailable"
+		exit 1
+	fi
+
+elif [ "${TYPE}" = "fpac" ]; then
+
+	PID=`pidof -x /usr/local/sbin/fpad`
+	if [ -n "${PID}" ]; then
+		echo "${TYPE} channel available"
+		exit 0
+	else
+		echo "channel ${TYPE} unavailable"
+		exit 1
+	fi
+
+elif [ "${TYPE}" = "scc" ]; then 
+
+	SCC_CALL_SSID=`cat ${AXPORTS} | grep ${NAME} | awk '{print $2}'`
+	# NOTE: there is a space and a tab between the []'s below
+	SCC_IFC_INTF=`/sbin/ifconfig | grep "${SCC_CALL_SSID}[ 	]" | awk '{print $1}'`
+	if [ -z "${SCC_IFC_INTF}" ]; then
+		echo "-channel ${TYPE} unavailable"
+		exit 1
+	fi 
+	SCC_IFC_STAT=`/sbin/ifconfig ${SCC_IFC_INTF} | grep -i up`
+	    
+	if [ -z "${SCC_IFC_STAT}" ]; then
+		echo "port ${NAME} unavailable"
+		exit 1
+	fi
+	    
+	set -o noglob
+	IP=($(/sbin/ifconfig ${SCC_IFC_INTF} | egrep -o '[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}' ))
+	set +o noglob
+
+elif [ "${TYPE}" = "netrom" ]; then 
+
+	NR_CALL_SSID=`cat ${NRPORTS} | grep ${NAME} | awk '{print $2}'`
+	# NOTE: there is a space and a tab between the []'s below
+	NR_IFC_INTF=`/sbin/ifconfig | grep "${NR_CALL_SSID}[ 	]" | awk '{print $1}'`
+	if [ -z "${NR_IFC_INTF}" ]; then
+		echo "-channel ${TYPE} unavailable"
+		exit 1
+	fi 
+	NR_IFC_STAT=`/sbin/ifconfig ${NR_IFC_INTF} | grep -i up`
+	    
+	if [ -z "${NR_IFC_STAT}" ]; then
+		echo "port ${NAME} unavailable"
+		exit 1
+	fi
+	    
+	set -o noglob
+	IP=($(/sbin/ifconfig ${NR_IFC_INTF} | egrep -o '[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}' ))
+	set +o noglob
+
+
+else 
+	echo "no useful channel type provided, exiting"
+	exit 2
+fi
+}
+
+
+
+
+function check_ax25_kiss_int
+{
+# get the interface using this IP address
+# (pos 7 when using ax25, pos 8 for 6pack)
+
+if [ "${TYPE}" = "kiss" ] || [ "${TYPE}" = "ax25" ]; then
+	INTERFACE=($(ifconfig | egrep -B 2 ${IP}))
+	if [ -z "${INTERFACE}" ]; then
+		echo "interface with ${IP} unavailable"
+		exit 1
+	fi
+fi
+}
+
+
+
+function check_ax25_netstat
+{
+# is the call listening on that specific interface?
+
+set -o noglob
+
+if [ "${TYPE}" = "kiss" ] || [ "${TYPE}" = "ax25" ]; then
+	#STATUS=($(netstat --protocol=ax25 -l | grep "${INTERFACE[0]}" | grep -i "${CALL}" | grep -i "LISTENING"))
+	STATUS=($(netstat --protocol=ax25 -l | grep -i "${CALL}" | grep -i "LISTENING"))
+elif [ "${TYPE}" = "scc" ]; then
+	STATUS=($(netstat --protocol=ax25 -l | grep "${SCC_IFC_INTF}" | grep -i "${CALL}" | grep -i "LISTENING"))
+elif [ "${TYPE}" = "netrom" ]; then
+	STATUS=($(netstat --protocol=netrom -l | grep "${NR_IFC_INTF}" | grep -i "${CALL}" | grep -i "LISTENING"))
+fi
+
+set +o noglob
+
+if [ -z "${STATUS}" ]; then
+	echo "status for interface ${INTERFACE[0]} unavailable, no listener"
+	exit 1
+else
+	echo "channel ${NAME} with callsign ${CALL} on interface ${INTERFACE[0]} up"
+	exit 0
+fi
+}
+
+
+
+# MAIN
+check_ax25_file
+check_port
+check_ax25_kiss_int
+check_ax25_netstat
+
+exit 1
+
