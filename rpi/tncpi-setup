@@ -1,0 +1,31 @@
+Installing TNC-Pi on rasbian
+
+In order to use the TNC-Pi with the Raspberry Pi serial port, you will need to make a couple of changes to the Pi configuration. 
+
+Edit the /boot/cmdline.txt file in the boot directory and make the following change:
+Remove the following (if it exists): console=serial0,115200
+Note: cmdline.txt is a single line of text.
+
+Edit the /boot/config.txt file to make the following change:
+Add the following: enable_uart=1
+
+In addition, if you are using a Raspberry Pi 3 do the following (in red):
+Add the following lines to /boot/config.txt:
+dtoverlay=pi3-miniuart-bt
+core_freq=250
+
+Add the following lines to /lib/systemd/system/hciattach.service (Note: this file does not exist in the most recent version of the OS. 
+In that case, create the file in the directory listed above and copy these lines into it).:
+[Unit]
+ConditionPathIsDirectory=/proc/device-tree/soc/gpio@7e200000/bt_pins
+Before=bluetooth.service
+After=dev-ttyS0.device
+[Service]
+Type=forking
+ExecStart=/usr/bin/hciattach /dev/ttyS0 bcm43xx 921600 noflow -
+[Install]
+WantedBy=multi-user.target
+
+You may have read some material on line saying the serial port will show up as ttyS0 on the Pi 3. 
+The above changes will cause it to show up as port ttyAMA0, just as it did with the Pi 2 and earlier. 
+Bluetooth will be moved to ttyS0.
