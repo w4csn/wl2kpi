@@ -1,0 +1,5 @@
+#Add these 2 lines before maildrop entry
+#Note the 2 spaces at the beginning of the second line are significant.
+
+wl2k      unix  -       n       n       -       1      pipe
+  flags=XFRhu user=pi argv=/usr/local/libexec/mail.wl2k -m
