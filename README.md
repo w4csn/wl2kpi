@@ -1,4 +1,4 @@
-# wl2kpi
+# wl2kpi -- Not ready for use!
 
 Introduction
 
