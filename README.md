@@ -2,7 +2,7 @@
 
 Introduction
 
-This repo contains scripts & notes for taking a fresh Raspbian-lite image that
+This repo contains scripts & notes for taking a fresh Raspbian image that
 will boot up & run the following configurations:
 
 1. Core only
