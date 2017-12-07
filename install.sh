@@ -10,7 +10,7 @@ WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
 
 # ===== main
-
+clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script STARTED"
@@ -27,21 +27,21 @@ fi
 
 echo "$scriptname: Configure RPI for TNC-PI"
 ./core_install.sh
-/config/core_config.sh
+./config/core_config.sh
 
-echo "$scriptname: Install ax25 files"
-/ax25/ax25_install.sh
+#echo "$scriptname: Install ax25 files"
+#./ax25/ax25_install.sh
 
 
-echo "$scriptname: Install RMS Gateway"
-pushd ./rmsgw
-source ./rmsgw_install.sh
-popd > /dev/null
+#echo "$scriptname: Install RMS Gateway"
+#pushd ./rmsgw
+#source ./rmsgw_install.sh
+#popd > /dev/null
 
-echo "$scriptname: Install paclink-unix with imap"
-pushd ./plu
-source ./pluimap_install.sh
-popd > /dev/null
+#echo "$scriptname: Install paclink-unix with imap"
+#pushd ./plu
+#source ./pluimap_install.sh
+#popd > /dev/null
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo

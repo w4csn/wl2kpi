@@ -10,7 +10,7 @@ WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
 
 # do upgrade, update outside of script since it can take some time
-UPDATE_NOW=false
+UPDATE_NOW=true
 
 # Edit the following list with your favorite text editor and set NONESSENTIAL_PKG to true
 NONESSENTIAL_PKG_LIST="mg jed whois mc"
@@ -46,7 +46,7 @@ function ctrl_c() {
 function install_build_tools() {
 # build tools install section
 
-echo " === Check build tools"
+echo "=== Check Build Tools"
 needs_pkg=false
 
 for pkg_name in `echo ${BUILDTOOLS_PKG_LIST}` ; do
@@ -65,12 +65,12 @@ if [ "$needs_pkg" = "true" ] ; then
    apt-get install -y -q $BUILDTOOLS_PKG_LIST
    if [ "$?" -ne 0 ] ; then
       echo "Build tools package install failed. Please try this command manually:"
-      echo "apt-get install -y $BUILDTOOLS_PKG_LIIST"
+      echo "apt-get install -y $BUILDTOOLS_PKG_LIST"
       exit 1
    fi
 fi
 
-echo "Build Tools packages installed."
+echo "=== Build Tools packages installed."
 }
 
 # ===== function install nonessential packages
@@ -122,9 +122,11 @@ fi
 
 
 if [ "$UPDATE_NOW" = "true" ] ; then
-   echo " === Check for updates"
-   apt-get update
-   apt-get upgrade
+   echo "=== Check for updates"
+   apt-get update -y -q
+   apt-get upgrade -y -q
+   echo "=== updates finished"
+   echo
 fi
 
 install_build_tools
@@ -140,12 +142,12 @@ if [ ! -d /lib/modules/$(uname -r)/ ] ; then
    exit 1
 fi
 
-echo " === enable modules"
+echo "=== Enable Modules"
 grep ax25 /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
 	lsmod | grep -i ax25 > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
-   echo "=== Enable ax25 module"
+   echo "... Enable ax25 module"
    insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
 fi
 
@@ -177,14 +179,15 @@ fi
 
 
 # Modify config.txt
-echo " === Modify /boot/config.txt"
+echo "=== Modify /boot/config.txt"
 #grep "force_turbo" /boot/config.txt > /dev/null 2>&1
 cat << EOT >> /boot/config.txt
+# User Mods
 enable_uart=1
 dtoverlay=pi-miniuart-bt
 core_Frequ=250
 EOT
-sed -i -e "/console=ttyAMA0,115200/d/ " /boot/cmdline.txt
+sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
 # To enable serial console disable bluetooth
 #  and change console to ttyS0. Maybe? not sure how to handle yet.
 if [ "$SERIAL_CONSOLE" = "true" ] ; then
