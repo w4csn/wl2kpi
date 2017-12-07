@@ -239,13 +239,23 @@ if [ "$GET_K4GBB" = "true" ]; then
 fi
 
 echo -e "=== Installing Startup Files"
-cp $wd/k4gbb/ax25 /etc/init.d/ax25 
-if [ ! -L /usr/sbin/ax25 ]; then 
-   ln -s /etc/init.d/ax25 /usr/sbin/ax25
+if [ ! -f /etc/init.d/ax25 ]; then
+   cp $wd/k4gbb/ax25 /etc/init.d/ax25 
+   if [ ! -L /usr/sbin/ax25 ]; then 
+      ln -s /etc/init.d/ax25 /usr/sbin/ax25
+   fi
+   echo -e "... Setting up ax25 SysInitV"
+   chmod 755 /etc/init.d/ax25
+   update-rc.d ax25 defaults
 fi
-chmod 755 /etc/init.d/ax25
-update-rc.d ax25 defaults
-# Add ax25 systemd service code here
+
+# Setup ax25 systemd service
+if [ ! -f /lib/systemd/system/ax25.service ]; then
+   echo -e "... Setting up ax25 systemd service"
+   cp $wd/systemd/ax25.service /lib/systemd/system/ax25.service
+   systemctl enable ax25.service
+fi
+
 cd /etc/ax25
 cp $wd/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
 cp $wd/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
@@ -257,6 +267,8 @@ echo -e "=== Install Finished"
 
 
 # Main
+sleep 5
+clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script STARTED"

@@ -21,6 +21,8 @@ exit
 }
 
 # ==== main
+sleep 5 
+clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script STARTED"
