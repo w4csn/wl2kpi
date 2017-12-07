@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Run this after copying a fresh compass file system image
-#
+# This script installs tools necessary for preparing a fresh rasberry pi2 or 3
+# Configures rasberry pi for TNC-pi on /dev/ttyAMA0
 # Uncomment this statement for debug echos
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
