@@ -71,6 +71,7 @@ if [ "$needs_pkg" = "true" ] ; then
 fi
 
 echo "=== Build Tools packages installed."
+echo
 }
 
 # ===== function install nonessential packages
@@ -103,9 +104,11 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
       fi
    fi
 
-   echo "Non essential packages installed."
+   echo "=== Non essential packages installed."
+   echo
 fi
 }
+
 
 # ===== main
 
@@ -144,18 +147,23 @@ fi
 
 echo "=== Enable Modules"
 grep ax25 /etc/modules > /dev/null 2>&1
-if [ $? -ne 0 ] ; then
+if [ $? -ne 0 ]; then
 	lsmod | grep -i ax25 > /dev/null 2>&1
-if [ $? -ne 0 ] ; then
+if [ $? -ne 0 ]; then
    echo "... Enable ax25 module"
    insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
 fi
-
 # Add Kernel modules
-cat << EOT >> /etc/modules
-i2c-dev
-EOT
+grep i2c-dev /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo "i2c-dev" >> /etc/modules
 fi
+#cat << EOT >> /etc/modules
+#i2c-dev
+#EOT
+fi
+echo "=== Enable Modules Finished"
+echo
 
 # Modify hciattach.service to configure BT for /dev/ttyS0
 echo "=== Configure BT for ttyS0"
@@ -176,25 +184,36 @@ ExecStart=/usr/bin/hciattach /dev/ttyS0 bcm43xx 921600 noflow -
 WantedBy=multi-user.target
 EOT
 fi
-
+echo "=== Configure BT Finished"
+echo
 
 # Modify config.txt
 echo "=== Modify /boot/config.txt"
-#grep "force_turbo" /boot/config.txt > /dev/null 2>&1
-cat << EOT >> /boot/config.txt
-# User Mods
-enable_uart=1
-dtoverlay=pi-miniuart-bt
-core_Frequ=250
-EOT
-sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
-# To enable serial console disable bluetooth
-#  and change console to ttyS0. Maybe? not sure how to handle yet.
-if [ "$SERIAL_CONSOLE" = "true" ] ; then
-   echo "=== Disabling Bluetooth & enabling serial console"
-   sed -i -e "/dtoverlay/ s/dtoverlay=pi-miniuart-bt/dtoverlay=pi-disable-bt/" /boot/config.txt
-   #sed -i -e "/console/ s/console=serial0/console=ttyAMA0,115200/" /boot/cmdline.txt
+CONFIGDIR=/boot/config.txt
+grep "# User Mods" $CONFIGDIR > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo "# User Mods" >> $CONFIGDIR
 fi
+grep "enable_uart=1" $CONFIGDIR > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo "enable_uart=1" >> $CONFIGDIR
+fi
+grep "dtoverlay=pi-miniuart-bt" $CONFIGDIR >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo "dtoverlay=pi-miniuart-bt" >> $CONFIGDIR
+fi
+grep "core_freq=250" $CONFIGDIR > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo "core_freq=250" >> $CONFIGDIR
+fi
+echo "=== Modify /boot/config.txt Finished"
+echo
+
+# Remove Serial Console
+echo "=== Remove Serial Console from /boot/cmdline.txt"
+sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
+echo "=== Remove Serial Console from /boot/cmdline.txt Finished"
+echo
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
