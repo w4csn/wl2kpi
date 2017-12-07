@@ -10,12 +10,9 @@ START_DIR=$(pwd)
 wd=$(pwd)
 uid=$(id -u)
 INST_UID=pi
-#LIBAX25=linuxax25-master/libax25/
-#TOOLS=linuxax25-master/ax25tools/
-#APPS=linuxax25-master/ax25apps/
-LIBAX25=linuxax25/libax25/
-TOOLS=linuxax25/ax25tools/
-APPS=linuxax25/ax25apps/
+LIBAX25=libax25/
+TOOLS=ax25tools/
+APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
 	
 
