@@ -213,7 +213,7 @@ if [ $? -ne 0 ]; then
 echo "rose" >> /etc/modules
 fi
 grep mkiss /etc/modules > /dev/null 2>&1
-fi [ $? -ne 0 ]; then
+if [ $? -ne 0 ]; then
    lsmod | grep -i mkiss > /dev/null 2>&1
    if [ $? -ne 0 ]; then
       echo "... Enabling mkiss module"
