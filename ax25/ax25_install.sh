@@ -14,7 +14,7 @@ LIBAX25=libax25/
 TOOLS=ax25tools/
 APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
-	
+GET_K4GBB=false
 
 function Chk_Root {
 # Check for Root
@@ -224,17 +224,19 @@ echo -e "=== AX.25 Modules Finished"
 echo
 
 # download start up files
-echo -e "=== Downloading Startup Files"
-cd $wd/k4gbb
-wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25
-wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25-up.pi
-wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25-down
-wget -qt3 http://k4gbb.no-ip.info/docs/rpi/axports
-wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25d.conf
-wget -qt3 http://k4gbb.no.info/docs/rpi/calibrate_pi
-wget -qt3 http://k4gbb.no.info/docs/rpi/i2ckiss
-echo "=== Download Finished"
-echo
+if [ "$GET_K4GBB" = "true" ]; then
+   echo -e "=== Downloading Startup Files"
+   cd $wd/k4gbb
+   wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25
+   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25-up.pi
+   wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25-down
+   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/axports
+   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25d.conf
+   wget -qt3 http://k4gbb.no.info/docs/rpi/calibrate_pi
+   wget -qt3 http://k4gbb.no.info/docs/rpi/i2ckiss
+   echo "=== Download Finished"
+   echo
+fi
 
 echo -e "=== Installing Startup Files"
 cp $wd/k4gbb/ax25 /etc/init.d/ax25 
