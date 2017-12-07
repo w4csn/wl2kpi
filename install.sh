@@ -28,10 +28,11 @@ fi
 echo "$scriptname: Configure RPI for TNC-PI"
 ./core_install.sh
 ./config/core_config.sh
+echo
 
-#echo "$scriptname: Install ax25 files"
-#./ax25/ax25_install.sh
-
+echo "$scriptname: Install ax25 files"
+./ax25/ax25_install.sh
+echo
 
 #echo "$scriptname: Install RMS Gateway"
 #pushd ./rmsgw

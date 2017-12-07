@@ -32,7 +32,7 @@ if [[ $EUID != 0 ]] ; then
     exit 1
 fi
 
-echo " === Verify not using default password"
+echo "=== Verify not using default password"
 # is there even a user pi?
 ls /home | grep pi > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -65,6 +65,7 @@ if [ $? -eq 0 ] ; then
 else
    echo "User pi NOT found"
 fi
+echo
 
 # Check hostname
 echo " === Verify hostname"

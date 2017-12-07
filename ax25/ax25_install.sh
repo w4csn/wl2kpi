@@ -23,7 +23,7 @@ function Chk_Root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
    echo "Must be root"
-    exit 1
+   exit 1
 fi
 }
 
@@ -76,6 +76,8 @@ else
   echo -e "\t Updating local AX25 source"
   git pull $AX25REPO .
 fi
+echo "=== Download Finished"
+echo
 }
 
 function Configure_libax25 {
@@ -88,6 +90,8 @@ if [ $? -ne 0 ]; then
     echo -e "\t Libax25 Configuration error - See liberror.txt"
     exit 1
 fi
+echo "=== Libax25 Config Finished"
+echo
 }
 
 function CompileAx25 {
@@ -177,6 +181,8 @@ else
     echo -e "\t AX.25 tools Installed"
     rm toolserror.txt
 fi
+echo "=== Compile AX.25 Finished"
+echo
 }
 
 function FinishAx25_Install {
@@ -187,10 +193,35 @@ cd /usr/local/bin/
 chmod 4775 *
 echo -e "=== Ax.25 Libraries, Applications and Tools were successfully installed"
 
-# Add Modules to /etc/modules
+echo "=== Enable AX.25 Modules"
+grep ax25 /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   lsmod | grep -i ax25 > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+      echo "... Enabling ax25 module"
+      insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
+   fi
 echo "ax25" >> /etc/modules
+fi
+grep rose /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   lsmod | grep -i rose > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+      echo "... Enabling rose module"
+      insmod /lib/modules/$(uname -r)/kernel/net/rose/rose.ko
+   fi
 echo "rose" >> /etc/modules
+fi
+grep mkiss /etc/modules > /dev/null 2>&1
+fi [ $? -ne 0 ]; then
+   lsmod | grep -i mkiss > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+      echo "... Enabling mkiss module"
+      insmod /lib/modules/$(uname -r)/kernel/net/mkiss/mkiss.ko
+   fi
 echo "mkiss" >> /etc/modules
+fi
+echo "=== AX.25 Modules Finished"
 
 # download start up files
 cd $wd/k4gbb
