@@ -32,6 +32,7 @@ echo
 
 echo -e "$scriptname: Install ax25 files"
 ./ax25/ax25_install.sh
+#./ax25/ax25_config.sh
 echo
 
 #echo -e "$scriptname: Install RMS Gateway"
