@@ -25,21 +25,21 @@ if [[ $EUID != 0 ]] ; then
    exit 1
 fi
 
-echo "$scriptname: Configure RPI for TNC-PI"
-./core_install.sh
-./config/core_config.sh
+echo -e "$scriptname: Configure RPI for TNC-PI"
+./core/core_install.sh
+./core/core_config.sh
 echo
 
-echo "$scriptname: Install ax25 files"
+echo -e "$scriptname: Install ax25 files"
 ./ax25/ax25_install.sh
 echo
 
-#echo "$scriptname: Install RMS Gateway"
+#echo -e "$scriptname: Install RMS Gateway"
 #pushd ./rmsgw
 #source ./rmsgw_install.sh
 #popd > /dev/null
 
-#echo "$scriptname: Install paclink-unix with imap"
+#echo -e "$scriptname: Install paclink-unix with imap"
 #pushd ./plu
 #source ./pluimap_install.sh
 #popd > /dev/null

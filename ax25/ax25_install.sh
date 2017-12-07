@@ -19,41 +19,47 @@ AX25REPO=https://github.com/ve7fet/linuxax25
 function Chk_Root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
-   echo "Must be root"
+   echo -e "Must be root"
    exit 1
 fi
 }
 
 function CreateAx25_Folders {
-if [ ! -d /usr/local/etc ]; then
-	echo "=== Creating file folders for Config files"
-	mkdir /usr/local/etc
+if [ ! -d "/usr/local/etc" ]; then
+   echo -e "=== Creating file folders for Config files"
+   mkdir /usr/local/etc
 fi
 
-mkdir /usr/local/etc/ax25
+if [ ! -d "/usr/local/etc/ax25" ]; then
+   mkdir /usr/local/etc/ax25
+fi
 
-if [ ! -d /usr/local/var/ ]; then
-	echo "=== Creating file folders for Data files"
+if [ ! -d "/usr/local/var/" ]; then
+	echo -e "=== Creating file folders for Data files"
 	mkdir /usr/local/var
 fi
 
-mkdir /usr/local/var/ax25
+if [ ! -d "/usr/local/var/ax25" ]; then
+   mkdir /usr/local/var/ax25
+fi
 
-if [ ! -d /usr/etc/ax25 ]; then
-	rm -rf /etc/ax25
+if [ ! -d "/usr/etc/ax25" ]; then
+   rm -rf /etc/ax25
 fi
 
 if [ ! -d /usr/local/src ]; then
-	echo "=== Creating file folders for source files"
-	mkdir /usr/local/src
-	mkdir /usr/local/src/ax25
-else
-  mkdir /usr/local/src/ax25
+   echo -e "=== Creating file folders for source files"
+   mkdir /usr/local/src
+   mkdir /usr/local/src/ax25
 fi
 
-echo "=== Creating symlinks to standard directories"
-ln -s /usr/local/var/ax25/ /var/ax25
-ln -s /usr/local/etc/ax25/ /etc/ax25
+echo -e "=== Creating symlinks to standard directories"
+if [ ! -L /var/ax25 ]; then
+   ln -s /usr/local/var/ax25/ /var/ax25
+fi
+if [ ! -L /etc/ax25 ]; then
+   ln -s /usr/local/etc/ax25/ /etc/ax25
+fi
 
 if [ -f /usr/lib/libax25.a ]; then
 	echo -e "\t Moving Old Libax25 files out of the way"
@@ -65,15 +71,15 @@ fi
 
 function DownloadAx25 {
 cd /usr/local/src/ax25
-echo "=== Downloading AX25 archives"
-if [ ! -d linuxax25 ]; then
-  echo -e "\t Downloading AX25 source"
+echo -e "=== Downloading AX25 archives"
+if [ ! -d .git ]; then
+  echo -e "\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
 else
-  echo -e "\t Updating local AX25 source"
-  git pull $AX25REPO .
+  echo -e "\t Updating AX25 from $AX25REPO"
+  git pull
 fi
-echo "=== Download Finished"
+echo -e "=== Download Finished"
 echo
 }
 
@@ -87,12 +93,12 @@ if [ $? -ne 0 ]; then
     echo -e "\t Libax25 Configuration error - See liberror.txt"
     exit 1
 fi
-echo "=== Libax25 Config Finished"
+echo -e "=== Libax25 Config Finished"
 echo
 }
 
 function CompileAx25 {
-echo "=== Compiling AX.25 Libraries"
+echo -e "=== Compiling AX.25 Libraries"
 # Clean old binaries
 make clean > /dev/null
 
@@ -178,7 +184,7 @@ else
     echo -e "\t AX.25 tools Installed"
     rm toolserror.txt
 fi
-echo "=== Compile AX.25 Finished"
+echo -e "=== Compile AX.25 Finished"
 echo
 }
 
@@ -189,13 +195,14 @@ chmod 4775 *
 cd /usr/local/bin/
 chmod 4775 *
 echo -e "=== Ax.25 Libraries, Applications and Tools were successfully installed"
+echo
 
-echo "=== Enable AX.25 Modules"
+echo -e "=== Enable AX.25 Modules"
 grep ax25 /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    lsmod | grep -i ax25 > /dev/null 2>&1
    if [ $? -ne 0 ]; then
-      echo "... Enabling ax25 module"
+      echo -e "... Enabling ax25 module"
       insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
    fi
 echo "ax25" >> /etc/modules
@@ -204,23 +211,20 @@ grep rose /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    lsmod | grep -i rose > /dev/null 2>&1
    if [ $? -ne 0 ]; then
-      echo "... Enabling rose module"
+      echo -e"... Enabling rose module"
       insmod /lib/modules/$(uname -r)/kernel/net/rose/rose.ko
    fi
 echo "rose" >> /etc/modules
 fi
 grep mkiss /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-   lsmod | grep -i mkiss > /dev/null 2>&1
-   if [ $? -ne 0 ]; then
-      echo "... Enabling mkiss module"
-      insmod /lib/modules/$(uname -r)/kernel/net/mkiss/mkiss.ko
-   fi
-echo "mkiss" >> /etc/modules
+   echo -e "mkiss" >> /etc/modules
 fi
-echo "=== AX.25 Modules Finished"
+echo -e "=== AX.25 Modules Finished"
+echo
 
 # download start up files
+echo -e "=== Downloading Startup Files"
 cd $wd/k4gbb
 wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25
 wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25-up.pi
@@ -229,9 +233,14 @@ wget -qt3 http://k4gbb.no-ip.info/docs/rpi/axports
 wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25d.conf
 wget -qt3 http://k4gbb.no.info/docs/rpi/calibrate_pi
 wget -qt3 http://k4gbb.no.info/docs/rpi/i2ckiss
+echo "=== Download Finished"
+echo
 
-  
-cp $wd/k4gbb/ax25 /etc/init.d/ax25 && ln -s /etc/init.d/ax25 /usr/sbin/ax25
+echo -e "=== Installing Startup Files"
+cp $wd/k4gbb/ax25 /etc/init.d/ax25 
+if [ ! -L /usr/sbin/ax25 ]; then 
+   ln -s /etc/init.d/ax25 /usr/sbin/ax25
+fi
 chmod 755 /etc/init.d/ax25
 update-rc.d ax25 defaults
 # Add ax25 systemd service code here
@@ -241,7 +250,9 @@ cp $wd/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
 cp $wd/k4gbb/axports /etc/ax25/axports
 cp $wd/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
 touch nrports rsports
+echo -e "=== Install Finished"
 }
+
 
 # Main
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
