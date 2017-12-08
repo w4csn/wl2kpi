@@ -1,6 +1,10 @@
 #!/bin/bash
 # ax25_install.sh
 # It will Download and Install AX25
+# Parts taken from RMS-Upgrade-181 script Updated 10/30/2014
+# (https://groups.yahoo.com/neo/groups/LinuxRMS/files)
+# by C Schuman, K4GBB k4gbb1gmail.com
+#
 DEBUG=1 # Uncomment this statement for debug echos
 set -u # Exit if there are unitialized variables.
 scriptname="`basename $0`"

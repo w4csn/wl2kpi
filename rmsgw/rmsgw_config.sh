@@ -236,37 +236,20 @@ fi
 echo -e "=== Configuration Finished"
 echo
 
+# RMSGW user created in rmsgw_install.sh
 # Does the RMSGW user exist?
-getent passwd rmsgw > /dev/null 2>&1
-if [ $? -ne 0 ] ; then
-   echo "user rmsgw does NOT exist, creating"
-   adduser --no-create-home --system rmsgw
-else
-   echo "user rmsgw exists"
-fi
-
-# Does user rmsgw have a crontab?
-crontab -u rmsgw -l > /dev/null 2>&1
-if [ $? -ne 0 ] ; then
-   echo "user rmsgw does NOT have a crontab, creating"
-   crontab -u rmsgw -l ;
-   {
-   echo "# m h  dom mon dow   command"
-   echo "17,46 * * * * /usr/local/bin/rmsgw_aci > /dev/null 2>&1"
-   } | crontab -u rmsgw -
-else
-   echo "user rmsgw already has a crontab"
-fi
-
-echo "rmsgw crontab looks like this:"
-echo
-crontab -l -u rmsgw
-echo
+#getent passwd rmsgw > /dev/null 2>&1
+#if [ $? -ne 0 ] ; then
+#   echo "user rmsgw does NOT exist, creating"
+#   adduser --no-create-home --system rmsgw
+#else
+#   echo "user rmsgw exists"
+#fi
 
 # Edit gateway.conf
 # Need to set:
 # GWCALL, GRIDSQUARE, LOGFACILITY (should match syslog entry)
-
+echo -e "=== Configure gateway.conf"
 RMSGW_GWCFGFILE=$RMSGW_CFGDIR/gateway.conf
 CHECK_CALL="N0CALL"
 
@@ -288,11 +271,14 @@ if [ $? -eq 0 ] ; then
 else
    echo "$RMSGW_GWCFGFILE already configured."
 fi
+echo -e "=== Configuration Finished"
+echo
 
 # Edit channels.xml
 # Need to set:
 # channel name, basecall, callsign, password, gridsquare,
 # frequency
+echo -e "=== Configure channels.xml"
 CHECK_CALL="N0CALL"
 grep -i "$CHECK_CALL" $RMSGW_CFGDIR/channels.xml  > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -301,8 +287,11 @@ if [ $? -eq 0 ] ; then
 else
    echo "$RMSGW_CFGDIR/channels.xml already configured"
 fi
+echo -e " Configuration Finished"
+echo
 
 # Edit banner
+echo -e "=== Configure banner"
 CHECK_CALL="N0CALL"
 grep -i "$CHECK_CALL" $RMSGW_CFGDIR/banner  > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -313,21 +302,24 @@ else
    cat $RMSGW_CFGDIR/banner
    echo
 fi
+echo -e "=== Configuration Finished"
+echo
 
-# Check the 2 log config files
-filename="/etc/rsyslog.conf"
-grep -i "local0" $filename  > /dev/null 2>&1
-if [ $? -eq 0 ] ; then
-   echo "file $filename already configured"
+# Install Logging
+echo -e "=== Configuring log files"
+# Install Logging
+filename="/etc/rsyslog.d/60-rms.conf"
+if [ ! -f $filename ]; then
+	{
+	echo "# RMS Gate" 
+	echo "local0.info                    /var/log/rms"
+	echo "local0.debug                   /var/log/rms.debug"
+	echo "#local0.debug                  /dev/null" 
+	echo "# (End)"
+	} >> $filename
+	sysctl restart rsyslog
 else
-   echo "$filename NOT configured for RMS gateway."
-   {
-   echo
-   echo "#"
-   echo "local0.info                     /var/log/rms"
-   echo "local0.debug                    /var/log/rms.debug"
-   echo "#local0.debug                   /dev/null"
-   } >> $filename
+	echo "file $filename already configured"
 fi
 
 filename="/etc/logrotate.d/rms"
@@ -357,13 +349,32 @@ cat > $filename <<EOT
 }
 EOT
 fi
-
-
+echo -e "=== Configuration Finished"
+echo
 
 # create a sysop record
 # run mksysop.py
 # Check /etc/rmsgw/new-sysop.xml
 
+echo -e "=== Setting up cron"
+# Add RMS_ACI to Crontab
+# Is there already a entry for user rmsgw?
+grep rmsgw  /etc/crontab  > /dev/null 2>&1
+if [ $? -eq 1 ] ; then
+	echo "Creating crontab entry for user: rmsgw"
+	{
+	echo "6,36 * * * *   rmsgw    /usr/local/bin/rmsgw_aci > /dev/null 2>&1"
+	echo "# (End) " 
+	} >> /etc/crontab
+else
+	echo "Crontab entry already exist"
+fi
+echo
+echo -e "=== Finished"
+echo
+
+
+	
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"

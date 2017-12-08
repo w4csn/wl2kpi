@@ -1,11 +1,15 @@
 #!/bin/bash
 # Installs/Updates the Linux RMS Gateway
-# Based on RMS-Install7-181.bash by C Schuman, K4GBB k4gbb1gmail.com
-# ReWrite by Scott Newton, W4CSN	Nov 2017
-
-# Error Checking
-set -u # Exit if there are uninitialized variables
-set -e # Exit if any statement returns a non-true value
+# Parts taken from RMS-Upgrade-181 script Updated 10/30/2014
+# (https://k4gbb.no-ip.org/docs/scripts)
+# by C Schuman, K4GBB k4gbb1gmail.com
+#
+DEBUG=1 # Uncomment this statement for debug echos
+set -u # Exit if there are unitialized variables.
+scriptname="`basename $0`"
+WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+wd=$(pwd)
+uid=$(id -u)
 
 # Color Codes
 Reset='\e[0m'
@@ -16,38 +20,68 @@ Blue='\e[34m'
 White='\e[37m'
 BluW='\e[37;44m'
 
-# Constants
-wd=$(pwd)
-uid=$(id -u)
 UDATE="NO"
 GWOWNER="rmsgw"
 RMSGW=https://github.com/nwdigitalradio/rmsgw
+PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
+SRC_DIR="/usr/local/src/rmsgw"
+ROOTFILE_NAME="rmsgw-"
+RMS_BUILD_FILE="rmsbuild.txt"
 
-function Chk_Root
-{
+# ===== Function List =====
+
+# ===== function dbecho
+function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
+
+# ===== function chk_root 
+function chk_root {
 # Check for Root
-if [ ! uid=0 ]; then
- echo "You must be root User to perform installation!"
- echo "Attempting to change user to root..."
- sudo su ||{echo "SU to root Failed! Exiting..."; exit 1}
+if [[ $EUID != 0 ]] ; then
+   echo -e "Must be root"
+   exit 1
 fi
 }
 
+# ===== function is_pkg_installed
+function is_pkg_installed() {
 
-function Install_Tools
-{
-echo -e "${Green} Updating the Package List               ${Reset}"
-echo -e "\t${YelRed} This may take a while ${Reset}"
-apt-get update > /dev/null
-echo "  *"
-echo -e "${BluW}\t Installing Support libraries \t${Reset}"
-apt-get install build-essential autoconf automake libtool -y -q
-apt-get install xutils-dev libxml2 libxml2-dev python-requests -y -q
-apt-get install libax25-dev libx11-dev zlib1g-dev libncurses5-dev -y -q
-echo "  *"
+return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
 }
 
-function Create_Users
+
+function install_tools
+{
+# check if packages are installed
+echo -e "=== Installing Required Packages"
+dbgecho "Check packages: $PKG_REQUIRE"
+needs_pkg=false
+
+for pkg_name in `echo ${PKG_REQUIRE}` ; do
+
+   is_pkg_installed $pkg_name
+   if [ $? -ne 0 ] ; then
+      echo "$scriptname: Will Install $pkg_name program"
+      needs_pkg=true
+      break
+   fi
+done
+
+if [ "$needs_pkg" = "true" ] ; then
+   echo -e "${BluW}\t Installing Support libraries \t${Reset}"
+
+   apt-get install -y -q $PKG_REQUIRE
+   if [ "$?" -ne 0 ] ; then
+      echo "Support library install failed. Please try this command manually:"
+      echo "apt-get install -y $PKG_REQUIRE"
+      exit 1
+   fi
+fi
+
+echo -e "=== All required packages installed."
+echo
+}
+
+function create_users
 {
 #  create the group for the gateway if it doesn't exist
 grep "rmsgw:" /etc/group >/dev/null 2>&1
@@ -71,7 +105,7 @@ if [ "$GWOWNER" != root ]; then
 fi
 }
 
-function Download_rmsgw #Pull rmsgw from github
+function download_rmsgw #Pull rmsgw from github
 {
 echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
 cd /usr/local/src
@@ -84,11 +118,12 @@ else
 fi
 }
 
-function CopyFromInst_rmsgw # Copy rmsgw from install folder
+function copy_rmsgw # Copy rmsgw from install folder
 {
 echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
+
 cd /usr/local/src
-cp rmsgw-2.4.0-182 rmsgw
+cp $wd/src/rmsgw-2.4.0-182 rmsgw > /dev/null 2>&1
 if [ $? -ne 0 ]
    then
  echo -e "${BluW}${Red}\t RMS File not available \t${Reset}"
@@ -96,7 +131,7 @@ if [ $? -ne 0 ]
 fi
 }
 
-function Compile_rmsgw
+function compile_rmsgw
 {
 # rmsgw 
 echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
@@ -104,7 +139,7 @@ cd /usr/local/src/rmsgw
 make > RMS.txt
 if [ $? -ne 0 ]
  then
- echo -e "${BluW}$Red} \tCompile error${White} - check RMS.txt File \t${Reset}"
+ echo -e "${BluW}$Red}\t Compile error${White} - check RMS.txt File \t${Reset}"
  exit 1
 else 
  rm RMS.txt
@@ -113,24 +148,8 @@ make install
 echo -e "${BluW}RMS Gateway Installed \t${Reset}"
 }
 
-function Finishrmsgw_Install
+function finishrmsgw_install
 {
-# Add RMS_ACI to Crontab
-cat /etc/crontab|grep rmsgw || echo "6,36 *  * * *   rmsgw    /usr/local/bin/rmsgw_aci > /dev/null 2>&1
-# (End) " >> /etc/crontab
-
-# Install Logging
-if [ ! -f "/etc/rsyslog.d/60-rmsgw.conf" ]; then
-echo "# RMS Gate" > /etc/rsyslog.d/60-rms.conf 
-echo "        local0.info                     /var/log/rms" >> /etc/rsyslog.d/60-rms.conf 
-echo "        local0.debug                    /var/log/rms.debug" >> /etc/rsyslog.d/60-rms.conf
-echo "        #local0.debug                   /dev/null" >> /etc/rsyslog.d/60-rms.conf 
-echo "
-# (End)" >> /etc/rsyslog.d/60-rms.conf 
-
-service restart rsyslog
-fi
-
 # Use old rmschanstat file.
 if [ -f /usr/local/bin/rmschanstat.~1~ ] ; then
     cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
@@ -142,13 +161,24 @@ echo -e "${BluW} Be Sure to Update/Edit the channels.xml and gateway.config file
 exit 0
 }
 
-# Main
-echo -e "${BluW}\t\n\t  Install/Update Linux RMS Gateway \n${Yellow}\t     version 1.0.0  \t\n\t \n${White}   by Scott Newton ( W4CSN )  \n${Red}               snewton86@gmail.com \n${Reset}"
-Chk_Root
-Install_Tools
-Create_Users
-Download_rmsgw
-Compile_rmsgw
-Finishrmsgw_Install
-exit 0
-# (End of Script)
+# ===== End of Functions list =====
+
+# ===== Main
+sleep 5
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
+echo
+echo "$scriptname: script STARTED"
+echo
+
+chk_root
+install_tools
+create_users
+copy_rmsgw
+compile_rmsgw
+finishrmsgw_install
+
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo "$scriptname: script FINISHED"
+echo
