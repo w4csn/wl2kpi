@@ -2,28 +2,37 @@
 #
 # Configure an RMS Gateway installation
 #
-# Uncomment this statement for debug echos
-DEBUG=1
 
+DEBUG=1 # Uncomment this statement for debug echos
+set -u # Exit if there are unitialized variables.
 scriptname="`basename $0`"
-UDR_INSTALL_LOGFILE="/var/log/udr_install.log"
-
+WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+wd=$(pwd)
 CALLSIGN="N0ONE"
 GRIDSQUARE="AA00aa"
-AX25PORT="udr0"
+AX25PORT="0"
 SSID="10"
-AX25_CFGDIR="/usr/local/etc/ax25"
+AX25_CFGDIR="/etc/ax25"
 RMSGW_CFGDIR="/etc/rmsgw"
-
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
 RMSGW_CFG_FILES="gateway.conf channels.xml banner"
 REQUIRED_PRGMS="rmschanstat python rmsgw rmsgw_aci"
 
+# ===== Function List =====
+
+# ===== function dbecho
+function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
+
+# ===== function chk_root 
+function chk_root {
+# Check for Root
+if [[ $EUID != 0 ]] ; then
+   echo -e "Must be root"
+   exit 1
+fi
+}
+
 # ===== function get_callsign
-
 function get_callsign() {
-
 # Check if call sign var has already been set
 if [ "$CALLSIGN" == "N0ONE" ] ; then
    echo "Enter call sign, followed by [enter]:"
@@ -136,7 +145,7 @@ echo "[$CALLSIGN-$SSID VIA $AX25PORT]"
 echo "NOCALL   * * * * * *  L"
 echo "N0CALL   * * * * * *  L"
 #echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -l debug -P %d %U"
-echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U
+echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U"
 } >> $AX25_CFGDIR/ax25d.conf
 
 }
@@ -160,18 +169,19 @@ sed -i -e "/password/ s/password/$PASSWD/2" $RMSGW_CHANFILE
 sed -i -e "/AA00AA/ s/AA00AA/$GRIDSQUARE/" $RMSGW_CHANFILE
 sed -i -e "/144000000/ s/144000000/$FREQUENCY/" $RMSGW_CHANFILE
 }
+# ===== End of Functions list =====
 
 # ===== main
+sleep 5
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
-echo "rmsgw config START"
+echo "$scriptname: script STARTED"
+echo
+# Make sure user is root
+chk_root
+
 echo "Check for required files ..."
-
-# Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "Must be root to config rmsgw"
-   exit 1
-fi
-
 EXITFLAG=false
 for prog_name in `echo ${REQUIRED_PRGMS}` ; do
    type -P $prog_name &>/dev/null
@@ -192,6 +202,39 @@ fi
 
 # Check for a valid callsign
 get_callsign
+
+# Create a /etc/ax25d.conf entry
+echo -e "=== Configuring ax25d.conf for rmsgw"
+CHECK_CALL="k4gbb"
+grep $CHECK_CALL  /etc/ax25/ax25d.conf  > /dev/null 2>&1
+if [ $? -eq 0 ] ; then
+   echo "ax25d never configured"
+   mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
+   echo "Original ax25d.conf saved as ax25d.conf-dist"
+   # copy first 1 line of original file
+   sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
+{
+echo "[$CALLSIGN-$AX25DSSID VIA $AX25PORT]"
+echo "NOCALL   * * * * * *  L"
+echo "N0CALL   * * * * * *  L"
+echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
+} >> $AX25_CFGDIR/ax25d.conf
+	sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
+else
+   echo "ax25d is configured, checking for RMS Gateway entry"
+   grep  "\-10" /etc/ax25/ax25d.conf  > /dev/null 2>&1
+   if [ $? -eq 0 ] ; then
+      echo "ax25d.conf already configured"
+   else
+      echo "ax25d NOT configured for Gateway"
+      get_callsign
+	  sed '$d' $AX25GFGDIR/ax25d.conf
+      cfg_ax25d
+	  sed -n '$p' $AX25CFGDIR/ax25d.conf-dist >> $AX25CFGDIR/ax25d.conf
+  fi
+fi
+echo -e "=== Configuration Finished"
+echo
 
 # Does the RMSGW user exist?
 getent passwd rmsgw > /dev/null 2>&1
@@ -228,14 +271,11 @@ RMSGW_GWCFGFILE=$RMSGW_CFGDIR/gateway.conf
 CHECK_CALL="N0CALL"
 
 grep -i "$CHECK_CALL" $RMSGW_GWCFGFILE > /dev/null 2>&1
-
 if [ $? -eq 0 ] ; then
    echo "gateway.conf not configured, will set"
    mv $RMSGW_GWCFGFILE $RMSGW_CFGDIR/gateway.conf-dist
    echo "Original gateway.conf saved as gateway.conf-dist"
-
    prompt_read_gwcfg
-
    {
    echo "GWCALL=$CALLSIGN-$SSID"
    echo "GRIDSQUARE=$GRIDSQUARE"
@@ -318,35 +358,13 @@ cat > $filename <<EOT
 EOT
 fi
 
-# Create a /etc/ax25d.conf entry
-CHECK_CALL="N0ONE"
-grep $CHECK_CALL  /etc/ax25/ax25d.conf  > /dev/null 2>&1
-if [ $? -eq 0 ] ; then
-   echo "ax25d never configured"
-   mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
-   echo "Original ax25d.conf saved as ax25d.conf-dist"
-   # copy first 16 lines of file
-   sed -n '1,16p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 
-  get_callsign
-  cfg_ax25d
-else
-   echo "ax25d is configured, checking for RMS Gateway entry"
-   grep  "\-10" /etc/ax25/ax25d.conf  > /dev/null 2>&1
-   if [ $? -eq 0 ] ; then
-      echo "ax25d.conf already configured"
-   else
-      echo "ax25d NOT configured for Gateway"
-      get_callsign
-      cfg_ax25d
-  fi
-fi
 
 # create a sysop record
 # run mksysop.py
 # Check /etc/rmsgw/new-sysop.xml
 
-echo "$(date "+%Y %m %d %T %Z"): rmsgw config script FINISHED" >> $UDR_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "rmsgw config script FINISHED"
+echo "$scriptname: script FINISHED"
 echo

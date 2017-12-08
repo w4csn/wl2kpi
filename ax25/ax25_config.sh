@@ -92,7 +92,7 @@ function configure_axports() {
 	sed -i -e "/k4gbb/ /k4gbb-1/$callsign/ " /etc/ax25/axports
 }
 
-# ===== End of Functions list
+# ===== End of Functions list =====
 
 # =====  Main
 sleep 5
