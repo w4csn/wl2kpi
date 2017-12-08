@@ -25,6 +25,7 @@ GWOWNER="rmsgw"
 RMSGW=https://github.com/nwdigitalradio/rmsgw
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src/rmsgw"
+SRC_FILE="rmsgw-2.4.0-182.zip"
 ROOTFILE_NAME="rmsgw-"
 RMS_BUILD_FILE="rmsbuild.txt"
 
@@ -121,14 +122,25 @@ fi
 function copy_rmsgw # Copy rmsgw from install folder
 {
 echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
-
-cd /usr/local/src
-cp $wd/src/rmsgw-2.4.0-182 rmsgw > /dev/null 2>&1
-if [ $? -ne 0 ]
-   then
- echo -e "${BluW}${Red}\t RMS File not available \t${Reset}"
- exit 1
+if [ ! -d $SRC_DIR ]; then
+	mkdir $SRC_DIR
 fi
+cd $SRC_DIR
+cp $wd/src/$SRC_FILE . > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	echo "...Copy complete"
+else
+	echo "... Copy failed"
+	exit 1
+fi
+unzip $SRC_FILE > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	echo "...Unzip complete"
+else
+	echo "...Unzip failed"
+	exit 1
+fi	
+
 }
 
 function compile_rmsgw
