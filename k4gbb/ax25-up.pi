@@ -7,16 +7,17 @@ sysctl -wq kernel.panic=30
 sysctl -wq kernel.panic_on_oops=30
 
 # Port0 (Start)
- echo "Start Port 0"
+echo "Start Port 0"
 
-# Attach KISS-device /dev/ttyUSB0 to Port 0
+# Attach KISS-device /dev/ttyAMA0 to Port 0
  /usr/local/sbin/kissattach /dev/ttyAMA0 0 44.128.1.19 >/tmp/ax25-config.tmp
 # /usr/local/sbin/kissattach /dev/ttyUSB0 0 44.128.1.19 >/tmp/ax25-config.tmp
-  awk '/device/ { print $7 }' /tmp/ax25-config.tmp > /tmp/ax25-config-tmp
-  read Device < /tmp/ax25-config-tmp
+
+awk '/device/ { print $7 }' /tmp/ax25-config.tmp > /tmp/ax25-config-tmp
+read Device < /tmp/ax25-config-tmp
 
 # Install Parameter: P=128, W=10, TX-Delay=200
-  /usr/local/sbin/kissparms -p 0 -r 128 -s 10 -l 20 -t 250
+/usr/local/sbin/kissparms -p 0 -r 128 -s 10 -l 20 -t 250
 
 # Parms for a USER Port
 echo 3000    > t1_timeout		# (Frack) /1000 = ? Sec
@@ -40,12 +41,20 @@ echo 0       > protocol
 # Open Listen on Term 11
 # /usr/local/bin/listen -artc > /dev/tty11 &
 
+# Set Beacon for Port 0 
+/usr/local/sbin/beacon \
+	-c k4gbb \
+	-d "info " \
+	-t 15 \
+	0 \
+	"RMS Gate = k4gbb-10"
+
 # Enable External Logons
-  /usr/local/sbin/ax25d &
-  echo "ax25d started"
+/usr/local/sbin/ax25d &
+echo "ax25d started"
 
 # Start Mheard daemon
- /usr/local/sbin/mheardd -f -n 20
-  echo "mheardd Started"
+/usr/local/sbin/mheardd -f -n 20
+echo "mheardd Started"
 
 # AX25-up (End)

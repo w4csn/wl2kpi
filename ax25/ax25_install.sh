@@ -1,12 +1,11 @@
 #!/bin/bash
 # ax25_install.sh
 # It will Download and Install AX25
-set -u # Exit if there are uninitialized variables.
+DEBUG=1 # Uncomment this statement for debug echos
+set -u # Exit if there are unitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-START_DIR=$(pwd)
 
-#Constants
 wd=$(pwd)
 uid=$(id -u)
 INST_UID=pi
@@ -14,9 +13,15 @@ LIBAX25=libax25/
 TOOLS=ax25tools/
 APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
-GET_K4GBB=false
+GET_K4GBB=false # needs to be replaced with smarter method!
 
-function Chk_Root {
+# ===== Function List =====
+
+# ===== function dbecho
+function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
+
+# ===== function chk_root
+function chk_root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
    echo -e "Must be root"
@@ -264,7 +269,7 @@ cp $wd/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
 touch nrports rsports
 echo -e "=== Install Finished"
 }
-
+# ===== End of Functions list =====
 
 # Main
 sleep 5
@@ -274,7 +279,7 @@ echo
 echo "$scriptname: script STARTED"
 echo
 
-Chk_Root
+chk_root
 CreateAx25_Folders
 DownloadAx25
 Configure_libax25
