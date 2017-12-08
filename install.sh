@@ -26,8 +26,8 @@ if [[ $EUID != 0 ]] ; then
 fi
 
 echo -e "$scriptname: Configure RPI for TNC-PI"
-./core/core_install.sh
-./core/core_config.sh
+#./core/core_install.sh
+#./core/core_config.sh
 echo
 
 echo -e "$scriptname: Install ax25 files"
