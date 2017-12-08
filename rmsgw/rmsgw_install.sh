@@ -160,10 +160,12 @@ make install
 echo -e "${BluW}RMS Gateway Installed \t${Reset}"
 }
 
-function finishrmsgw_install
-{
-# Use old rmschanstat file.
-if [ -f /usr/local/bin/rmschanstat.~1~ ] ; then
+function finish_rmsgw
+# Copy rmschanstat to /usr/local/bin
+if [ ! -f /usr/local/bin/rmschanstat~1~ ]; then
+	cp -f $wd/rmsgw/rmschanstat /usr/local/bin/rmschanstat
+else
+	# Use old rmschanstat file.
     cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
 fi
 
@@ -188,7 +190,7 @@ install_tools
 create_users
 copy_rmsgw
 compile_rmsgw
-finishrmsgw_install
+finish_rmsgw
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo

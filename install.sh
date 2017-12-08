@@ -31,14 +31,14 @@ echo -e "$scriptname: Configure RPI for TNC-PI"
 echo
 
 echo -e "$scriptname: Install ax25 files"
-./ax25/ax25_install.sh
-#./ax25/ax25_config.sh
+#./ax25/ax25_install.sh
+./ax25/ax25_config.sh
 echo
 
-#echo -e "$scriptname: Install RMS Gateway"
-#pushd ./rmsgw
-#source ./rmsgw_install.sh
-#popd > /dev/null
+echo -e "$scriptname: Install RMS Gateway"
+#./rmsgw/rmsgw_install.sh
+#./rmsgw/rmsgw_config.sh
+echo
 
 #echo -e "$scriptname: Install paclink-unix with imap"
 #pushd ./plu
