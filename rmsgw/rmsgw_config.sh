@@ -224,9 +224,9 @@ else
    echo "ax25d is configured, checking for RMS Gateway entry"
    grep  "\-10" /etc/ax25/ax25d.conf  > /dev/null 2>&1
    if [ $? -eq 0 ] ; then
-      echo "ax25d.conf already configured"
+      echo "ax25d.conf already configured for RMS Gateway"
    else
-      echo "ax25d NOT configured for Gateway"
+      echo "ax25d NOT configured for RMS Gateway"
       get_callsign
 	  sed '$d' $AX25_CFGDIR/ax25d.conf
       cfg_ax25d
@@ -295,7 +295,7 @@ echo -e "=== Configure banner"
 CHECK_CALL="N0CALL"
 grep -i "$CHECK_CALL" $RMSGW_CFGDIR/banner  > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
-   echo "banner not configured, will set"
+   echo "banner not configured, setting"
    echo "$CALLSIGN-$SSID Linux RMS Gateway 2.4, $CITY, $STATE" > $RMSGW_CFGDIR/banner
 else
    echo "$RMSGW_CFGDIR/banner already configured, looks like this:"
@@ -317,7 +317,7 @@ if [ ! -f $filename ]; then
 	echo "#local0.debug                  /dev/null" 
 	echo "# (End)"
 	} >> $filename
-	sysctl restart rsyslog
+	service rsyslog restart
 else
 	echo "file $filename already configured"
 fi
