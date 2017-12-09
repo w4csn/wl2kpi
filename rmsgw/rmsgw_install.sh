@@ -181,21 +181,24 @@ else
  rm $RMS_BUILD_FILE
 fi
 make install
+if [ $? -ne 0 ] ; then
+  echo "Error during install."
+  exit 1
+fi
 echo -e "${BluW}RMS Gateway Installed \t${Reset}"
 }
 
 function finish_rmsgw
 {
 # Copy rmschanstat to /usr/local/bin
-if [ ! -f /usr/local/bin/rmschanstat~1~ ]; then
+if [ ! -f /usr/local/bin/rmschanstat ]; then
+	mv /usr/local/bin/rmschanstat /usr/local/bin/rmschanstat-dist
 	cp -f $wd/rmsgw/rmschanstat /usr/local/bin/rmschanstat
 else
 	# Use old rmschanstat file.
     cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
 fi
 
-date >> /root/Changes
-echo "        RMS Gate Installed - rmsgw-2.4.0-181" >> /root/Changes
 echo -e "${BluW} Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
 }
 
@@ -214,8 +217,9 @@ install_tools
 create_users
 copy_rmsgw
 compile_rmsgw
-#finish_rmsgw
+finish_rmsgw
 
+echo "$(date $(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"

@@ -276,7 +276,7 @@ echo -e "=== Install Finished"
 # ===== End of Functions list =====
 
 # Main
-sleep 5
+sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
@@ -290,6 +290,7 @@ Configure_libax25
 CompileAx25
 FinishAx25_Install
 
+echo "$(date $(date "+%Y %m %d %T %Z"): $scriptname: AX.25 Installed" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"
