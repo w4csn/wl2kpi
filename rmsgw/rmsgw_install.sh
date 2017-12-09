@@ -121,26 +121,45 @@ fi
 
 function copy_rmsgw # Copy rmsgw from install folder
 {
-echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
-if [ ! -d $SRC_DIR ]; then
-	mkdir $SRC_DIR
+echo -e "${BluW}\t Copying RMS Source file \t${Reset}"
+# Does source directory exist?
+if [ ! -d $SRC_DIR ] ; then
+   mkdir -p $SRC_DIR
+   if [ "$?" -ne 0 ] ; then
+      echo "Problems creating source directory: $SRC_DIR"
+      exit 1
+   fi
 fi
 cd $SRC_DIR
-cp $wd/src/$SRC_FILE . > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-	echo "...Copy complete"
+# Determine if any rmsgw zip files have been copied to $SRC_DIR"
+ls rmsgw-*.zip 2>/dev/null
+if [ $? -ne 0 ]; then
+   echo -e "${BluW}\t Copying RMS Gateway Source file \t${Reset}"
+   cp $wd/src/$SRC_FILE $SRC > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+	  echo "Problems Copying file"
+	  exit 1
+	fi
 else
-	echo "... Copy failed"
-	exit 1
+	# Get here if some zip files were found
+    ZIP_FILELIST="$(ls rmsgw-*.zip |tr '\n' ' ')"
+    echo "Already have rmsgw install file(s): $ZIP_FILELIST"
+    echo "To check for a new version move .zip file(s) out of this directory"
 fi
-unzip $SRC_FILE > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-	echo "...Unzip complete"
-else
-	echo "...Unzip failed"
-	exit 1
-fi	
+# Lists all .tgz files in directory
+# Last file listed should have lastest version number
+for filename in *.zip ; do
+   rms_ver="$(echo ${filename#r*-} | cut -d '.' -f1,2,3)"
+   echo "$filename version: $rms_ver"
+done
+dbgecho "Untarring this installation file: $filename, version: $rms_ver"
 
+#tar xf $filename
+unzip $filename
+if [ $? -ne 0 ] ; then
+ echo -e "${BluW}${Red}\t $filename File not available \t${Reset}"
+ exit 1
+fi
 }
 
 function compile_rmsgw
@@ -191,8 +210,8 @@ chk_root
 install_tools
 create_users
 copy_rmsgw
-compile_rmsgw
-finish_rmsgw
+#compile_rmsgw
+#finish_rmsgw
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
