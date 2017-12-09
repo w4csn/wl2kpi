@@ -167,7 +167,7 @@ function compile_rmsgw
 # rmsgw 
 echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
 chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/install.sh
+chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
 # Clean old binaries
