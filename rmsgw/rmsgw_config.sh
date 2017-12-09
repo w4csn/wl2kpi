@@ -228,7 +228,7 @@ else
    else
       echo "ax25d NOT configured for Gateway"
       get_callsign
-	  sed '$d' $AX25_GFGDIR/ax25d.conf
+	  sed '$d' $AX25_CFGDIR/ax25d.conf
       cfg_ax25d
 	  sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
   fi
