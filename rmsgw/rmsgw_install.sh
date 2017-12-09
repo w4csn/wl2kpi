@@ -135,7 +135,7 @@ cd $SRC_DIR
 ls rmsgw-*.zip 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "${BluW}\t Copying RMS Gateway Source file \t${Reset}"
-   cp $wd/src/$SRC_FILE $SRC > /dev/null 2>&1
+   cp $wd/src/$SRC_FILE $SRC_DIR > /dev/null 2>&1
    if [ $? -ne 0 ]; then
 	  echo "Problems Copying file"
 	  exit 1
