@@ -172,7 +172,7 @@ sed -i -e "/144000000/ s/144000000/$FREQUENCY/" $RMSGW_CHANFILE
 # ===== End of Functions list =====
 
 # ===== main
-sleep 5
+sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
@@ -228,9 +228,9 @@ else
    else
       echo "ax25d NOT configured for Gateway"
       get_callsign
-	  sed '$d' $AX25GFGDIR/ax25d.conf
+	  sed '$d' $AX25_GFGDIR/ax25d.conf
       cfg_ax25d
-	  sed -n '$p' $AX25CFGDIR/ax25d.conf-dist >> $AX25CFGDIR/ax25d.conf
+	  sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
   fi
 fi
 echo -e "=== Configuration Finished"
