@@ -201,6 +201,7 @@ fi
 # remove all duplicate files due to recompiles
 cd /etc/rmsgw
 for filename in *.~?~ ; do
+	echo ${filename#r*-} | cut -d '.' -f1,2,3)
 	if [ $filename = "*.~1~" ];then
        echo "$filename Dont erase."
 	fi
