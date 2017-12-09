@@ -199,14 +199,6 @@ else
     cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
 fi
 # remove all duplicate files due to recompiles
-cd /etc/rmsgw
-for filename in *.~?~ ; do
-	echo ${filename} | cut -d '.' -f1,2,3
-	if [ $filename = "*.~1~" ];then
-       echo "$filename Dont erase."
-	fi
-	echo "Erasing $filename"
-done
 
 echo -e "${BluW}Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
 }
@@ -222,10 +214,10 @@ echo "$scriptname: script STARTED"
 echo
 
 chk_root
-#install_tools
-#create_users
-#copy_rmsgw
-#compile_rmsgw
+install_tools
+create_users
+copy_rmsgw
+compile_rmsgw
 finish_rmsgw
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
