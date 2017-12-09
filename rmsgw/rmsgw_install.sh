@@ -199,7 +199,7 @@ else
     cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
 fi
 
-echo -e "${BluW} Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
+echo -e "${BluW}Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
 }
 
 # ===== End of Functions list =====
@@ -219,7 +219,7 @@ copy_rmsgw
 compile_rmsgw
 finish_rmsgw
 
-echo "$(date $(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"
