@@ -166,8 +166,8 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
+cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
-cd $SRC_DIR
 make clean
 make -j$num_cores > $RMS_BUILD_FILE 2>&1
 if [ $? -ne 0 ]
