@@ -110,7 +110,7 @@ function download_rmsgw #Pull rmsgw from github
 {
 echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
 cd /usr/local/src
-if [ ! -d /usr/local/src/rmsgw ]; then
+if [ ! -d $SRC_DIR ]; then
   echo -e "${Green} Downloading rmsgw source ${Reset}"
   git clone $RMSGW
 else
@@ -147,14 +147,15 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
-cd /usr/local/src/rmsgw
-make > RMS.txt
+num_cores=$(nproc --all)
+cd $SRC_DIR
+make -j$num_cores > $RMS_BUILD_FILE 2>&1
 if [ $? -ne 0 ]
  then
  echo -e "${BluW}$Red}\t Compile error${White} - check RMS.txt File \t${Reset}"
  exit 1
 else 
- rm RMS.txt
+ rm $RMS_BUILD_FILE
 fi
 make install
 echo -e "${BluW}RMS Gateway Installed \t${Reset}"
