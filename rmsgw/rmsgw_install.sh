@@ -191,7 +191,7 @@ echo -e "${BluW}RMS Gateway Installed \t${Reset}"
 function finish_rmsgw
 {
 # Copy rmschanstat to /usr/local/bin
-if [ ! -f /usr/local/bin/rmschanstat ]; then
+if [ -f /usr/local/bin/rmschanstat ]; then
 	mv /usr/local/bin/rmschanstat /usr/local/bin/rmschanstat-dist
 	cp -f $wd/rmsgw/rmschanstat /usr/local/bin/rmschanstat
 else
