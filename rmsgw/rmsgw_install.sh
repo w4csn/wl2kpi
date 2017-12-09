@@ -121,7 +121,7 @@ fi
 
 function copy_rmsgw # Copy rmsgw from install folder
 {
-echo -e "${BluW}\t Copying RMS Source file \t${Reset}"
+echo -e "${BluW}\t Copy RMS Gateway Source File from Source Folder  \t${Reset}"
 # Does source directory exist?
 if [ ! -d $SRC_DIR ] ; then
    mkdir -p $SRC_DIR
@@ -210,7 +210,7 @@ chk_root
 install_tools
 create_users
 copy_rmsgw
-#compile_rmsgw
+compile_rmsgw
 #finish_rmsgw
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
