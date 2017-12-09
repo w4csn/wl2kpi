@@ -152,10 +152,10 @@ for filename in *.zip ; do
    rms_ver="$(echo ${filename#r*-} | cut -d '.' -f1,2,3)"
    echo "$filename version: $rms_ver"
 done
-dbgecho "Untarring this installation file: $filename, version: $rms_ver"
+dbgecho "Unzipping this installation file: $filename, version: $rms_ver"
 
 #tar xf $filename
-unzip $filename
+unzip -o $filename
 if [ $? -ne 0 ] ; then
  echo -e "${BluW}${Red}\t $filename File not available \t${Reset}"
  exit 1
