@@ -43,11 +43,11 @@ echo 0       > protocol
 
 # Set Beacon for Port 0 
 /usr/local/sbin/beacon \
-	-c k4gbb \
+	-c n0one \
 	-d "info " \
 	-t 15 \
 	0 \
-	"RMS Gate = k4gbb-10"
+	"RMS Gate = n0one-10"
 
 # Enable External Logons
 /usr/local/sbin/ax25d &

@@ -95,7 +95,7 @@ function configure_axports() {
 # ===== End of Functions list =====
 
 # =====  Main
-sleep 5
+sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
@@ -132,22 +132,26 @@ get_callsign
 
 # === Configure axports
 echo -e "=== Configuring axports"
+echo
 grep -i "$AX25PORT" $AX25_CFGDIR/axports
 if [ $? -eq 1 ] ; then
+   echo
    echo "No ax25 ports defined"
+   echo
    mv $AX25_CFGDIR/axports $AX25_CFGDIR/axports-dist
    echo "Original ax25 axports saved as axports-dist"
-   sed -n '1,4p' $AX25_CFGDIR/axports-dist >> $AX25_CFGDIR/axports
+   echo
    prompt_read
 {
 echo "# $AX25_CFGDIR/axports"
 echo "#"
 echo "# The format of this file is:"
-echo "#portname	callsign	speed	paclen	window	description"
+echo "# portname	callsign	speed	paclen	window	description"
 echo "$AX25PORT            $CALLSIGN-$SSID         19200    256     7       TNC-Pi port"
-} >> $AX25_CFGDIR/axports
+} > $AX25_CFGDIR/axports
 else
    echo "AX.25 port $AX25PORT already configured"
+   echo
 fi
 echo -e "=== Configuration Finished"
 echo
@@ -156,17 +160,20 @@ echo
 # Set up a listening socket, for testing
 # Make it different than previous SSID
 echo -e "=== Configuring ax25d.conf"
+echo
 if ((SSID < 15)) ; then
    AX25DSSID=$((SSID+1))
 else
    AX25DSSID=$((SSID-1))
 fi
 
-grep  "k4gbb" /etc/ax25/ax25d.conf >/dev/null
+grep  "n0one" /etc/ax25/ax25d.conf >/dev/null
 if [ $? -eq 0 ] ; then
    echo "ax25d not configured"
+   echo
    mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
    echo "Original ax25d.conf saved as ax25d.conf-dist"
+   echo
    # copy first 1 line of file
    sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 {
@@ -174,17 +181,20 @@ echo "[$CALLSIGN-$AX25DSSID VIA $AX25PORT]"
 echo "NOCALL   * * * * * *  L"
 echo "N0CALL   * * * * * *  L"
 echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
-} >> $AX25_CFGDIR/ax25d.conf
+} > $AX25_CFGDIR/ax25d.conf
    sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 else
    echo "ax25d.conf already configured"
+   echo
 fi
 echo -e "=== Configuration Finished"
 echo
 
 # === Configure ax25-up
 echo -e "=== Configuring ax25-up"
-sed -i -e "/k4gbb/ s/k4gbb/$CALLSIGN/" >> $AX25_CONFIGDIR/ax25-up
+echo
+sed -i -e "/n0one/ s/n0one/$CALLSIGN/" $AX25_CFGDIR/ax25-up > /dev/null 2>&1
+
 echo -e "=== Configuration Finished"
 echo
 

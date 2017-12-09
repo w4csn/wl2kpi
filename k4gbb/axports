@@ -1,5 +1,5 @@
-# $AX25_CFGDIR/axports
+# /etc/ax25/axports
 #
 # The format of this file is:
-#portname	callsign	speed	paclen	window	description
+# portname	callsign	speed	paclen	window	description
 

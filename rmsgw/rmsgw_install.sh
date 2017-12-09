@@ -127,14 +127,14 @@ if [ ! -d $SRC_DIR ]; then
 fi
 cd $SRC_DIR
 cp $wd/src/$SRC_FILE . > /dev/null 2>&1
-if [ $? -ne 0 ]; then
+if [ $? -eq 0 ]; then
 	echo "...Copy complete"
 else
 	echo "... Copy failed"
 	exit 1
 fi
 unzip $SRC_FILE > /dev/null 2>&1
-if [ $? -ne 0 ]; then
+if [ $? -eq 0 ]; then
 	echo "...Unzip complete"
 else
 	echo "...Unzip failed"
@@ -161,6 +161,7 @@ echo -e "${BluW}RMS Gateway Installed \t${Reset}"
 }
 
 function finish_rmsgw
+{
 # Copy rmschanstat to /usr/local/bin
 if [ ! -f /usr/local/bin/rmschanstat~1~ ]; then
 	cp -f $wd/rmsgw/rmschanstat /usr/local/bin/rmschanstat
@@ -172,13 +173,12 @@ fi
 date >> /root/Changes
 echo "        RMS Gate Installed - rmsgw-2.4.0-181" >> /root/Changes
 echo -e "${BluW} Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
-exit 0
 }
 
 # ===== End of Functions list =====
 
 # ===== Main
-sleep 5
+sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
