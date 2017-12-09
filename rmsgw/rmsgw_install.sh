@@ -27,7 +27,7 @@ PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src/rmsgw"
 SRC_FILE="rmsgw-2.4.0-182.zip"
 ROOTFILE_NAME="rmsgw-"
-RMS_BUILD_FILE="rmsbuild.txt"
+RMS_BUILD_FILE="rmsgwbuild.txt"
 
 # ===== Function List =====
 
@@ -166,8 +166,10 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
+chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
+# Clean old binaries
 make clean
 make -j$num_cores > $RMS_BUILD_FILE 2>&1
 if [ $? -ne 0 ]
