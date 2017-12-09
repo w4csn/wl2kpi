@@ -36,8 +36,8 @@ echo -e "$scriptname: Install ax25 files"
 echo
 
 echo -e "$scriptname: Install RMS Gateway"
-./rmsgw/rmsgw_install.sh
-#./rmsgw/rmsgw_config.sh
+#./rmsgw/rmsgw_install.sh
+./rmsgw/rmsgw_config.sh
 echo
 
 #echo -e "$scriptname: Install paclink-unix with imap"
