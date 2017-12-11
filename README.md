@@ -2,8 +2,9 @@
 
 ## Introduction
 
-### This repo contains scripts & notes for taking a fresh Raspbian image that will boot up & run the following configurations:
+### This repo contains scripts & notes for AX.25/RMSGW-Linux/paclink-unix/ on a fresh Raspbian image.
 
+#### The script will run the following configurations:
 * Core only
 	* this includes AX.25 & tools for running a TNC-PI on a Raspberry Pi 2 or 3
 * RMS Winlink Gateway for linux
