@@ -1,206 +1,236 @@
 #!/bin/bash
-# script by Scott Newton ( W4CSN )
-# updated November-22-2017
-# for Rpi3
-# Copy this script file and execute as root.
-# It will Download and Install paclink-unix, postfix
-# It also assumes that you have already ran the Instax25.new script by k4gbb
+#
+# Install paclink-unix from source tree
+# Also installs mutt & postfix
+#
+# Uncomment this statement for debug echos
+DEBUG=1
+#DEFER_BUILD=1
 
-# Error Checking
-set -u # Exit if there are uninitialized variables.
-set -e # Exit if any statement returns a non-true value.
+scriptname="`basename $0`"
+UDR_INSTALL_LOGFILE="/var/log/udr_install.log"
 
-#Constants
-wd=$(pwd)
-uid=$(id -u)
-INST_UID=$USER
-PACLINK=https://github.com/nwdigitalradio/paclink-unix
+SRC_DIR="/usr/local/src"
+PLU_CFG_FILE="/usr/local/etc/wl2k.conf"
+POSTFIX_CFG_FILE="/etc/postfix/transport"
+PLU_VAR_DIR="/usr/local/var/wl2k"
 
+BUILD_PKG_REQUIRE="build-essential autoconf automake libtool"
+INSTALL_PKG_REQUIRE="postfix mutt libdb-dev libglib2.0-0 zlib1g-dev libncurses5-dev libdb5.3-dev libgmime-2.6-dev jq curl"
 
-# Color Codes
-Reset='\e[0m'
-Red='\e[31m'
-Green='\e[30;42m'  # Black/Green
-Yellow='\e[33m'
-YelRed='\e[31;43m' # Red/Yellow
-Blue='\e[34m'
-White='\e[37m'
-BluW='\e[37;44m'   # White/Blue
+function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
+# ===== function is_pkg_installed
 
-function Chk_Root
-{
-# Check for Root
-if [ ! uid=0 ]; then
- echo "You must be root User to perform installation!"
- echo "Attempting to change user to root..."
- sudo su || {echo "SU to root Failed! Exiting..."; exit 1}
-fi
+function is_pkg_installed() {
+
+return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
 }
 
-function Install_Tools
-{
-#Update Package list & Install Build resources
-echo -e "${Green} Updating the Package List               ${Reset}"
-echo -e "\t${YelRed} This may take a while ${Reset}"
-apt-get update > /dev/null
-echo "  *"
-apt-get install build-essential autoconf automake libtool -y -q
-apt-get install postfix libdb-dev libglib2.0-0 zlib1g-dev libncurses5-dev libdb5.3-dev libgmime-2.6-dev -y -q
-apt-get install dovecot-common dovecot-imapd telnet -y -q
-echo "  *"
-}
+# ===== function get_user
+function get_user() {
 
-function Download_paclink
-{
-# Get current source code for paclink-unix
-cd /usr/local/src
-if [ ! -d /usr/local/src/paclink-unix ]; then
-  echo -e "${Green} Downloading paclink-unix source ${Reset}"
-  git clone $PACLINK
+# prompt for user name
+# Check if there is only a single user on this system
+
+USERLIST="$(ls /home)"
+USERLIST="$(echo $USERLIST | tr '\n' ' ')"
+
+if (( `ls /home | wc -l` == 1 )) ; then
+   USER=$(ls /home)
 else
-  echo -e "${Green} updating local paclink-unix source ${Reset}"
-  git pull $PACLINK
+  echo "Enter user name ($(echo $USERLIST | tr '\n' ' ')), followed by [enter]:"
+  read -e USER
 fi
+
+# verify user name is legit
+userok=false
+
+for username in $USERLIST ; do
+  if [ "$USER" = "$username" ] ; then
+     userok=true;
+  fi
+done
+
+if [ "$userok" = "false" ] ; then
+   echo "User name does not exist,  must be one of: $USERLIST"
+   exit 1
+fi
+
+dbgecho "using USER: $USER"
 }
 
-function Compile_paclink
-{
-# Compile paclink-unix
-cd /usr/local/src/paclink-unix
-automakever=$(ls -d /usr/share/automake*) # Determine automake version
-cp $automakever/missing . # copy missing template to paclink-unix source dir
-if [ ! -e README ]; then # autogen expects a README file, but may not be provided by paclink-unix
-  touch README
-fi  
-./autogen.sh --enable-postfix
-if [ ! -e Makefile.in ]; then
-  automake --add-missing
-  ./configure --enable-postfix
-fi
-make > paclink.txt
-if [ $? -ne 0 ]
-   then
- echo -e "${BluW}$Red} \tCompile error${White} - check paclink.txt File \t${Reset}"
- exit 1
-   else 
- rm paclink.txt
-fi
-make install
-echo -e "${BluW}paclink-unix Installed \t${Reset}"
+# ===== function files_exist()
+function files_exist() {
+   retcode=1
+
+   for filename in `echo ${CFG_FILES}` ; do
+      if [ ! -f "$filename" ] ; then
+         retcode=0
+      else
+         echo "File check found: $filename"
+      fi
+   done
+   return $retcode
 }
 
-function Configure_Groups
-{
-# Configure groups
-usermod -a -G postdrop $INST_UID
-usermod -a -G mail $INST_UID
-usermod -a -G adm $INST_UID
-cd /usr/local/var/
-chown -R $INST_UID:mail wl2k
-}
+# ===== main
 
-echo -e "${Red} Edit paclink-unix config file in /usr/local/etc/wl2k.conf ${Reset}"
-echo -e "${Red} Uncommment any lines that you edit. ${Reset}"
-echo -e "Set mycall to your callsign & use UPPERCASE"
-echo -e "Set timeout to 190"
-echo -e "Set email to " $INST_UID "@localhost"
-echo -e "Set wl2k-password"
-echo -e "Set ax25port to the portname in /etc/ax25/axports"
+echo
+echo "paclink-unix install START"
 
-function Configure_postfix
-{
-# Configure postfix
+# make sure we're running as root
+if [[ $EUID != 0 ]] ; then
+   echo "Must be root"
+   exit 1
+fi
+# Save current directory
+CUR_DIR=$(pwd)
 
-cd /etc/postfix
-$CONFIG_FILE=transport
-ChkFile_Exist $CONFIG_FILE
+# check if build packages are installed
+dbgecho "Check build packages: $BUILD_PKG_REQUIRE"
+needs_pkg=false
 
-# Create postfix transport file using file descriptor (fd) 3
-exec 3<> trasnport
-echo "#" >&3
-echo "localhost :" >&3
-echo $HOSTNAME"	local:" >&3
-echo $HOSTNAME".localnet	local:" >&3
-echo "*		wl2k:localhost" >&3
-exec 3>&-
+for pkg_name in `echo ${BUILD_PKG_REQUIRE}` ; do
 
-#Reload transport file
-postmap /etc/postfix/transport
+   is_pkg_installed $pkg_name
+   if [ $? -ne 0 ] ; then
+      echo "$scriptname: Will Install $pkg_name package"
+      needs_pkg=true
+      break
+   fi
+done
 
-cd /etc
-$CONFIG_FILE=mailname
-ChkFile_Exist $CONFIG_FILE
+if [ "$needs_pkg" = "true" ] ; then
+   echo
+   echo -e "=== Installing build tools"
 
-# Create mailname file
-echo $HOSTNAME".localnet" > mailname
+   apt-get install -y -q $BUILD_PKG_REQUIRE
+   if [ "$?" -ne 0 ] ; then
+      echo "Build tool install failed. Please try this command manually:"
+      echo "apt-get -y $BUILD_PKG_REQUIRE"
+      exit 1
+   fi
+fi
 
-$CONFIG_FILE=aliases
-ChkFile_Exist $CONFIG_FILE
+# check if other required packages are installed
+dbgecho "Check required packages: $INSTALL_PKG_REQUIRE"
+needs_pkg=false
 
-# Create postfix aliases file using file descriptor (fd) 3
-exec 3<> aliases
-echo "# /etc/aliases" >&3
-echo "root: "$INST_UID >&3
-echo "mailer-daemon" >&3
-echo "postmaster: "$INST_UID >&3
-echo "nobody: root" >&3
-echo "hostmaster: root" >&3
-echo "usenet: root" >&3
-echo "news: root" >&3
-echo "webmaster: root" >&3
-echo "www: root" >&3
-echo "ftp: root" >&3
-echo "abuse: root" >&3
-echo "noc: root" >&3
-echo "security: root" >&3
-exec 3>&-
+for pkg_name in `echo ${INSTALL_PKG_REQUIRE}` ; do
 
-# Recreate aliases.db
-newaliases
-# Configure master.cf
-# Check if postfix master file has been modified
-grep "wl2k" /etc/postfix/master.cf  > /dev/null 2>&1
-if [ $? -ne 0 ] ; then
-   {
-      echo "wl2k      unix  -       n       n       -       1      pipe"
-      echo "  flags=XFRhu user=$USER argv=/usr/local/libexec/mail.wl2k -m"
-   } >> /etc/postfix/master.cf
+   is_pkg_installed $pkg_name
+   if [ $? -ne 0 ] ; then
+      echo "$scriptname: Will Install $pkg_name package"
+      needs_pkg=true
+      break
+   fi
+done
+
+# Get user name, $USER
+get_user
+MUTT_CFG_FILE="/home/$USER/.muttrc"
+CFG_FILES="$PLU_CFG_FILE $MUTT_CFG_FILE $POSTFIX_CFG_FILE"
+
+if [ "$needs_pkg" = "true" ] ; then
+   echo
+   echo -e "=== Installing required packages"
+
+   debconf-set-selections <<< "postfix postfix/mailname string $(hostname).localhost"
+   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+
+   apt-get install -y -q $INSTALL_PKG_REQUIRE
+   if [ "$?" -ne 0 ] ; then
+      echo "Required package install failed. Please try this command manually:"
+      echo "apt-get -y $INSTALL_PKG_REQUIRE"
+      exit 1
+   fi
 else
-   echo " /etc/postfix/master.cf already modified."
+   # Does NOT need any package
+   # Have paclink-unix, mutt & postfix already been installed?
+   files_exist
+   if [ $? -eq 1 ] ; then
+      echo "paclink-unix, mutt & postfix already installed ..."
+      exit 0
+   fi
 fi
 
-# Configure main.cf
-cd /etc/postfix
-$CONFIG_FILE=main.cf
-ChkFile_Exist $CONFIG_FILE
-# use awk to modify necessary entris in main.cf use comment below as reference
-#awk -F '[ \t]*=[ \t]*' '$1=="keytodelete" { next } $1=="keytomodify" { print "keytomodify=newvalue" ; next } { print } END { print "keytoappend=value" }' "$CONFIG_FILE" >"$CONFIG_FILE~"
-awk -v key="myhostname" -v name="$HOSTNAME" -F '[ \t]*=[ \t]*' '$1==key { print $1" = "name ; next } { print }' "$CONFIG_FILE" >"$CONFIG_FILE~"
-awk -v key="mydestination" -v name="$HOSTNAME, $HOSTNAME.localnet, localhost.localnet, localhost" -F '[ \t]*=[ \t]*' '$1==key { print $1" = "name ; next } { print }' "$CONFIG_FILE~"
-awk -v key="mynetworks" -v name="127.0.0.0/8" -F '[ \t]*=[ \t]*' '$1==key { print $1" = "name ; next } { print }' "$CONFIG_FILE~"
-awk -v key="inet_protocols" -v name="ipv4" -F '[ \t]*=[ \t]*' '$1==key { print $1" = "name ; next } { print }' "$CONFIG_FILE~"
-awk -v key="home_mailbox" -v name="maildir" -F '[ \t]*=[ \t]*' '$1==key { print $1" = "name ; next } { print }' "$CONFIG_FILE~"
-mv "$CONFIG_FILE~" "$CONFIG_FILE" || echo "File move failed (permissions? disk space?)"
-
-
-
-}
-
-function ChkFile_Exist()
-# Check for file and make dated backup before continuing.
-{
-if [ -e "$1" ]; then
-  cp -p "$1" "$1.orig.$(date \"+%Y%m%d_%H%M%S\")"
+# Does source directory exist?
+if [ ! -d $SRC_DIR ] ; then
+   mkdir -p $SRC_DIR
+   if [ "$?" -ne 0 ] ; then
+      echo "Problems creating source directory: $SRC_DIR"
+      exit 1
+   fi
 fi
-}
 
-# Main
-echo -e "${BluW}\t\n\t  Install Paclink-Unix \n${Yellow}\t     version 1.0.0  \t\n\t \n${White}   by Scott Newton ( W4CSN )  \n${Red}               snewton86@gmail.com \n${Reset}"
-Chk_Root
-Install_Tools
-Download_paclink
-Configure_Groups
-Configure_postfix
-exit 0
+cd $SRC_DIR
 
+if [ -d paclink-unix ] && (($(ls -1 paclink-unix | wc -l) > 56)) ; then
+   echo "=== paclink-unix source already downloaded"
+else
+   echo "=== getting paclink-unix source"
+   git clone https://github.com/nwdigitalradio/paclink-unix
+   pwd
+   rm -f paclink-unix/missing paclink-unix/test-driver
+fi
+
+## For Debugging check conditional for building paclink-unix
+if [ -z "$DEFER_BUILD" ] ; then
+   echo "=== building paclink-unix"
+   echo "This will take a few minutes, output is captured to $(pwd)/paclink-unix/build_log.out"
+
+   pushd paclink-unix
+
+   cp README.md README
+   echo "=== running autotools"
+   aclocal > build_log.out 2> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at aclocal"; exit 1; fi
+   autoheader >> build_log.out 2>> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at autoheader"; exit 1; fi
+   automake --add-missing >> build_log.out 2>> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at automake"; exit 1; fi
+   autoreconf >> build_log.out 2>> build_error.out
+   echo "=== running configure"
+   ./configure --enable-postfix >> build_log.out 2>> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at configure"; exit 1; fi
+   num_cores=$(nproc --all)
+   echo "=== making paclink-unix using $num_cores cores"
+   make -j$num_cores >> build_log.out 2>> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at make"; exit 1; fi
+   echo "=== installing paclink-unix"
+   make install >> build_log.out 2>> build_error.out
+   if [ "$?" -ne 0 ] ; then echo "build failed at make install"; exit 1; fi
+
+   popd > /dev/null
+fi
+
+echo "=== test files 'missing' & 'test-driver'"
+pwd
+ls -salt $SRC_DIR/paclink-unix/missing $SRC_DIR/paclink-unix/test-driver
+
+echo "=== verifying paclink-unix install"
+REQUIRED_PRGMS="wl2ktelnet wl2kax25 wl2kserial"
+echo "Check for required files ..."
+EXITFLAG=false
+
+for prog_name in `echo ${REQUIRED_PRGMS}` ; do
+   type -P $prog_name &>/dev/null
+   if [ $? -ne 0 ] ; then
+      echo "$scriptname: paclink-unix not installed properly"
+      echo "$scriptname: Need to Install $prog_name program"
+      EXITFLAG=true
+   fi
+done
+if [ "$EXITFLAG" = "true" ] ; then
+  exit 1
+fi
+
+echo "$(date "+%Y %m %d %T %Z"): paclink-unix basic install script FINISHED" >> $UDR_INSTALL_LOGFILE
+echo
+echo "paclink-unix install FINISHED"
+echo
+# install postfix
+source $CUR_DIR/postfix_install.sh
+# install mutt
+source $CUR_DIR/mutt_install.sh $USER $CALLSIGN
