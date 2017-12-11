@@ -52,7 +52,7 @@ It allows using a WiFi device (smart phone, tablet, laptop) to compose a Winlink
 paclink-unix to send the message. This is also configured to cough up a dhcp config for your mobil 
 device if your RPi 3 is in a car not connected to the Internet.
 
-Installs the following:
+#### Installs the following:
 
 	* paclink-unix to format e-mail
 	* postfix for the mail transfer agent
@@ -62,7 +62,7 @@ Installs the following:
 	* nodejs to host the control page for paclink-unix
 	* iptables to enable NAT
 	
-Special recognition
+### Special recognition
 Thanks goes out to k4gbb and n7nix, their scripts and code provided me with the basics to understanding 
 and customizing this set of install scripts for my version of a working rpi with a TNC-PI. Hopefully others
 will find this useful as well.
