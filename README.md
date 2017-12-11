@@ -1,15 +1,15 @@
 # wl2kpi -- Not ready for use!
 
-##Introduction
+## Introduction
 
-###This repo contains scripts & notes for taking a fresh Raspbian image that will boot up & run the following configurations:
+### This repo contains scripts & notes for taking a fresh Raspbian image that will boot up & run the following configurations:
 
 * Core only
-	*this includes AX.25 & tools for running a TNC-PI on a Raspberry Pi 2 or 3
+	* this includes AX.25 & tools for running a TNC-PI on a Raspberry Pi 2 or 3
 * RMS Winlink Gateway for linux
 * Paclink-unix in two flavors
-	*paclink-unix basic which allows using a movemail e-mail client like mutt
-	*paclink-unix imap which allows using any e-mail client that supports. IMAP
+	* paclink-unix basic which allows using a movemail e-mail client like mutt
+	* paclink-unix imap which allows using any e-mail client that supports. IMAP
 
 Note: These scripts are meant to only be run once and only on a fresh image.
 
