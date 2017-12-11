@@ -29,11 +29,10 @@ In order to install the linux RMS Gateway you must register with Winlink to get 
 for a gateway.
 See rmsgw_install.md for details on installing RMS Gateway functionality.
 
-### paclink-unix
-1. Two installation options:
-	a. basic - installs paclink-unix, mutt & postfix
-	b. imap - installs the above plus, dovecot imap mailserver & hostapd WiFi access point,
-       and dnsmasq to serve up DNS & DHCP when the RPi 3 is not connected to a network.
+#### paclink-unix
+* Two installation options:
+	* basic - installs paclink-unix, mutt & postfix
+	* imap - installs the above plus, dovecot imap mailserver & hostapd WiFi access point, and dnsmasq to serve up DNS & DHCP when the RPi 3 is not connected to a network.
 	
 #### paclink-unix basic
 
@@ -42,9 +41,9 @@ on the Raspberry Pi to compose & send winlink messages.
 
 Installs the following:
 
-	a. paclink-unix to format e-mail
-	b. postfix for the mail transfer agent
-	c. mutt for the mail user agent
+* paclink-unix to format e-mail
+* postfix for the mail transfer agent
+* mutt for the mail user agent
 
 #### paclink-unix imap
 
@@ -55,13 +54,13 @@ device if your RPi 3 is in a car not connected to the Internet.
 
 Installs the following:
 
-	a. paclink-unix to format e-mail
-	b. postfix for the mail transfer agent
-	c. dovecot, imap e-mail server
-	d. hostapdd to enable a Raspberry Pi 3 to be a virtual access point
-	e. dnsmasq to allow connecting to the Raspbery Pi when it is not connected to a network
-	f. nodejs to host the control page for paclink-unix
-	g. iptables to enable NAT
+	* paclink-unix to format e-mail
+	* postfix for the mail transfer agent
+	* dovecot, imap e-mail server
+	* hostapdd to enable a Raspberry Pi 3 to be a virtual access point
+	* dnsmasq to allow connecting to the Raspbery Pi when it is not connected to a network
+	* nodejs to host the control page for paclink-unix
+	* iptables to enable NAT
 	
 Special recognition
 Thanks goes out to k4gbb and n7nix, their scripts and code provided me with the basics to understanding 
@@ -69,25 +68,25 @@ and customizing this set of install scripts for my version of a working rpi with
 will find this useful as well.
 W4CSN
 
-Web Sources used:
-Installing Rasbian
-https://www.raspberrypi.org/downloads/raspbian/
-https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+### Web Sources used:
+#### Installing Rasbian
+* https://www.raspberrypi.org/downloads/raspbian/
+* https://www.raspberrypi.org/documentation/installation/installing-images/README.md
 
-Configuring pi for tnc-pi
-https://tnc-x.com/TNCPi.htm
+#### Configuring pi for tnc-pi
+* https://tnc-x.com/TNCPi.htm
 
-Installing an configuring ax25 and rms gateway
-http://k4gbb.no-ip.org/docs/
+#### Installing an configuring ax25 and rms gateway
+* http://k4gbb.no-ip.org/docs/
 
-Installing and configuring paclink-unix and postfix:
-http://bazaudi.com/plu/doku.php
+#### Installing and configuring paclink-unix and postfix:
+* http://bazaudi.com/plu/doku.php
 
-Help with postfix and dovecot imapd:
-https://samhobbs.co.uk/2013/12/raspberry-pi-email-server-part-1-postfix
+#### Help with postfix and dovecot imapd:
+* https://samhobbs.co.uk/2013/12/raspberry-pi-email-server-part-1-postfix
 
-Notes on linbpq:
-http://www.tnc-x.com/InstallingLINBPQ.htm
+#### Notes on linbpq:
+* http://www.tnc-x.com/InstallingLINBPQ.htm
 
 Winlink clients for linux:
 paclink-unix
@@ -96,7 +95,10 @@ Pat   http://getpat.io
 Winlink clients for windows:
 Winlink Express
 
-https://github.com/ve7fet/linuxax25
-https://github.com/nwdigitalradio/n7nix
-https://github.com/nwdigitalradio/rmsgw
-https://github.com/nwdigitalradio/paclink-unix
+#### AX.25 source Code
+*https://github.com/ve7fet/linuxax25
+
+#### Installation Scripts from n7nix
+* https://github.com/nwdigitalradio/n7nix
+* https://github.com/nwdigitalradio/rmsgw
+* https://github.com/nwdigitalradio/paclink-unix
