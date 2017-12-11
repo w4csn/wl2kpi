@@ -14,9 +14,9 @@
 
 Note: These scripts are meant to only be run once and only on a fresh image.
 
-Installation Scripts
+### Installation Scripts
 
-Core
+#### Core
 Core is required for any other packet apps using a TNC-PI. this option Configures a 
 rasberry pi 2 or 3 for using a TNC-PI for either serial /dev/ttyAMA0 or i2c operation.
 AX.25 tools/apps/library will also be installed. As part of the core requirements this
@@ -24,18 +24,18 @@ option also configures systemd to start AX.25 at boot time.
 
 Regardless of what functionality you want ot install, the first thing to run is install.sh 
 
-RMS Gateway
+#### RMS Gateway
 In order to install the linux RMS Gateway you must register with Winlink to get a password
 for a gateway.
 See rmsgw_install.md for details on installing RMS Gateway functionality.
 
-paclink-unix
+### paclink-unix
 1. Two installation options:
 	a. basic - installs paclink-unix, mutt & postfix
 	b. imap - installs the above plus, dovecot imap mailserver & hostapd WiFi access point,
        and dnsmasq to serve up DNS & DHCP when the RPi 3 is not connected to a network.
 	
-paclink-unix basic
+#### paclink-unix basic
 
 This is a light weight paclink-unix install that gives functionality to use an e-mail client 
 on the Raspberry Pi to compose & send winlink messages.
@@ -46,7 +46,7 @@ Installs the following:
 	b. postfix for the mail transfer agent
 	c. mutt for the mail user agent
 
-paclink-unix imap
+#### paclink-unix imap
 
 This installs functionality to use any imap e-mail client & to access paclink-unix from a browser.
 It allows using a WiFi device (smart phone, tablet, laptop) to compose a Winlink message & envoke 
