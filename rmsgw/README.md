@@ -41,7 +41,7 @@ include/rmslib.h
           librms/file_exists.c
             replace all "TRUE" or "FALSE" with "true" or "false repsectively.
 ````
-
+Update - it appears this issue has been corrected on https:\\github.com\nwdigitalradio\rmsgw
 
 
 #### Notes on rmschanstat

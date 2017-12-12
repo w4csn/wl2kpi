@@ -8,6 +8,7 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
+# source ./core/core_functions.sh
 
 # ===== main
 clear
@@ -15,6 +16,7 @@ echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_L
 echo
 echo "$scriptname: script STARTED"
 echo
+
 
 # Be sure we're running as root
 if [[ $EUID != 0 ]] ; then
