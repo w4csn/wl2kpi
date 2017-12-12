@@ -33,7 +33,8 @@ There is an issue with rmschanstat that prevents it from returning an available 
 It exist in the check_ax25_netstat functions, which simply greps the netstat command for the ax25 protocol, the interface (which would usually be ax0 from ifconfig), and the callsign.
 everything is returned true exept the interface, so i can be reasonably assured the interface is actually working.
 
-I simply edited the following line (200) in the check_ax25_netstat function on /usr/local/sbin/rmschanstat 
+I simply edited the following line (200) in the check_ax25_netstat function on /usr/local/sbin/rmschanstat.
+ 
 from:
 ````bash
 	STATUS=($netstat --protocol=ax25 -l | grep "${INTERFACE[0]})" | grep -i "${CALL}" | grep -i "LISTENING"))
