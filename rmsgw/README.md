@@ -1,8 +1,8 @@
 # RMS Gateway installation
 
 ## Status
-rmsgw_install.sh - working
-rmsgw_config.sh - working
+* rmsgw_install.sh - working
+* rmsgw_config.sh - working
 
 ### rmsgw_install.sh
 Depends on core_install.sh, core_config.sh, ax25_install.sh, and ax25_config.sh
