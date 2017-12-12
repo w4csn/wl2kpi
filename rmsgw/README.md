@@ -1,5 +1,21 @@
 # RMS Gateway installation
 
+## Status
+rmsgw_install.sh - working
+rmsgw_config.sh - working
+
+### rmsgw_install.sh
+Depends on core_install.sh, core_config.sh, ax25_install.sh, and ax25_config.sh
+* Installs prequisite packages for compiling rmsgw-linux
+* Creates rmsgw user and group
+* Copies patched source code ( see notes below) to /usr/loca/src/rmsgw
+* Compiles software 
+* Performs cleanup after updating source and recompiling ( not working at the moment.)
+
+### rmsgw_config.sh
+Depends on rmsgw_install.sh
+* Configures all necessary files for a working rms gateway.
+
 #### Notes on compiling if downloading from source
 rmsgw-2.4.0-181 and 182 will not compile on Raspbian Jessie or stretch
 due to a strict interpretation of boolean library. Must use <stdbool.h>
