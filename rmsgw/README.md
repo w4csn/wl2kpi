@@ -1,6 +1,7 @@
 # RMS Gateway installation
 
 ## Status
+##### Overall status of scripts in this folder. working means basic functionality.
 * rmsgw_install.sh - working
 * rmsgw_config.sh - working
 
@@ -10,11 +11,13 @@ Depends on core_install.sh, core_config.sh, ax25_install.sh, and ax25_config.sh
 * Creates rmsgw user and group
 * Copies patched source code ( see notes below) to /usr/loca/src/rmsgw
 * Compiles software 
+#### TODO
 * Performs cleanup after updating source and recompiling ( not working at the moment.)
 
 ### rmsgw_config.sh
 Depends on rmsgw_install.sh
 * Configures all necessary files for a working rms gateway.
+#### TODO
 
 #### Notes on compiling if downloading from source
 rmsgw-2.4.0-181 and 182 will not compile on Raspbian Jessie or stretch
