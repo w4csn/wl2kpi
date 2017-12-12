@@ -12,5 +12,6 @@ Depends on install.sh or app_install.sh
 #### TODO
 
 ### core_config.sh
+Depends on core_install.sh
 
 #### TODO
