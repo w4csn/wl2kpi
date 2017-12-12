@@ -27,7 +27,7 @@ include/rmslib.h
 
 #### Notes on rmschanstat
 rmschanstat is the script that determines if your rms gateway is functioning. It's called by rms_aci via a cron job. 
-If all check are ok, then the results are posted to the winlink web site. 
+If all checks are ok, then the results are posted to the winlink web site. 
 This keeps your station alive on the winlink map. otherwise after four hours your station will drop off the map.
 There is an issue with rmschanstat that prevents it from returning an available status on a RPI3 with Raspbian Stretch.
 It exist in the check_ax25_netstat functions, which simply greps the netstat command for the ax25 protocol, the interface (which would usually be ax0 from ifconfig), and the callsign.
