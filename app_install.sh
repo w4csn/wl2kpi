@@ -6,31 +6,32 @@
 #
 # Uncomment this statement for debug echos
 DEBUG=1
-
+set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-UDR_INSTALL_LOGFILE="/var/log/udr_install.log"
-
+WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+START_DIR=$(pwd)
+source ./core/core_functions.sh
 CALLSIGN="N0ONE"
-APP_CHOICES="core, rmsgw, plu, pluimap, uronode"
-APP_SELECT="rmsgw"
+APP_CHOICES="core, rmsgw, plu, pluimap, hostapd"
+APP_SELECT="hostapd"
 
 function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
 # ===== main
-
-echo "$scriptname: script start"
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo "$scriptname: script STARTED"
+echo
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "$scriptname: Must be root"
-   exit 1
-fi
+chk_root
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
    APP_SELECT=$1
 else
-   echo "No app chosen from command arg, so installing RMS Gateway"
+   echo "No app chosen from command arg, so installing Hostapd"
 fi
 
    # check argument passed to this script
@@ -72,10 +73,10 @@ case $APP_SELECT in
       source ./uro_install.sh
       popd > /dev/null
    ;;
-   tracker)
-      echo "$scriptname: Install dantracker"
-      pushd ../tracker
-      source ./tracker_install.sh
+   hostapd)
+      echo "$scriptname: Install hostapd"
+      pushd ../hostap
+      source ./hostap_install.sh
       popd > /dev/null
    ;;
    messanger)
@@ -95,12 +96,12 @@ case $APP_SELECT in
 
    *)
       echo "Undefined app, must be one of $APP_CHOICES"
-      echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script ERROR, undefined app" >> $UDR_INSTALL_LOGFILE
+      echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
       exit 1
    ;;
 esac
 
-echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script FINISHED" >> $UDR_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "app install ($APP_SELECT) script FINISHED"
 echo

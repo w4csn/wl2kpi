@@ -4,8 +4,12 @@
 #
 # hosts, resolv.conf /etc/network/interfaces /etc/dhcpcd.conf
 DEBUG=1
-
+set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
+WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+START_DIR=$(pwd)
+source ./core/core_functions.sh
+
 SSID="NOT_SET"
 
 # Required pacakges
@@ -90,7 +94,8 @@ for pkg_name in `echo ${PKGLIST}` ; do
       apt-get -qy install $pkg_name
    fi
 done
-
+./hostap_config.sh
+./autohotspot_config.sh
 echo "$(date "+%Y %m %d %T %Z"): hostap install script FINISHED" >> $UDR_INSTALL_LOGFILE
 echo
 echo "hostap install FINISHED"

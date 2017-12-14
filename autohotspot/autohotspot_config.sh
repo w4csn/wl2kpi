@@ -20,7 +20,7 @@ ls autohotspot 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot to /usr/bin"
    echo
-   cp $wd/hostap/autohotspot /usr/bin/ > /dev/null 2>&1
+   cp $wd/autohotspot/autohotspot /usr/bin/ > /dev/null 2>&1
    if [ $? -ne 0 ]; then
 	  echo "Problems Copying file"
 	  exit 1
@@ -60,7 +60,8 @@ service hostapd stop
 service dnsmasq stop
 systemctl disable hostapd
 systemctl disable dnsmasq
-systemctl enable autohotspot 
+systemctl enable autohotspot
+systemctl daemon-reload
 service autohotspot start
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE

@@ -4,8 +4,12 @@
 #
 # hosts, resolv.conf /etc/network/interfaces /etc/dhcpcd.conf
 DEBUG=1
-
+set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
+WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+START_DIR=$(pwd)
+source ./core/core_functions.sh
+
 SSID="NOT_SET"
 
 # ===== function debugecho

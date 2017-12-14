@@ -14,7 +14,7 @@ function ctrl_c() {
 function chk_root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
+   echo "$scriptname: Must be root"
    exit 1
 fi
 }
