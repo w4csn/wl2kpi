@@ -242,6 +242,8 @@ systemctl daemon-reload
 service hostapd start
 service dnsmasq start
 
+
+
 echo
 echo "Test if $SERVICELIST services have been started."
 for service_name in `echo ${SERVICELIST}` ; do
