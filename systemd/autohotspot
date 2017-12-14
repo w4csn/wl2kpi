@@ -1,0 +1,78 @@
+#!/bin/bash
+#Script to switch between a wifi network and a No Internet Hotspot without rebooting
+#Other setup required find out more at 
+#http://www.raspberryconnect.com/network/item/315-raspberry-pi-3-auto-wifi-hotspot-if-no-internet
+# These two lines check if any of the wifi networks already setup are in range
+wpassid=$(awk '/ssid="/{ print $0 }' /etc/wpa_supplicant/wpa_supplicant.conf | awk -F'ssid=' '{ print $2 }' ORS=' ' | sed 's/\"/''/g' | sed 's/ $//')
+ssids=($wpassid)
+#Note:If you only want to check for certain SSids
+#Remove the # in in front of ssids=('mySSID1'....  and 
+#put a # infront of  ssids=$(awk '..... & ssids($wpassid) in the lines above
+# separated by a space, ('mySSID1' 'mySSID2')
+#ssids=('mySSID1' 'mySSID2' 'mySSID3')
+createAdHocNetwork()
+{
+    ip link set dev wlan0 down
+    ip a add 10.0.0.5/24 dev wlan0
+    ip link set dev wlan0 up
+    systemctl start dnsmasq
+    systemctl start hostapd
+}
+KillHotspot()
+{
+	echo "Shutting Down Hotspot"
+	ip link set dev wlan0 down
+	systemctl stop hostapd
+	systemctl stop dnsmasq
+	ip addr flush dev wlan0
+	ip link set dev wlan0 up
+}
+#ssid in range check
+ssidChk=('NoSSid')
+for ssid in "${ssids[@]}"
+do 
+	if iw dev wlan0 scan ap-force | grep "$ssid" > /dev/null ;then
+		ssidChk=$ssid
+                break
+	else
+		ssidChk='NoSSid'
+	fi
+done 
+if [ $ssidChk != "NoSSid" ] 
+then
+	if systemctl status hostapd | grep "(running)"
+	then #hotspot running and ssid in range
+		KillHotspot
+		echo "Hotspot Deactivated, Bringing Wifi Up"
+        	wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null 2>&1
+	elif wpa_cli status | grep 'wlan0'
+	then #If already connected stop script
+		echo "Wifi already connected to network"
+	else #ssid exists and no hotspot running connect to wifi network
+		echo "Connecting to WiFi Network"
+		wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null 2>&1
+        	if wpa_cli status | grep 'wlan0' > /dev/null
+        	then
+			echo "Wifi connection ok"
+        	else
+			echo "Wifi failed to connect, Creating Hotspot instead"
+            		wpa_cli terminate
+			createAdHocNetwork
+        	fi
+	fi
+else #ssid not in range
+    	if systemctl status hostapd | grep "(running)" > /dev/null 
+	then
+		echo "Hostspot already active"
+	elif wpa_cli status | grep 'wlan0' > /dev/null
+	then
+		echo "Cleaning wifi files and Activating Hotspot"
+		wpa_cli terminate
+		ip addr flush wlan0
+		ip link set dev wlan0 down
+		rm -r /var/run/wpa_supplicant > /dev/null
+		createAdHocNetwork
+	else #"No SSID, activating Hotspot"
+		createAdHocNetwork
+	fi
+fi

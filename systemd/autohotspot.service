@@ -1,0 +1,9 @@
+[Unit]
+Description=Generates a non-internet Hotspot for ssh when a listed ssid is not in range.
+After=network-online.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/autohotspot
+[Install]
+WantedBy=multi-user.target
