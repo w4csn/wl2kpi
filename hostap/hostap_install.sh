@@ -62,14 +62,16 @@ return $HAS_WIFI
 }
 
 # ===== main
-
-echo "Install hostap on an RPi 3"
+sleep 3
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo "$scriptname: script STARTED"
+echo
+echo "=== Install hostap on an RPi 3"
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "Must be root."
-   exit 1
-fi
+chk_root
 
 is_rpi3
 if [ $? -eq "0" ] ; then
@@ -95,7 +97,7 @@ for pkg_name in `echo ${PKGLIST}` ; do
    fi
 done
 ./hostap_config.sh
-./autohotspot/autohotspot_config.sh
+../autohotspot/autohotspot_config.sh
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"
