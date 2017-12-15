@@ -46,11 +46,11 @@ if [ $DIST -ne "Rasbian" ]; then
 else
 	echo "OS: $DIST"
 	if [ $VERSION -eq "8" ]; then
-		$VER="Jessie"
+		VER="Jessie"
 		echo "Version: Jessie"
 		
 	elif [ $VERSION -eq "9" ]; then
-		$VER="Stretch"
+		VER="Stretch"
 		echo "Version: Stretch"
 	else
 		echo "INVALID VERSION"	
