@@ -260,7 +260,7 @@ echo "Test if $SERVICELIST services have been started."
    fi
 done
 
-echo "$(date "+%Y %m %d %T %Z"): hostap config script FINISHED" >> $UDR_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap config FINISHED"
+echo "$scriptname: script FINISHED"
 echo
