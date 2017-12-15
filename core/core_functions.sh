@@ -64,6 +64,7 @@ return $HAS_WIFI
 function is_rasbian() {
 HAS_RASBIAN=0
 DIST=$(lsb_release -si)
+VER=""
 read -d . VERSION < /etc/debian_version
 if [ $DIST != "Raspbian" ]; then
 	echo "INVALID OS"

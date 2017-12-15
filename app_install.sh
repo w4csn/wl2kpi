@@ -39,7 +39,7 @@ chk_root
 # OS Check
 DIST=$(lsb_release -si)
 read -d . VERSION < /etc/debian_version
-Ver=""
+VER=""
 if [ $DIST != "Raspbian" ]; then
 	echo "INVALID OS"
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
