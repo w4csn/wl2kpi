@@ -110,6 +110,7 @@ do
 			source ./core_config.sh
 			popd > /dev/null
 			echo "$scriptname: core installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		ax25)
@@ -120,6 +121,7 @@ do
 			source ./ax25_config.sh
 			popd > /dev/null
 			echo "$scriptname: AX.25 installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		rmsgw)
@@ -130,6 +132,7 @@ do
 			source ./rmsgw_config.sh
 			popd > /dev/null
 			echo "$scriptname: RMS Gateway installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		plu)
@@ -139,6 +142,7 @@ do
 			source ./plu_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		pluimap)
@@ -148,6 +152,7 @@ do
 			source ./pluimap_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix with imap installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		hostapd)
@@ -158,6 +163,7 @@ do
 			source ./hostap_config.sh
 			popd > /dev/null
 			echo "$scriptname: hostapd installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		autohs)
@@ -167,6 +173,7 @@ do
 			source ./autohotspot_config.sh
 			popd > /dev/null
 			echo "$scriptname: autohotspot installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		uronode)
@@ -175,6 +182,7 @@ do
 			source ./uro_install.sh
 			popd > /dev/null
 			echo "$scriptname: urnode installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		messanger)
@@ -190,6 +198,7 @@ do
 			## source ./tracker_install.sh
 			popd > /dev/null
 			echo "$scriptname: messanger installation FINISHED"
+			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		bye)
