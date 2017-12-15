@@ -6,8 +6,8 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-source ../core/core_functions.sh
+
+SERVICELIST="autohotspot hostapd dnsmasq"
 SERVICELIST="hostapd dnsmasq"
 SSID="NOT_SET"
 
@@ -132,7 +132,7 @@ sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo "hostap_config.sh: script STARTED"
 echo
 echo "=== Config hostap on an RPi 3"
 
@@ -224,5 +224,5 @@ done
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo "hostap_config.sh: script FINISHED"
 echo
