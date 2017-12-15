@@ -17,48 +17,7 @@ PKGLIST="hostapd dnsmasq iptables iptables-persistent"
 SERVICELIST="hostapd dnsmasq"
 
 
-# ===== function is_pkg_installed
 
-function is_pkg_installed() {
-
-return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
-}
-
-# ===== function is_rpi3
-
-function is_rpi3() {
-
-CPUINFO_FILE="/proc/cpuinfo"
-HAS_WIFI=0
-
-piver="$(grep "Revision" $CPUINFO_FILE)"
-piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
-
-case $piver in
-a01040)
-   echo " Pi 2 Model B Mfg by Unknown"
-;;
-a01041)
-   echo " Pi 2 Model B Mfg by Sony"
-;;
-a21041)
-   echo " Pi 2 Model B Mfg by Embest"
-;;
-a22042)
-   echo " Pi 2 Model B with BCM2837 Mfg by Embest"
-;;
-a02082)
-   echo " Pi 3 Model B Mfg by Sony"
-   HAS_WIFI=1
-;;
-a22082)
-   echo " Pi 3 Model B Mfg by Embest"
-   HAS_WIFI=1
-;;
-esac
-
-return $HAS_WIFI
-}
 
 # ===== main
 sleep 3

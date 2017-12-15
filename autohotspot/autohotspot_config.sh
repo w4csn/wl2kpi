@@ -8,8 +8,7 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-source ../core/core_functions.sh
+
 
 #===== Function List =====
 function copy_files
@@ -19,7 +18,7 @@ ls autohotspot 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot to /usr/bin"
    echo
-   cp ../autohotspot/autohotspot /usr/bin/   
+   cp $START_DIR/autohotspot/autohotspot /usr/bin/   
    if [ $? -ne 0 ]; then
       echo "Problems Copying file"
       exit 1
@@ -33,7 +32,7 @@ ls autohotspot.service 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot.service to /etc/systemd/system"
    echo
-   cp ../systemd/autohotspot.service /etc/systemd/system > /dev/null 2>&1
+   cp $START_DIR/systemd/autohotspot.service /etc/systemd/system > /dev/null 2>&1
    if [ $? -ne 0 ]; then
 	  echo "... Problems Copying file"
 	  exit 1
@@ -55,6 +54,12 @@ echo "$scriptname: script STARTED"
 echo
 
 chk_root
+is_rpi3
+if [ $? -eq "0" ] ; then
+   echo "Not running on an RPi 3 ... exiting"
+   exit 1
+fi
+
 copy_files
 service hostapd stop
 service dnsmasq stop

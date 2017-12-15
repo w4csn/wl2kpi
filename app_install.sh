@@ -26,7 +26,8 @@ echo
 
 # Be sure we're running as root
 chk_root
-# Be sure we're running Rasbian Jesse or Stretch
+
+# OS Check
 DIST=$(lsb_release -si)
 read -d . VERSION < /etc/debian_version
 if [ $DIST -ne "Rasbian" ]; then
@@ -49,6 +50,13 @@ else
 fi
 echo "OS is $DIST $VER : Proceeding..."
 sleep 3
+# move OS Check to core_functions, simplifies code
+# is_raspbian
+#if [ $? -eq "0" ] ; then
+#   echo "Not running on an RPi 3 ... exiting"
+#   exit 1
+#fi
+
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
@@ -69,8 +77,8 @@ do
 	echo "rmsgw)   Install RMS Gateway - Linux"
 	echo "plu)     Install paclink-unix  basic "
 	echo "pluimap) Install paclink-unix with imap "
-	echo "hostap)  Install WiFi Hotspot"
-	echo "autohs)  Install Autohotspot"
+	echo "hostap)  Install WiFi Hotspot Rpi3 Only!"
+	echo "autohs)  Install Autohotspot Rpi3 Only!"
 	echo ""
 	echo "bye)  EXIT PROGRAM"
 	echo ""
