@@ -80,6 +80,7 @@ fi
 while true
 do
 	clear
+	echo "OS is $DIST $VER"
 	echo ""
 	echo "Please select option."
 	echo "wait for each process to finish."
