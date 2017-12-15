@@ -155,7 +155,7 @@ do
 			pushd $START_DIR/autohotspot
 			source ./autohotspot_config.sh
 			popd > /dev/null
-			sleep 5
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		uronode)
 			echo "$scriptname: Install uronode"
