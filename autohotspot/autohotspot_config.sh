@@ -20,11 +20,11 @@ ls autohotspot 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot to /usr/bin"
    echo
-   cp ../autohotspot/autohotspot /usr/bin/ > /dev/null 2>&1
+   cp ../autohotspot/autohotspot /usr/bin/   
    if [ $? -ne 0 ]; then
-	  echo "Problems Copying file"
-	  exit 1
-	fi
+      echo "Problems Copying file"
+      exit 1
+   fi
 else
 	echo "... autohotspot already exists"
     echo 
