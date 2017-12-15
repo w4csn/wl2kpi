@@ -82,6 +82,7 @@ else
 		echo "INVALID VERSION"	
 		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		$HAS_RASBIAN=0
+	fi
 fi
 echo "OS is $DIST $VER : Proceeding..."
 sleep 3

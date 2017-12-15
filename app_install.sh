@@ -56,6 +56,7 @@ else
 		echo "INVALID VERSION"	
 		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		exit 1
+	fi
 fi
 echo "OS is $DIST $VER : Proceeding..."
 sleep 2
@@ -191,4 +192,5 @@ echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script FINISHED" >> 
 echo
 echo "$scriptname: ($APP_SELECT) script FINISHED"
 echo
+exit 0
 # ===== End Main =====
