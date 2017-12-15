@@ -39,18 +39,19 @@ chk_root
 # OS Check
 DIST=$(lsb_release -si)
 read -d . VERSION < /etc/debian_version
-if [ $DIST -ne "Rasbian" ]; then
+Ver=""
+if [ $DIST != "Rasbian" ]; then
 	echo "INVALID OS"
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 	exit 1
 else
 	echo "OS: $DIST"
 	if [ $VERSION -eq "8" ]; then
-		VER="Jessie"
+		$VER="Jessie"
 		echo "Version: Jessie"
 		
 	elif [ $VERSION -eq "9" ]; then
-		VER="Stretch"
+		$VER="Stretch"
 		echo "Version: Stretch"
 	else
 		echo "INVALID VERSION"	
