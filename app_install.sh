@@ -101,7 +101,7 @@ do
 	
    # check argument passed to this script
 	case $APP_SELECT in
-		core)
+		core
 			echo "$scriptname: Install core"
 			# install core files
 			pushd ../core
@@ -110,7 +110,7 @@ do
 			popd > /dev/null
 			echo "$scriptname: core installation FINISHED"
 		;;
-		ax25)
+		ax25
 			echo "$scriptname: Install AX.25"
 			# install ax25 files
 			pushd ../ax25
@@ -118,7 +118,7 @@ do
 			source ./ax25_config.sh
 			popd > /dev/null
 		;;
-		rmsgw)
+		rmsgw
 			echo "$scriptname: Install RMS Gateway"
 			# install rmsgw
 			pushd ../rmsgw
@@ -126,21 +126,21 @@ do
 			source ./rmsgw_config.sh
 			popd > /dev/null
 		;;
-		plu)
+		plu
 			echo "$scriptname: Install paclink-unix basic"
 			# install paclink-unix basic
 			pushd ../plu
 			source ./plu_install.sh
 			popd > /dev/null
 		;;
-		pluimap)
+		pluimap
 			echo "$scriptname: Install paclink-unix with imap"
 			# install paclink-unix with imap
 			pushd ../plu
 			source ./pluimap_install.sh
 			popd > /dev/null
 		;;
-		hostapd)
+		hostapd
 			echo "$scriptname: Install hostapd"
 			# install hostapd
 			pushd ../hostap
@@ -148,20 +148,20 @@ do
 			source ./hostap_config.sh
 			popd > /dev/null
 		;;
-		autohs)
+		autohs
 			echo "$scriptname: Install autohotspot"
 			# install autohotspot
 			pushd ../autohotspot
 			source ./autohotspot_config.sh
 			popd > /dev/null
 		;;
-		uronode)
+		uronode
 			echo "$scriptname: Install uronode"
 			pushd ../uronode
 			source ./uro_install.sh
 			popd > /dev/null
 		;;
-		messanger)
+		messanger
 			# Install pluimap & nixtracker
 			echo "$scriptname: Install messanger appliance"
 			pushd ../plu
@@ -174,7 +174,7 @@ do
 			## source ./tracker_install.sh
 			popd > /dev/null
 		;;
-		bye)
+		bye
 			echo ""
 			echo ""
 			echo "73!"
@@ -184,7 +184,7 @@ do
 			clear
 			exit
 		;;
-		*)
+		*
 			echo "Undefined app, must be one of $APP_CHOICES"
 			echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
 		;;
