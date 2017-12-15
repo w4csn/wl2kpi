@@ -8,7 +8,7 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-
+SERVICELIST="autohotspot hostapd dnsmasq"
 
 #===== Function List =====
 function copy_files
@@ -46,8 +46,8 @@ fi
 #===== End Function List =====
 
 # ===== main
-sleep 3
-clear
+#sleep 3
+#clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script STARTED"
@@ -68,6 +68,18 @@ systemctl disable dnsmasq
 systemctl enable autohotspot
 systemctl daemon-reload
 service autohotspot start
+
+echo
+echo "Test if $SERVICELIST services have been started."
+for service_name in `echo ${SERVICELIST}` ; do
+
+   systemctl is-active $service_name >/dev/null
+   if [ "$?" = "0" ] ; then
+      echo "$service_name is running"
+   else
+      echo "$service_name is NOT running"
+   fi
+done
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo

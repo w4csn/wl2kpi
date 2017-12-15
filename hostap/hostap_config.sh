@@ -8,7 +8,7 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 source ../core/core_functions.sh
-
+SERVICELIST="hostapd dnsmasq"
 SSID="NOT_SET"
 
 # ===== function copy_dnsmasq
@@ -46,7 +46,8 @@ fi
 
 echo "Enter Service set identifier (SSID) for new WiFi access point, followed by [enter]:"
 read -e SSID
-
+echo "Enter Passphrase for new WiFi access point, followed by [enter]:"
+read -e PASSPHRASE
 # Create a new file
 cat > $1/hostapd.conf <<EOT
 interface=wlan0
@@ -79,20 +80,20 @@ macaddr_acl=0
 #ignore_broadcast_ssid=0
 
 # Use WPA authentication
-#auth_algs=1
+auth_algs=1
 
 # Use WPA2
-#wpa=2
+wpa=2
 
 # Use a pre-shared key
-#wpa_key_mgmt=WPA-PSK
+wpa_key_mgmt=WPA-PSK
 
 # The network passphrase, set password Here
-#wpa_passphrase=
+wpa_passphrase=$PASSPHRASE
 
 # Use AES, instead of TKIP
-##wpa_pairwise=CCMP
-#rsn_pairwise=CCMP
+wpa_pairwise=CCMP
+rsn_pairwise=CCMP
 EOT
 }
 
@@ -209,10 +210,10 @@ service dnsmasq start
 
 
 
-
-for service_name in `echo ${SERVICELIST}` ; do
 echo
 echo "Test if $SERVICELIST services have been started."
+for service_name in `echo ${SERVICELIST}` ; do
+
    systemctl is-active $service_name >/dev/null
    if [ "$?" = "0" ] ; then
       echo "$service_name is running"

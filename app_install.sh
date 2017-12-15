@@ -53,7 +53,7 @@ sleep 3
 # move OS Check to core_functions, simplifies code
 # is_raspbian
 #if [ $? -eq "0" ] ; then
-#   echo "Not running on an RPi 3 ... exiting"
+#   echo "Not running Raspbian Jessie or Stretch ... exiting"
 #   exit 1
 #fi
 
