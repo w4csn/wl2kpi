@@ -110,6 +110,7 @@ do
 			source ./core_config.sh
 			popd > /dev/null
 			echo "$scriptname: core installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		ax25)
 			echo "$scriptname: Install AX.25"
@@ -118,6 +119,8 @@ do
 			source ./ax25_install.sh
 			source ./ax25_config.sh
 			popd > /dev/null
+			echo "$scriptname: AX.25 installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		rmsgw)
 			echo "$scriptname: Install RMS Gateway"
@@ -126,6 +129,8 @@ do
 			source ./rmsgw_install.sh
 			source ./rmsgw_config.sh
 			popd > /dev/null
+			echo "$scriptname: RMS Gateway installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		plu)
 			echo "$scriptname: Install paclink-unix basic"
@@ -133,6 +138,8 @@ do
 			pushd ../plu
 			source ./plu_install.sh
 			popd > /dev/null
+			echo "$scriptname: paclink-unix installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		pluimap)
 			echo "$scriptname: Install paclink-unix with imap"
@@ -140,6 +147,8 @@ do
 			pushd ../plu
 			source ./pluimap_install.sh
 			popd > /dev/null
+			echo "$scriptname: paclink-unix with imap installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		hostapd)
 			echo "$scriptname: Install hostapd"
@@ -148,6 +157,8 @@ do
 			source ./hostap_install.sh
 			source ./hostap_config.sh
 			popd > /dev/null
+			echo "$scriptname: hostapd installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		autohs)
 			echo "$scriptname: Install autohotspot"
@@ -155,6 +166,7 @@ do
 			pushd $START_DIR/autohotspot
 			source ./autohotspot_config.sh
 			popd > /dev/null
+			echo "$scriptname: autohotspot installation FINISHED"
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		uronode)
@@ -162,6 +174,8 @@ do
 			pushd ../uronode
 			source ./uro_install.sh
 			popd > /dev/null
+			echo "$scriptname: urnode installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		messanger)
 			# Install pluimap & nixtracker
@@ -175,6 +189,8 @@ do
 			echo "Now run tracker_install.sh"
 			## source ./tracker_install.sh
 			popd > /dev/null
+			echo "$scriptname: messanger installation FINISHED"
+			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		bye)
 			echo ""

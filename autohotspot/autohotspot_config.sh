@@ -50,7 +50,7 @@ sleep 2
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo "autohotspot_config.sh: script STARTED"
 echo
 
 # Be sure we're running as root
@@ -87,5 +87,5 @@ done
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo "autohotspot_config.sh: script FINISHED"
 echo
