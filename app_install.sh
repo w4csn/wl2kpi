@@ -155,7 +155,7 @@ do
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
-		hostapd)
+		hostap)
 			echo "$scriptname: Install hostapd"
 			# install hostapd
 			pushd ../hostap
