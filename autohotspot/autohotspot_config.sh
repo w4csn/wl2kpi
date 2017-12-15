@@ -46,17 +46,21 @@ fi
 #===== End Function List =====
 
 # ===== main
-#sleep 3
-#clear
+sleep 2
+clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script STARTED"
 echo
 
+# Be sure we're running as root
 chk_root
+
+# Make sure we're running a Raspberry Pi 3
 is_rpi3
 if [ $? -eq "0" ] ; then
    echo "Not running on an RPi 3 ... exiting"
+   echo
    exit 1
 fi
 
