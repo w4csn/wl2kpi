@@ -8,12 +8,9 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
-source ./core/core_functions.sh
+source ../core/core_functions.sh
 
 SSID="NOT_SET"
-
-# ===== function debugecho
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
 
 # ===== function is_rpi3
@@ -168,14 +165,16 @@ fi
 
 
 # ===== main
-
-echo "Config hostap on an RPi 3"
+sleep 3
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo "$scriptname: script STARTED"
+echo
+echo "=== Config hostap on an RPi 3"
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "Must be root."
-   exit 1
-fi
+chk_root
 
 is_rpi3
 if [ $? -eq "0" ] ; then

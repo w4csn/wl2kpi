@@ -10,7 +10,7 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
-source ./core/core_functions.sh
+source ../core/core_functions.sh
 
 #===== Function List =====
 function copy_files
@@ -48,6 +48,7 @@ fi
 #===== End Function List =====
 
 # ===== main
+sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
