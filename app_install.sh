@@ -150,11 +150,14 @@ do
 			popd > /dev/null
 		;;
 		autohs)
-			echo "$scriptname: Install autohotspot"
-			# install autohotspot
-			pushd ../autohotspot
-			source ./autohotspot_config.sh
-			popd > /dev/null
+			while true 
+			do
+				echo "$scriptname: Install autohotspot"
+				# install autohotspot
+				pushd ../autohotspot
+				source ./autohotspot_config.sh
+				popd > /dev/null
+			done
 		;;
 		uronode)
 			echo "$scriptname: Install uronode"
