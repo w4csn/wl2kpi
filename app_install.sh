@@ -10,12 +10,12 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
-source ./core/core_functions.sh
+source $START_DIR/core/core_functions.sh
 CALLSIGN="N0ONE"
 APP_CHOICES="core, rmsgw, plu, pluimap, hostapd"
-APP_SELECT="hostapd"
+#APP_SELECT="hostapd"
+trap ctrl_c INT
 
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
 # ===== main
 clear
@@ -26,82 +26,151 @@ echo
 
 # Be sure we're running as root
 chk_root
+# Be sure we're running Rasbian Jesse or Stretch
+DIST=$(lsb_release -si)
+read -d . VERSION < /etc/debian_version
+if [ $DIST -ne "Rasbian" ]; then
+	echo "INVALID OS"
+	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
+	exit 1
+else
+	echo "OS: $DIST"
+	if [ $VERSION -eq "8" ]; then
+		$VER="Jessie"
+		echo "Version: Jessie"
+		
+	elif [ $VERSION -eq "9" ]; then
+		$VER="Stretch"
+		echo "Version: Stretch"
+	else
+		echo "INVALID VERSION"	
+		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		exit 1
+fi
+echo "OS is $DIST $VER : Proceeding..."
+sleep 3
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
    APP_SELECT=$1
 else
-   echo "No app chosen from command arg, so installing Hostapd"
+   echo "No app chosen from command... Loading menu"
 fi
 
+while true
+do
+	clear
+	echo ""
+	echo "Please select option."
+	echo "wait for each process to finish."
+	echo "" 
+	echo "core)    Install CORE (Do this first!)"
+	echo "ax25)    Install AX.25"
+	echo "rmsgw)   Install RMS Gateway - Linux"
+	echo "plu)     Install paclink-unix  basic "
+	echo "pluimap) Install paclink-unix with imap "
+	echo "hostap)  Install WiFi Hotspot"
+	echo "autohs)  Install Autohotspot"
+	echo ""
+	echo "bye)  EXIT PROGRAM"
+	echo ""
+	echo -n "Please select option.  " 
+	read APP_SELECT
+	echo
+	
    # check argument passed to this script
-case $APP_SELECT in
-   core)
-      echo "$scriptname: Install core"
+	case $APP_SELECT in
+		core)
+			echo "$scriptname: Install core"
+			# install core files
+			pushd ../core
+			source ./core_install.sh
+			source ./core_config.sh
+			popd > /dev/null
+			echo "$scriptname: core installation FINISHED"
+		;;
+		ax25)
+			echo "$scriptname: Install AX.25"
+			# install ax25 files
+			pushd ../ax25
+			source ./ax25_install.sh
+			source ./ax25_config.sh
+			popd > /dev/null
+		;;
+		rmsgw)
+			echo "$scriptname: Install RMS Gateway"
+			# install rmsgw
+			pushd ../rmsgw
+			source ./rmsgw_install.sh
+			source ./rmsgw_config.sh
+			popd > /dev/null
+		;;
+		plu)
+			echo "$scriptname: Install paclink-unix basic"
+			# install paclink-unix basic
+			pushd ../plu
+			source ./plu_install.sh
+			popd > /dev/null
+		;;
+		pluimap)
+			echo "$scriptname: Install paclink-unix with imap"
+			# install paclink-unix with imap
+			pushd ../plu
+			source ./pluimap_install.sh
+			popd > /dev/null
+		;;
+		hostapd)
+			echo "$scriptname: Install hostapd"
+			# install hostapd
+			pushd ../hostap
+			source ./hostap_install.sh
+			source ./hostap_config.sh
+			popd > /dev/null
+		;;
+		autohs)
+			echo "$scriptname: Install autohotspot"
+			# install autohotspot
+			pushd ../autohotspot
+			source ./autohotspot_config.sh
+			popd > /dev/null
+		;;
+		uronode)
+			echo "$scriptname: Install uronode"
+			pushd ../uronode
+			source ./uro_install.sh
+			popd > /dev/null
+		;;
+		messanger)
+			# Install pluimap & nixtracker
+			echo "$scriptname: Install messanger appliance"
+			pushd ../plu
+			# Command line arg prevents installation of pluweb.service
+			source ./pluimap_install.sh -
+			popd > /dev/null
+			pushd ../tracker
+			echo "Change to normal login user & cd to ~/n7nix/tracker"
+			echo "Now run tracker_install.sh"
+			## source ./tracker_install.sh
+			popd > /dev/null
+		;;
+		bye)
+			echo ""
+			echo ""
+			echo "73!"
+			echo "Scott Newton - W4CSN"
+			echo ""
+			echo ""
+			clear
+			exit
+		;;
+		*)
+			echo "Undefined app, must be one of $APP_CHOICES"
+			echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
+		;;
+	esac
+done
 
-      # install systemd files
-      pushd ../systemd
-      /bin/bash ./install.sh
-      popd > /dev/null
-
-      echo "core installation FINISHED"
-   ;;
-   rmsgw)
-      echo "$scriptname: Install RMS Gateway"
-      # install rmsgw
-      pushd ../rmsgw
-      source ./install.sh
-      popd > /dev/null
-   ;;
-   plu)
-      # install paclink-unix basic
-      echo "$scriptname: Install paclink-unix"
-      pushd ../plu
-      source ./plu_install.sh
-      popd > /dev/null
-
-   ;;
-   pluimap)
-      echo "$scriptname: Install paclink-unix with imap"
-      pushd ../plu
-      source ./pluimap_install.sh
-      popd > /dev/null
-   ;;
-   uronode)
-      echo "$scriptname: Install uronode"
-      pushd ../uronode
-      source ./uro_install.sh
-      popd > /dev/null
-   ;;
-   hostapd)
-      echo "$scriptname: Install hostapd"
-      pushd ../hostap
-      source ./hostap_install.sh
-      popd > /dev/null
-   ;;
-   messanger)
-   # Install pluimap & nixtracker
-      echo "$scriptname: Install messanger appliance"
-      pushd ../plu
-      # Command line arg prevents installation of pluweb.service
-      source ./pluimap_install.sh -
-      popd > /dev/null
-      pushd ../tracker
-      echo "Change to normal login user & cd to ~/n7nix/tracker"
-      echo "Now run tracker_install.sh"
-
-##      source ./tracker_install.sh
-      popd > /dev/null
-   ;;
-
-   *)
-      echo "Undefined app, must be one of $APP_CHOICES"
-      echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
-      exit 1
-   ;;
-esac
-
-echo "$(date "+%Y %m %d %T %Z"): app install ($APP_SELECT) script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "app install ($APP_SELECT) script FINISHED"
+echo "$scriptname: ($APP_SELECT) script FINISHED"
 echo

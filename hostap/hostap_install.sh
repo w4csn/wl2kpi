@@ -16,7 +16,6 @@ SSID="NOT_SET"
 PKGLIST="hostapd dnsmasq iptables iptables-persistent"
 SERVICELIST="hostapd dnsmasq"
 
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
 # ===== function is_pkg_installed
 
@@ -96,8 +95,7 @@ for pkg_name in `echo ${PKGLIST}` ; do
       apt-get -qy install $pkg_name
    fi
 done
-./hostap_config.sh
-../autohotspot/autohotspot_config.sh
+
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"
