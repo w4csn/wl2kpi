@@ -11,19 +11,10 @@ source $START_DIR/core/core_functions.sh
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
 
-
-# ==== main
-sleep 5 
-clear
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
-echo
-echo "$scriptname: script STARTED"
-echo
-
-# Be sure we're running as root
-chk_root
-
-echo "=== Verify not using default password"
+# ===== Function List =====
+function chng_passwd {
+# Check for default password
+echo -e "\t${Blue}=== Verify not using default password ${Reset}"
 # is there even a user pi?
 ls /home | grep pi > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -57,8 +48,10 @@ else
    echo "User pi NOT found"
 fi
 echo
+}
 
-# Check hostname
+function chng_hostname {
+# Change hostname from default
 echo " === Verify hostname"
 HOSTNAME=$(cat /etc/hostname | tail -1)
 dbgecho "$scriptname: Current hostname: $HOSTNAME"
@@ -72,12 +65,34 @@ if [ "$HOSTNAME" = "raspberrypi" ] || [ "$HOSTNAME" = "compass" ] ; then
    echo "$HOSTNAME" > /etc/hostname
 fi
 
+}
+# ===== End Function List =====
+
+# ===== Main =====
+sleep 2 
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo -e "${BluW} $scriptname: script STARTED ${Reset}"
+echo
+
+# Be sure we're running as root
+chk_root
+
+# Make sure User pi isn't using the default password
+chng_passwd
+
+# Change hostname to something besides default
+chng_hostname
+
 # Get hostname again incase it was changed
 HOSTNAME=$(cat /etc/hostname | tail -1)
 
+# Set up /etc/mailname
 echo "=== Set mail hostname"
 echo "$HOSTNAME.localhost" > /etc/mailname
 
+# Set  up /etc/hosts
 grep "127.0.1.1" /etc/hosts
 if [ $? -eq 0 ] ; then
    # Found 127.0.1.1 entry
@@ -97,9 +112,9 @@ else
    fi
 fi
 
+# Change Time Zone
 DATETZ=$(date +%Z)
 dbgecho "Time zone: $DATETZ"
-
 if [ "$DATETZ" == "UTC" ] ; then
    echo " === Set time zone"
    echo " ie. select America, then scroll down to 'Los Angeles'"
@@ -112,5 +127,6 @@ fi
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW} $scriptname: script FINISHED ${Resest}"
 echo
+# ===== End Main =====

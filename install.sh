@@ -10,7 +10,7 @@ WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
 source $START_DIR/core/core_functions.sh
 
-# ===== main
+# ===== Main =====
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
@@ -52,3 +52,4 @@ echo
 echo "$scriptname: script FINISHED"
 echo
 exit 0
+# ===== End Main =====

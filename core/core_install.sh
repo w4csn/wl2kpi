@@ -7,11 +7,12 @@ DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 source $START_DIR/core/core_functions.sh
+
 # do upgrade, update outside of script since it can take some time
 UPDATE_NOW=false
 
 # Edit the following list with your favorite text editor and set NONESSENTIAL_PKG to true
-NONESSENTIAL_PKG_LIST="mg jed whois mc"
+NONESSENTIAL_PKG_LIST="mg jed whois mc telnet"
 
 NONESSENTIAL_PKG=true # set this to true if you even want non essential packages installed
 
@@ -24,44 +25,43 @@ SERIAL_CONSOLE=false
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
 
-# ===== function install build tools
+# ===== Function List =====
 
+# function install build tools
 function install_build_tools() {
 # build tools install section
 
-echo -e "=== Check Build Tools"
+echo -e "\t ${Blue}=== Check Build Tools ${Reset}"
 needs_pkg=false
 
 for pkg_name in `echo ${BUILDTOOLS_PKG_LIST}` ; do
 
    is_pkg_installed $pkg_name
    if [ $? -ne 0 ] ; then
-      echo "$scriptname: Will Install $pkg_name program"
+      echo -e "\t ${Blue} $scriptname: Will Install $pkg_name program ${Reset}"
       needs_pkg=true
       break
    fi
 done
 
 if [ "$needs_pkg" = "true" ] ; then
-   echo -e "Installing some build tool packages"
+   echo -e "\t ${Blue} Installing some build tool packages ${Reset}"
 
    apt-get install -y -q $BUILDTOOLS_PKG_LIST
    if [ "$?" -ne 0 ] ; then
-      echo -e "Build tools package install failed. Please try this command manually:"
-      echo -e "apt-get install -y $BUILDTOOLS_PKG_LIST"
+      echo -e "\t ${Red} Build tools package install failed. ${Reset}Please try this command manually:"
+      echo -e "\t apt-get install -y $BUILDTOOLS_PKG_LIST"
       exit 1
    fi
 fi
 
-echo -e "=== Build Tools packages installed."
+echo -e "${Green}=== Build Tools packages installed. ${Reset}"
 echo
 }
 
-# ===== function install nonessential packages
-
+# function install nonessential packages
 function install_nonessential_pkgs () {
 # NON essential package install section
-
 if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    # Check if non essential packages have been installed
    echo -e "=== Check for non essential packages"
@@ -91,13 +91,14 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    echo
 fi
 }
+# ===== End Function List =====
 
-
-# ===== main
-
+# ===== Main =====
+clear
+sleep 2
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW} $scriptname: script STARTED ${Reset}"
 echo
 
 # Be sure we're running as root
@@ -105,10 +106,10 @@ chk_root
 
 
 if [ "$UPDATE_NOW" = "true" ] ; then
-   echo -e "=== Check for updates"
+   echo -e "\t ${Blue} === Check for updates ${Reset}"
    apt-get update -y -q
    apt-get upgrade -y -q
-   echo -e "=== updates finished"
+   echo -e "\t ${Green} === updates finished ${Reset}"
    echo
 fi
 
@@ -125,17 +126,17 @@ if [ ! -d /lib/modules/$(uname -r)/ ] ; then
    exit 1
 fi
 
-echo -e "=== Enable Modules"
+echo -e "\t ${Blue}=== Enabling Kernel Modules ${Reset}"
 # Add Kernel modules
 grep i2c-dev /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    echo "i2c-dev" >> /etc/modules
 fi
-echo -e "=== Enable Modules Finished"
+echo -e "\t ${Green} === Finished. ${Reset}"
 echo
 
 # Modify hciattach.service to configure BT for /dev/ttyS0
-echo -e "=== Configure BT for ttyS0"
+echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
 if [ ! -e /lib/systemd/system/hciattach.service ]; then
 	cp $START_DIR/rpi/hciattach.service /lib/systemd/system/hciattach.service
 else
@@ -153,11 +154,11 @@ ExecStart=/usr/bin/hciattach /dev/ttyS0 bcm43xx 921600 noflow -
 WantedBy=multi-user.target
 EOT
 fi
-echo -e "=== Configure BT Finished"
+echo -e "\t ${Green}=== Finished ${Reset}"
 echo
 
 # Modify config.txt
-echo -e "=== Modify /boot/config.txt"
+echo -e "\t ${Blue}=== Modify /boot/config.txt ${Reset}"
 CONFIGDIR=/boot/config.txt
 grep "# User Mods" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -175,16 +176,17 @@ grep "core_freq=250" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    echo "core_freq=250" >> $CONFIGDIR
 fi
-echo -e "=== Modify /boot/config.txt Finished"
+echo -e "\t ${Green}=== Finished. ${Reset}"
 echo
 
 # Remove Serial Console
-echo -e "=== Remove Serial Console from /boot/cmdline.txt"
+echo -e "\t ${Blue}=== Remove Serial Console from /boot/cmdline.txt ${Reset}"
 sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
-echo -e "=== Remove Serial Console from /boot/cmdline.txt Finished"
+echo -e "\t ${Green}=== Finished. ${Reset}"
 echo
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW} $scriptname: script FINISHED ${Reset}"
 echo
+# ===== End Main =====

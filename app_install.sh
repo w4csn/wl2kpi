@@ -16,13 +16,22 @@ APP_CHOICES="core, rmsgw, plu, pluimap, hostapd"
 #APP_SELECT="hostapd"
 trap ctrl_c INT
 
+# Color Codes
+Reset='\e[0m'
+Red='\e[31m'
+Green='\e[32m'
+Yellow='\e[33m'
+Blue='\e[34m'
+White='\e[37m'
+BluW='\e[37;44m'
 
-# ===== main
+# ===== Main =====
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
 echo
+sleep 2
 
 # Be sure we're running as root
 chk_root
@@ -62,7 +71,7 @@ sleep 3
 if (( $# != 0 )) ; then
    APP_SELECT=$1
 else
-   echo "No app chosen from command... Loading menu"
+   echo -e "\t ${Red} No app chosen from command ${White}... Loading menu ${Reset}"
 fi
 
 while true
@@ -182,3 +191,4 @@ echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script FINISHED" >> 
 echo
 echo "$scriptname: ($APP_SELECT) script FINISHED"
 echo
+# ===== End Main =====

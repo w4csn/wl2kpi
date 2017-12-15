@@ -5,12 +5,11 @@
 # (https://groups.yahoo.com/neo/groups/LinuxRMS/files)
 # by C Schuman, K4GBB k4gbb1gmail.com
 #
-DEBUG=1 # Uncomment this statement for debug echos
-set -u # Exit if there are unitialized variables.
+DEBUG=1
+set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+source $START_DIR/core/core_functions.sh
 
-wd=$(pwd)
 uid=$(id -u)
 INST_UID=pi
 LIBAX25=libax25/
@@ -20,18 +19,6 @@ AX25REPO=https://github.com/ve7fet/linuxax25
 GET_K4GBB=false # needs to be replaced with smarter method!
 
 # ===== Function List =====
-
-# ===== function dbecho
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
-# ===== function chk_root
-function chk_root {
-# Check for Root
-if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
-   exit 1
-fi
-}
 
 function CreateAx25_Folders {
 if [ ! -d "/usr/local/etc" ]; then
@@ -235,7 +222,7 @@ echo
 # download start up files
 if [ "$GET_K4GBB" = "true" ]; then
    echo -e "=== Downloading Startup Files"
-   cd $wd/k4gbb
+   cd $START_DIR/k4gbb
    wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25
    wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25-up.pi
    wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25-down
@@ -249,7 +236,7 @@ fi
 
 echo -e "=== Installing Startup Files"
 if [ ! -f /etc/init.d/ax25 ]; then
-   cp $wd/k4gbb/ax25 /etc/init.d/ax25 
+   cp $START_DIR/k4gbb/ax25 /etc/init.d/ax25 
    if [ ! -L /usr/sbin/ax25 ]; then 
       ln -s /etc/init.d/ax25 /usr/sbin/ax25
    fi
@@ -261,26 +248,26 @@ fi
 # Setup ax25 systemd service
 if [ ! -f /lib/systemd/system/ax25.service ]; then
    echo -e "... Setting up ax25 systemd service"
-   cp $wd/systemd/ax25.service /lib/systemd/system/ax25.service
+   cp $START_DIR/systemd/ax25.service /lib/systemd/system/ax25.service
    systemctl enable ax25.service
 fi
 
 cd /etc/ax25
-cp $wd/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
-cp $wd/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
-cp $wd/k4gbb/axports /etc/ax25/axports
-cp $wd/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
+cp $START_DIR/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
+cp $START_DIR/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
+cp $START_DIR/k4gbb/axports /etc/ax25/axports
+cp $START_DIR/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
 touch nrports rsports
 echo -e "=== Install Finished"
 }
-# ===== End of Functions list =====
+# ===== End Functions list =====
 
-# Main
+# ===== Main =====
 sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW} $scriptname: script STARTED ${Reset}"
 echo
 
 chk_root
@@ -290,9 +277,9 @@ Configure_libax25
 CompileAx25
 FinishAx25_Install
 
-echo "$(date $(date "+%Y %m %d %T %Z"): $scriptname: AX.25 Installed" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: AX.25 Installed" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW} $scriptname: script FINISHED ${Reset}"
 echo
-# (End of Script)
+# ===== End Main =====

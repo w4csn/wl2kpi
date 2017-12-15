@@ -3,11 +3,11 @@
 # Configure axports & ax25d.conf files
 #
 
-DEBUG=1 # Uncomment this statement for debug echos
-set -u # Exit if there are unitialized variables.
+DEBUG=1
+set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-wd=$(pwd)
+source $START_DIR/core/core_functions.sh
+
 CALLSIGN="N0ONE"
 AX25PORT="0" # Leave 0 for now, needs code for configuring port on ax25-up
 SSID="15"
@@ -16,18 +16,6 @@ AX25_CFGDIR="/etc/ax25"
 
 
 # ===== Function List =====
-
-# ===== function dbecho
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
-# ===== function chk_root 
-function chk_root {
-# Check for Root
-if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
-   exit 1
-fi
-}
 
 # ===== function get_callsign
 function get_callsign() { 
@@ -92,9 +80,9 @@ function configure_axports() {
 	sed -i -e "/k4gbb/ /k4gbb-1/$callsign/ " /etc/ax25/axports
 }
 
-# ===== End of Functions list =====
+# ===== End Functions list =====
 
-# =====  Main
+# =====  Main =====
 sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
@@ -197,7 +185,7 @@ sed -i -e "/n0one/ s/n0one/$CALLSIGN/" $AX25_CFGDIR/ax25-up > /dev/null 2>&1
 
 echo -e "=== Configuration Finished"
 echo
-
+===== END Main ====
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"

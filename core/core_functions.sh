@@ -1,7 +1,7 @@
 #!/bin/bash
 # ===== Function List =====
 
-# ===== function dbecho
+# function dbecho
 function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
 # ===== function ctrl_c trap handler
@@ -10,7 +10,7 @@ function ctrl_c() {
 	exit
 }
 
-# ===== function chk_root
+# function chk_root
 function chk_root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
@@ -19,13 +19,13 @@ if [[ $EUID != 0 ]] ; then
 fi
 }
 
-# ===== function is_pkg_installed
+# function is_pkg_installed
 function is_pkg_installed() {
 
 return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
 }
 
-# ===== function is_rpi3
+# function is_rpi3
 function is_rpi3() {
 
 CPUINFO_FILE="/proc/cpuinfo"
@@ -60,7 +60,7 @@ esac
 return $HAS_WIFI
 }
 
-# ===== function is_rasbian
+# function is_rasbian
 function is_rasbian() {
 HAS_RASBIAN=0
 DIST=$(lsb_release -si)
