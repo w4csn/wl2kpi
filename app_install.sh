@@ -105,7 +105,7 @@ do
 		core)
 			echo "$scriptname: Install core"
 			# install core files
-			pushd ../core
+			pushd $START_DIR/core
 			source ./core_install.sh
 			source ./core_config.sh
 			popd > /dev/null
@@ -116,7 +116,7 @@ do
 		ax25)
 			echo "$scriptname: Install AX.25"
 			# install ax25 files
-			pushd ../ax25
+			pushd $START_DIR/ax25
 			source ./ax25_install.sh
 			source ./ax25_config.sh
 			popd > /dev/null
@@ -127,7 +127,7 @@ do
 		rmsgw)
 			echo "$scriptname: Install RMS Gateway"
 			# install rmsgw
-			pushd ../rmsgw
+			pushd $START_DIR/rmsgw
 			source ./rmsgw_install.sh
 			source ./rmsgw_config.sh
 			popd > /dev/null
@@ -138,7 +138,7 @@ do
 		plu)
 			echo "$scriptname: Install paclink-unix basic"
 			# install paclink-unix basic
-			pushd ../plu
+			pushd $START_DIR/plu
 			source ./plu_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix installation FINISHED"
@@ -148,7 +148,7 @@ do
 		pluimap)
 			echo "$scriptname: Install paclink-unix with imap"
 			# install paclink-unix with imap
-			pushd ../plu
+			pushd $START_DIR/plu
 			source ./pluimap_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix with imap installation FINISHED"
@@ -158,7 +158,7 @@ do
 		hostap)
 			echo "$scriptname: Install hostapd"
 			# install hostapd
-			pushd ../hostap
+			pushd $START_DIR/hostap
 			source ./hostap_install.sh
 			source ./hostap_config.sh
 			popd > /dev/null
