@@ -219,7 +219,7 @@ fi
 echo -e "=== AX.25 Modules Finished"
 echo
 
-# download start up files
+# Download start up files
 if [ "$GET_K4GBB" = "true" ]; then
    echo -e "=== Downloading Startup Files"
    cd $START_DIR/k4gbb
@@ -235,21 +235,25 @@ if [ "$GET_K4GBB" = "true" ]; then
 fi
 
 echo -e "=== Installing Startup Files"
-if [ ! -f /etc/init.d/ax25 ]; then
-   cp $START_DIR/k4gbb/ax25 /etc/init.d/ax25 
-   if [ ! -L /usr/sbin/ax25 ]; then 
-      ln -s /etc/init.d/ax25 /usr/sbin/ax25
-   fi
-   echo -e "... Setting up ax25 SysInitV"
-   chmod 755 /etc/init.d/ax25
-   update-rc.d ax25 defaults
-fi
+# Setup ax25 SysInitV (Deprecated - Do Not USE!)
+#if [ ! -f /etc/init.d/ax25 ]; then
+#   cp $START_DIR/k4gbb/ax25 /etc/init.d/ax25 
+#   if [ ! -L /usr/sbin/ax25 ]; then 
+#		ln -s /etc/init.d/ax25 /usr/sbin/ax25
+#   fi
+#   echo -e "... Setting up ax25 SysInitV"
+#   chmod 755 /etc/init.d/ax25
+#   update-rc.d ax25 defaults
+#fi
 
 # Setup ax25 systemd service
 if [ ! -f /lib/systemd/system/ax25.service ]; then
    echo -e "... Setting up ax25 systemd service"
    cp $START_DIR/systemd/ax25.service /lib/systemd/system/ax25.service
    systemctl enable ax25.service
+   systemctl daemon-reload
+   service ax25 start
+   chk_service $service_name
 fi
 
 cd /etc/ax25
@@ -270,11 +274,22 @@ echo
 echo -e "${BluW} $scriptname: script STARTED ${Reset}"
 echo
 
+# Be sure we're running as root
 chk_root
+
+# Set up folder structure
 CreateAx25_Folders
+
+# Download source files
 DownloadAx25
+
+# Configure source files
 Configure_libax25
+
+# Compile source
 CompileAx25
+
+# Clean up and install startup files
 FinishAx25_Install
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: AX.25 Installed" >> $WL2KPI_INSTALL_LOGFILE

@@ -89,7 +89,8 @@ echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LO
 echo
 echo "$scriptname: script STARTED"
 echo
-# Make sure user is root
+
+# Be sure we're running as root
 chk_root
 
 if [ ! -f "/etc/ax25/axports" ]; then
@@ -185,9 +186,9 @@ sed -i -e "/n0one/ s/n0one/$CALLSIGN/" $AX25_CFGDIR/ax25-up > /dev/null 2>&1
 
 echo -e "=== Configuration Finished"
 echo
-===== END Main ====
+
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo "$scriptname: script FINISHED"
 echo
-
+# ===== END Main ====

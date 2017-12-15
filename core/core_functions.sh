@@ -87,4 +87,15 @@ echo "OS is $DIST $VER : Proceeding..."
 sleep 3
 return $HAS_RASBIAN
 }
+
+# function chk_service
+function chk_service() {
+systemctl is-active $service_name >/dev/null
+	if [ $? -eq 0 ]; then
+		echo "$service_name is running"
+	else
+		echo "$service_name is NOT running"
+   fi
+}
+
 # ===== End Function List =====
