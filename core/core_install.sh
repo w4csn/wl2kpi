@@ -6,9 +6,7 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-START_DIR=$(pwd)
-
+source $START_DIR/core/core_functions.sh
 # do upgrade, update outside of script since it can take some time
 UPDATE_NOW=false
 
@@ -25,21 +23,6 @@ SERIAL_CONSOLE=false
 
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
-# ===== function is_pkg_installed
-
-function is_pkg_installed() {
-
-return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
-}
-
-# ===== function ctrl_c trap handler
-
-function ctrl_c() {
-        echo "Exiting script from trapped CTRL-C"
-	exit
-}
 
 # ===== function install build tools
 
@@ -118,10 +101,7 @@ echo "$scriptname: script STARTED"
 echo
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
-    exit 1
-fi
+chk_root
 
 
 if [ "$UPDATE_NOW" = "true" ] ; then

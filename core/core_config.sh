@@ -5,20 +5,12 @@
 # Uncomment this statement for debug echos
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
-
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-START_DIR=$(pwd)
+source $START_DIR/core/core_functions.sh
 
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
 
-# ===== function ctrl_c trap handler
-function ctrl_c() { 
-echo "Exiting script from trapped CTRL-C"	
-exit
-}
 
 # ==== main
 sleep 5 
@@ -29,10 +21,7 @@ echo "$scriptname: script STARTED"
 echo
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "Must be root"
-    exit 1
-fi
+chk_root
 
 echo "=== Verify not using default password"
 # is there even a user pi?
@@ -120,7 +109,6 @@ if [ "$DATETZ" == "UTC" ] ; then
    dpkg-reconfigure tzdata
 fi
 
-cd $START_DIR
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo

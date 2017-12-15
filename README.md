@@ -19,10 +19,14 @@ Note: These scripts are meant to only be run once and only on a fresh image.
 #### Core
 Core is required for any other packet apps using a TNC-PI. this option Configures a 
 rasberry pi 2 or 3 for using a TNC-PI for either serial /dev/ttyAMA0 or i2c operation.
-AX.25 tools/apps/library will also be installed. As part of the core requirements this
-option also configures systemd to start AX.25 at boot time.
 
-Regardless of what functionality you want ot install, the first thing to run is install.sh 
+
+Regardless of what functionality you want ot install, the first thing to run is install.sh
+
+#### AX.25
+AX.25 is required for communication with TNC-pi 
+AX.25 tools/apps/library will also be installed. As part of the requirements this
+option also configures systemd to start AX.25 at boot time.
 
 #### RMS Gateway
 In order to install the linux RMS Gateway you must register with Winlink to get a password

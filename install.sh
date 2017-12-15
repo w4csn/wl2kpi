@@ -8,7 +8,7 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
-# source ./core/core_functions.sh
+source $START_DIR/core/core_functions.sh
 
 # ===== main
 clear
@@ -19,27 +19,27 @@ echo
 
 
 # Be sure we're running as root
-if [[ $EUID != 0 ]] ; then
-   echo "$scriptname: Must be root"
-   echo "Please type: "
-   echo "sudo su"
-   echo "and run this script again"
-   exit 1
-fi
+chk_root
 
 echo -e "$scriptname: Configure RPI for TNC-PI"
-#./core/core_install.sh
-#./core/core_config.sh
+pushd ../core
+#source ./core_install.sh
+#source ./core_config.sh
+popd > /dev/null
 echo
 
 echo -e "$scriptname: Install ax25 files"
-#./ax25/ax25_install.sh
-#./ax25/ax25_config.sh
+pushd ../ax25
+#source ./ax25_install.sh
+#source ./ax25_config.sh
+popd > /dev/null
 echo
 
 echo -e "$scriptname: Install RMS Gateway"
-#./rmsgw/rmsgw_install.sh
-./rmsgw/rmsgw_config.sh
+pushd ../rmsgw
+#source ./rmsgw_install.sh
+source ./rmsgw_config.sh
+popd > /dev/null
 echo
 
 #echo -e "$scriptname: Install paclink-unix with imap"
