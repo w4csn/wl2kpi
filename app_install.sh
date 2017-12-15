@@ -60,7 +60,7 @@ else
 	fi
 fi
 echo "OS is $DIST $VER : Proceeding..."
-sleep 5
+sleep 2
 
 # move OS Check to core_functions, simplifies code
 # is_raspbian
@@ -150,14 +150,12 @@ do
 			popd > /dev/null
 		;;
 		autohs)
-			while true 
-			do
-				echo "$scriptname: Install autohotspot"
-				# install autohotspot
-				pushd ../autohotspot
-				source ./autohotspot_config.sh
-				popd > /dev/null
-			done
+			echo "$scriptname: Install autohotspot"
+			# install autohotspot
+			pushd $START_DIR/autohotspot
+			source ./autohotspot_config.sh
+			popd > /dev/null
+			sleep 5
 		;;
 		uronode)
 			echo "$scriptname: Install uronode"
