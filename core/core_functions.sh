@@ -65,7 +65,7 @@ function is_rasbian() {
 HAS_RASBIAN=0
 DIST=$(lsb_release -si)
 read -d . VERSION < /etc/debian_version
-if [ $DIST -ne "Rasbian" ]; then
+if [ $DIST != "Raspbian" ]; then
 	echo "INVALID OS"
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 else
