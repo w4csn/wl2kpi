@@ -60,7 +60,7 @@ else
 	fi
 fi
 echo "OS is $DIST $VER : Proceeding..."
-sleep 2
+sleep 5
 # move OS Check to core_functions, simplifies code
 # is_raspbian
 #if [ $? -eq "0" ] ; then
