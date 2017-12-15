@@ -75,6 +75,7 @@ if (( $# != 0 )) ; then
    APP_SELECT=$1
 else
    echo -e "\t ${Red} No app chosen from command line${White}... Loading menu ${Reset}"
+   sleep 2
 fi
 
 while true
