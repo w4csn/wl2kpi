@@ -12,7 +12,7 @@ WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
 START_DIR=$(pwd)
 source $START_DIR/core/core_functions.sh
 CALLSIGN="N0ONE"
-APP_CHOICES="core, rmsgw, plu, pluimap, hostapd"
+APP_CHOICES="core, rmsgw, plu, pluimap, hostapd autohs"
 #APP_SELECT="hostapd"
 trap ctrl_c INT
 
