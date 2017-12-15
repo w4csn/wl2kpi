@@ -20,7 +20,7 @@ ls autohotspot 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot to /usr/bin"
    echo
-   cp $START_DIR/autohotspot/autohotspot /usr/bin/ > /dev/null 2>&1
+   cp ../autohotspot/autohotspot /usr/bin/ > /dev/null 2>&1
    if [ $? -ne 0 ]; then
 	  echo "Problems Copying file"
 	  exit 1
@@ -34,7 +34,7 @@ ls autohotspot.service 2>/dev/null
 if [ $? -ne 0 ]; then
    echo -e "=== Copying autohotspot.service to /etc/systemd/system"
    echo
-   cp $START_DIR/systemd/autohotspot.service /etc/systemd/system > /dev/null 2>&1
+   cp ../systemd/autohotspot.service /etc/systemd/system > /dev/null 2>&1
    if [ $? -ne 0 ]; then
 	  echo "... Problems Copying file"
 	  exit 1
