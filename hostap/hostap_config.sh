@@ -248,10 +248,10 @@ service dnsmasq start
 
 
 
+
+for service_name in `echo ${SERVICELIST}` ; do
 echo
 echo "Test if $SERVICELIST services have been started."
-for service_name in `echo ${SERVICELIST}` ; do
-
    systemctl is-active $service_name >/dev/null
    if [ "$?" = "0" ] ; then
       echo "$service_name is running"

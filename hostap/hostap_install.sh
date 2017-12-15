@@ -95,8 +95,8 @@ for pkg_name in `echo ${PKGLIST}` ; do
    fi
 done
 ./hostap_config.sh
-./autohotspot_config.sh
-echo "$(date "+%Y %m %d %T %Z"): hostap install script FINISHED" >> $UDR_INSTALL_LOGFILE
+./autohotspot/autohotspot_config.sh
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap install FINISHED"
+echo "$scriptname: script FINISHED"
 echo
