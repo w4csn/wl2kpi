@@ -17,21 +17,21 @@ SERVICELIST="hostapd dnsmasq"
 
 
 
-# ===== main
-sleep 3
+# ===== Main =====
+sleep 2
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap_install.sh: script STARTED"
+echo -e "${BluW}hostap_install.sh: script STARTED${Reset}"
 echo
-echo "=== Install hostap on an RPi 3"
+echo -e "=== Install hostap on an RPi 3"
 
 # Be sure we're running as root
 chk_root
 
 is_rpi3
 if [ $? -eq "0" ] ; then
-   echo "Not running on an RPi 3 ... exiting"
+   echo -e "Not running on an RPi 3 ... exiting"
    exit 1
 fi
 
@@ -48,12 +48,13 @@ for pkg_name in `echo ${PKGLIST}` ; do
 
    is_pkg_installed $pkg_name
    if [ $? -ne 0 ] ; then
-      echo "$scriptname: Need to Install $pkg_name program"
+      echo -e "$scriptname: Need to Install $pkg_name program"
       apt-get -qy install $pkg_name
    fi
 done
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap_install.sh: script FINISHED"
+echo -e "${BluW}hostap_install.sh: script FINISHED${Reset}"
 echo
+# ===== End Main =====
