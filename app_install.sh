@@ -204,14 +204,11 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		bye)
-			echo ""
-			echo ""
-			echo "73!"
-			echo "Scott Newton - W4CSN"
-			echo ""
-			echo ""
-			clear
-			exit
+			echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+			echo
+			echo -e "${BluW} $scriptname: script FINISHED \t${Reset}"
+			echo
+			exit 0
 		;;
 		*)
 			echo "Undefined app, must be one of $APP_CHOICES"
@@ -219,10 +216,4 @@ do
 		;;
 	esac
 done
-
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
-echo
-echo "$scriptname: ($APP_SELECT) script FINISHED"
-echo
-exit 0
 # ===== End Main =====
