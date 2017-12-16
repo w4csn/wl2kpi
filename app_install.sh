@@ -41,25 +41,25 @@ DIST=$(lsb_release -si)
 read -d . VERSION < /etc/debian_version
 VER=""
 if [ $DIST != "Raspbian" ]; then
-	echo "INVALID OS"
+	echo -e "${Red}INVALID OS${Reset}"
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 	exit 1
 else
-	echo "OS: $DIST"
+	echo -e "${Blue}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
 		VER="Jessie"
-		echo "Version: Jessie"
+		echo -e "${Blue}Version:${Green} $VER${Reset}"
 		
 	elif [ $VERSION -eq "9" ]; then
 		VER="Stretch"
-		echo "Version: Stretch"
+		echo -e "${Blue}Version:${Green} $VER${Reset}"
 	else
-		echo "INVALID VERSION"	
+		echo -e "${Red}INVALID VERSION${Reset}"	
 		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		exit 1
 	fi
 fi
-echo "OS is $DIST $VER : Proceeding..."
+echo -e "OS is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
