@@ -98,7 +98,7 @@ clear
 sleep 2
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo -e "${BluW} $scriptname: script STARTED ${Reset}"
+echo -e "${BluW}core_install.sh: script STARTED ${Reset}"
 echo
 
 # Be sure we're running as root
@@ -187,6 +187,6 @@ echo
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo -e "${BluW} $scriptname: script FINISHED ${Reset}"
+echo -e "${BluW}core_install.sh: script FINISHED ${Reset}"
 echo
 # ===== End Main =====
