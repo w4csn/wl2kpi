@@ -158,13 +158,13 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		hostap)
-			echo "$scriptname: Install hostapd"
+			echo -e "${BluW}$scriptname: Install hostapd${Reset}"
 			# install hostapd
 			pushd $START_DIR/hostap
 			source ./hostap_install.sh
 			source ./hostap_config.sh
 			popd > /dev/null
-			echo "$scriptname: hostapd installation FINISHED"
+			echo -e "${BluW}$scriptname: hostapd installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;

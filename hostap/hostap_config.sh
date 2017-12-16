@@ -104,11 +104,14 @@ function dnsmasq_config() {
 if [ ! -f /etc/dnsmasq.conf ] ; then
    copy_dnsmasq "/etc"
 else
-   echo "/etc/dnsmasq.conf already exists."
+   echo
+   echo -e "/etc/dnsmasq.conf already exists."
    copy_dnsmasq "/tmp"
-   echo "=== diff of current dnsmasq config ==="
+   echo
+   echo -e "=== diff of current dnsmasq config ==="
    diff -b /etc/dnsmasq.conf /tmp
-   echo "=== end diff ==="
+   echo -e "=== end diff ==="
+   echo
 fi
 }
 
@@ -118,21 +121,23 @@ function hostapd_config() {
 if [ ! -f /etc/hostapd/hostapd.conf ] ; then
    copy_hostapd "/etc/hostapd"
 else
-   echo "/etc/hostapd/hostapd.conf already exists."
+   echo -e "/etc/hostapd/hostapd.conf already exists."
    copy_hostapd "/tmp"
-   echo "=== diff of current dnsmasq config ==="
+   echo
+   echo -e "=== diff of current dnsmasq config ==="
    diff -b /etc/hostapd/hostapd.conf /tmp
-   echo "=== end diff ==="
+   echo -e "=== end diff ==="
+   echo
 fi
 }
 
 
-# ===== main
+# ===== Main =====
 sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap_config.sh: script STARTED"
+echo -e "${BluW}hostap_config.sh: script STARTED${Reset}"
 echo
 echo "=== Config hostap on an RPi 3"
 
@@ -141,7 +146,7 @@ chk_root
 
 is_rpi3
 if [ $? -eq "0" ] ; then
-   echo "Not running on an RPi 3 ... exiting"
+   echo -e "Not running on an RPi 3 ... exiting"
    exit 1
 fi
 
@@ -224,5 +229,6 @@ done
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "hostap_config.sh: script FINISHED"
+echo -e "${BluW}hostap_config.sh: script FINISHED${Reset}"
 echo
+# ===== End Main =====
