@@ -77,15 +77,17 @@ systemctl daemon-reload
 service autohotspot start
 
 echo
-echo -e "Test if ${Yellow}$SERVICELIST{$Reset} services have been modified."
+echo -e "Test if ${Yellow}$SERVICELIST${Reset} services have been modified."
 echo -e "For reference hostapd and dnsmasq should be disabled and autohotspot enabled"
 for service_name in `echo ${SERVICELIST}` ; do
 
    systemctl is-active $service_name >/dev/null
    if [ "$?" = "0" ] ; then
-      echo -e "$service_name is running"
+      echo -e "$service_name is enabled"
+	  echo
    else
-      echo -e "$service_name is NOT running"
+      echo -e "$service_name has been disabled"
+	  echo
    fi
 done
 # Setup crontab
