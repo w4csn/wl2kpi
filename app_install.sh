@@ -105,13 +105,13 @@ do
    # check argument passed to this script
 	case $APP_SELECT in
 		core)
-			echo "$scriptname: Install core"
+			echo -e "${BluW}$scriptname: Install core${Reset}"
 			# install core files
 			pushd $START_DIR/core
 			source ./core_install.sh
 			source ./core_config.sh
 			popd > /dev/null
-			echo "$scriptname: core installation FINISHED"
+			echo -e "${BluW}$scriptname: core installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
@@ -161,7 +161,7 @@ do
 			echo -e "${BluW}$scriptname: Install hostapd${Reset}"
 			# install hostapd
 			pushd $START_DIR/hostap
-			source ./hostap_install.sh
+			source ./hostap_install.shcore
 			source ./hostap_config.sh
 			popd > /dev/null
 			echo -e "${BluW}$scriptname: hostapd installation FINISHED${Reset}"
