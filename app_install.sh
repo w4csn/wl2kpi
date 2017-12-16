@@ -81,22 +81,24 @@ fi
 while true
 do
 	clear
-	echo "OS is $DIST $VER"
+	echo -e "OS is ${Green}$DIST $VER${Reset}"
 	echo ""
-	echo "Please select option."
-	echo "wait for each process to finish."
+	echo "wl2kpi Install Menu"
+	echo ""
 	echo "" 
-	echo "core)    Install CORE (Do this first!)"
-	echo "ax25)    Install AX.25"
-	echo "rmsgw)   Install RMS Gateway - Linux"
-	echo "plu)     Install paclink-unix  basic "
-	echo "pluimap) Install paclink-unix with imap "
-	echo "hostap)  Install WiFi Hotspot Rpi3 Only!"
-	echo "autohs)  Install Autohotspot Rpi3 Only!"
+	echo -e "${Green}core${Reset}    Install CORE (Do this first!)"
+	echo -e "${Green}ax25${Reset}    Install AX.25"
+	echo -e "${Green}rmsgw${Reset}   Install RMS Gateway - Linux"
+	echo -e "${Red}plu${Reset}     Install paclink-unix  basic "
+	echo -e "${Red}pluimap${Reset} Install paclink-unix with imap "
+	echo -e "${Green}hostap${Reset}  Install WiFi Hotspot Rpi3 Only!"
+	echo -e "${Green}autohs${Reset  Install Autohotspot Rpi3 Only!"
 	echo ""
-	echo "bye)  EXIT PROGRAM"
+	echo -e "${Green}bye${Reset}  EXIT PROGRAM"
 	echo ""
-	echo -n "Please select option.  " 
+	echo "wait for each process to finish."
+	echo -n "Please enter option:  " 
+	
 	read APP_SELECT
 	echo
 	
