@@ -56,7 +56,7 @@ echo -e "\t${Blue} === Verify hostname${Reset}"
 echo
 HOSTNAME=$(cat /etc/hostname | tail -1)
 echo -e "Current hostname: ${Yellow}$HOSTNAME${Reset}"
-
+echo
 if [ "$HOSTNAME" = "raspberrypi" ] || [ "$HOSTNAME" = "compass" ] ; then
    # Change hostname
    echo -e "Using default host name: ${Red}$HOSTNAME${Reset}, change it"
@@ -102,6 +102,7 @@ if [ $? -eq 0 ] ; then
    # Found 127.0.1.1 entry
    # Be sure hostnames match
    HOSTNAME_CHECK=$(grep "127.0.1.1" /etc/hosts | awk {'print $2'})
+   echo
    if [ "$HOSTNAME" != "$HOSTNAME_CHECK" ] ; then
       echo "Make host names match between /etc/hostname & /etc/hosts"
       sed -i -e "/127.0.1.1/ s/127.0.1.1\t.*/127.0.1.1\t$HOSTNAME ${HOSTNAME}.localnet/" /etc/hosts
