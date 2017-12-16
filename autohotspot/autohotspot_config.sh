@@ -90,11 +90,14 @@ for service_name in `echo ${SERVICELIST}` ; do
 	fi
 done
 # Setup crontab
-grep "autohotspot"  /etc/crontab  > /dev/null 2>&1
-if [ $? -eq 0 ] ; then
-	echo "autohotspot has already been added to crontab"
+grep -i "autohotspot"  /etc/crontab  > /dev/null 2>&1
+if [ $? -eq 1 ] ; then
+	echo "Creating crontab entry for user: root"
+	{
+	echo "*/5 * * * *   root    /usr/local/bin/autohotspot > /dev/null 2>&1"
+	} >> /etc/crontab
 else
-	echo "Adding autohotspot to crontab"
+	echo "autohotspot has already been added to crontab"
 fi
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE

@@ -38,7 +38,7 @@ for pkg_name in `echo ${BUILDTOOLS_PKG_LIST}` ; do
 
    is_pkg_installed $pkg_name
    if [ $? -ne 0 ] ; then
-      echo -e "\t ${Blue} $scriptname: Will Install $pkg_name program ${Reset}"
+      echo -e "\t ${Blue} core_install.sh: Will Install $pkg_name program ${Reset}"
       needs_pkg=true
       break
    fi
@@ -71,7 +71,7 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
 
       is_pkg_installed $pkg_name
       if [ $? -ne 0 ] ; then
-         echo -e "$scriptname: Will Install $pkg_name program"
+         echo -e "${Blue} core_install.sh: Will Install $pkg_name program${Reset}"
          needs_pkg=true
          break
       fi
@@ -82,12 +82,12 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
 
       apt-get install -y -q $NONESSENTIAL_PKG_LIST
       if [ "$?" -ne 0 ] ; then
-         echo "Non essential packages install failed. Please try this command manually:"
+         echo -e "${Red}Non essential packages install failed. ${Reset}Please try this command manually:"
          echo "apt-get install -y $NONESSENTIAL_PKG_LIST"
       fi
    fi
 
-   echo -e "=== Non essential packages installed."
+   echo -e "${Green}=== Non essential packages installed. ${Reset}"
    echo
 fi
 }

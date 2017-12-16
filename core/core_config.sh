@@ -14,12 +14,12 @@ trap ctrl_c INT
 # ===== Function List =====
 function chng_passwd {
 # Check for default password
-echo -e "\t${Blue}=== Verify not using default password ${Reset}"
+echo -e "\t${Blue} === Verify not using default password ${Reset}"
 # is there even a user pi?
 ls /home | grep pi > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
-   echo "User pi found"
-   echo "Determine if default password is being used"
+   echo -e "User ${yellow}pi${Reset} found"
+   echo -e "Determine if default password is being used"
 
    # get salt
    SALT=$(grep -i pi /etc/shadow | awk -F\$ '{print $3}')
@@ -32,33 +32,34 @@ if [ $? -eq 0 ] ; then
 #   dbgecho "pass  gen: $PASSGEN"
 
    if [ "$PASSFILE" = "$PASSGEN" ] ; then
-      echo "User pi is using default password"
-      echo "Need to change your password for user pi NOW"
+      echo -e "User ${Yellow}pi${Reset} is using default password"
+      echo -e "Need to change your password for user pi NOW"
       read -t 1 -n 10000 discard
       passwd pi
       if [ $? -ne 0 ] ; then
-         echo "Failed to set password, exiting"
+         echo -e "Failed to set password, exiting"
 	 exit 1
       fi
    else
-      echo "User pi not using default password."
+      echo -e "User ${Yellow}pi${Reset} not using default password."
    fi
 
 else
-   echo "User pi NOT found"
+   echo -e "User ${Yellow}pi${Reset} ${Red}NOT${Reset} found"
 fi
 echo
 }
 
 function chng_hostname {
 # Change hostname from default
-echo " === Verify hostname"
+echo -e "${Blue} === Verify hostname${Reset}"
+echo
 HOSTNAME=$(cat /etc/hostname | tail -1)
 dbgecho "$scriptname: Current hostname: $HOSTNAME"
 
 if [ "$HOSTNAME" = "raspberrypi" ] || [ "$HOSTNAME" = "compass" ] ; then
    # Change hostname
-   echo "Using default host name: $HOSTNAME, change it"
+   echo -e "Using default host name: ${Red}$HOSTNAME${Reset}, change it"
    echo "Enter new host name followed by [enter]:"
    read -t 1 -n 10000 discard
    read -e HOSTNAME
@@ -89,10 +90,13 @@ chng_hostname
 HOSTNAME=$(cat /etc/hostname | tail -1)
 
 # Set up /etc/mailname
-echo "=== Set mail hostname"
+echo -e "${Blue} === Configure /etc/mailname with  ${Yellow}hostname${Reset}"
+echo
 echo "$HOSTNAME.localhost" > /etc/mailname
 
 # Set  up /etc/hosts
+echo -e "${Blue} === Configure /etc/hosts${Reset}"
+echo
 grep "127.0.1.1" /etc/hosts
 if [ $? -eq 0 ] ; then
    # Found 127.0.1.1 entry
@@ -116,7 +120,7 @@ fi
 DATETZ=$(date +%Z)
 dbgecho "Time zone: $DATETZ"
 if [ "$DATETZ" == "UTC" ] ; then
-   echo " === Set time zone"
+   echo -e "${Blue} === Set time zone ${Reset}"
    echo " ie. select America, then scroll down to 'Los Angeles'"
    echo " then hit tab & return ... wait for it"
    # pause to read above msg
