@@ -83,7 +83,7 @@ do
 	clear
 	echo -e "OS is ${Green}$DIST $VER${Reset}"
 	echo ""
-	echo "wl2kpi Install Menu"
+	echo -e "${Blue}wl2kpi Install Menu${Reset}"
 	echo ""
 	echo "" 
 	echo -e "${Green}core${Reset}    Install CORE (Do this first!)"
