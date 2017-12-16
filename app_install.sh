@@ -169,12 +169,12 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		autohs)
-			echo "$scriptname: Install autohotspot"
+			echo -e "${BluW}$scriptname: Install autohotspot${Reset}"
 			# install autohotspot
 			pushd $START_DIR/autohotspot
 			source ./autohotspot_config.sh
 			popd > /dev/null
-			echo "$scriptname: autohotspot installation FINISHED"
+			echo -e "${BluW}$scriptname: autohotspot installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;

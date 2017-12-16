@@ -84,7 +84,7 @@ for service_name in `echo ${SERVICELIST}` ; do
 
    systemctl is-active $service_name >/dev/null
    if [ "$?" = "0" ] ; then
-      echo -e "$service_name is enabled"
+      echo -e "$service_name has been enabled"
     else
       echo -e "$service_name has been disabled"
 	fi
@@ -99,6 +99,6 @@ fi
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "autohotspot_config.sh: script FINISHED"
+echo -e "${BluW}autohotspot_config.sh: script FINISHED${Reset}"
 echo
 # ===== End Main =====
