@@ -64,7 +64,10 @@ if [ $? -eq "0" ] ; then
    exit 1
 fi
 
+# Copy autohotspot files
 copy_files
+
+# Configure services
 service hostapd stop
 service dnsmasq stop
 systemctl disable hostapd
@@ -84,6 +87,13 @@ for service_name in `echo ${SERVICELIST}` ; do
       echo "$service_name is NOT running"
    fi
 done
+# Setup crontab
+grep "autohotspot"  /etc/crontab  > /dev/null 2>&1
+if [ $? -ne 0 ] ; then
+	echo "autohotspot has already been added to crontab"
+else
+	echo "Adding autohotspot to crontab"
+fi
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
