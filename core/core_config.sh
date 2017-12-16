@@ -18,7 +18,7 @@ echo -e "\t${Blue} === Verify not using default password ${Reset}"
 # is there even a user pi?
 ls /home | grep pi > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
-   echo -e "User ${yellow}pi${Reset} found"
+   echo -e "User ${Yellow}pi${Reset} found"
    echo -e "Determine if default password is being used"
 
    # get salt
