@@ -55,7 +55,7 @@ function chng_hostname {
 echo -e "\t${Blue} === Verify hostname${Reset}"
 echo
 HOSTNAME=$(cat /etc/hostname | tail -1)
-dbgecho "core_config.sh: Current hostname: $HOSTNAME"
+echo -e "Current hostname: ${Yellow}$HOSTNAME${Reset}"
 
 if [ "$HOSTNAME" = "raspberrypi" ] || [ "$HOSTNAME" = "compass" ] ; then
    # Change hostname
@@ -90,12 +90,12 @@ chng_hostname
 HOSTNAME=$(cat /etc/hostname | tail -1)
 
 # Set up /etc/mailname
-echo -e "\t${Blue} === Configure /etc/mailname with  ${Yellow}hostname${Reset}"
+echo -e "\t${Blue} === Configure /etc/mailname with  ${Yellow}$HOSTNAME${Reset}"
 echo
 echo "$HOSTNAME.localhost" > /etc/mailname
 
 # Set  up /etc/hosts
-echo -e "${Blue} === Configure /etc/hosts${Reset}"
+echo -e "\t${Blue} === Configure /etc/hosts${Reset}"
 echo
 grep "127.0.1.1" /etc/hosts
 if [ $? -eq 0 ] ; then
@@ -119,7 +119,7 @@ fi
 # Change Time Zone
 DATETZ=$(date +%Z)
 echo
-dbgecho -e "Time zone: ${Green}$DATETZ${Reset}"
+dbgecho "Time zone: $DATETZ"
 if [ "$DATETZ" == "UTC" ] ; then
    echo -e "\t${Blue} === Set time zone ${Reset}"
    echo " ie. select America, then scroll down to 'Los Angeles'"
