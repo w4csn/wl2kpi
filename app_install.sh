@@ -92,7 +92,7 @@ do
 	echo -e "${Red}plu${Reset}     Install paclink-unix  basic "
 	echo -e "${Red}pluimap${Reset} Install paclink-unix with imap "
 	echo -e "${Green}hostap${Reset}  Install WiFi Hotspot Rpi3 Only!"
-	echo -e "${Green}autohs${Reset  Install Autohotspot Rpi3 Only!"
+	echo -e "${Green}autohs${Reset}  Install Autohotspot Rpi3 Only!"
 	echo ""
 	echo -e "${Green}bye${Reset}  EXIT PROGRAM"
 	echo ""
