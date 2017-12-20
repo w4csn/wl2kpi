@@ -206,9 +206,7 @@ get_callsign
 # Create a /etc/ax25d.conf entry
 echo -e "=== Configuring ax25d.conf for rmsgw"
 CHECK_CALL="k4gbb"
-grep $CHECK_CALL  /etc/ax25/ax25d.conf  > /dev/null 2>&1
-if [ $? -eq 0 ] ; then
-   echo "ax25d never configured"
+bye
    mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
    echo "Original ax25d.conf saved as ax25d.conf-dist"
    # copy first 1 line of original file

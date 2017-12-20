@@ -20,6 +20,7 @@ read Device < /tmp/ax25-config-tmp
 /usr/local/sbin/kissparms -p 0 -r 128 -s 10 -l 20 -t 250
 
 # Parms for a USER Port
+cd /proc/sys/net/ax25/$Device/
 echo 3000    > t1_timeout		# (Frack) /1000 = ? Sec
 echo 1000    > t2_timeout 		# (RESPtime) /1000 = ? sec
 echo 300000  > t3_timeout 		# (Check) /6000 = ? Min

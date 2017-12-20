@@ -89,7 +89,8 @@ for service_name in `echo ${SERVICELIST}` ; do
       echo -e "$service_name has been disabled"
 	fi
 done
-# Setup crontab
+
+# Setup crontab for autohotspot
 grep -i "autohotspot"  /etc/crontab  > /dev/null 2>&1
 if [ $? -eq 1 ] ; then
 	echo "Creating crontab entry for user: root"
