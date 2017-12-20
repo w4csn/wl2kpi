@@ -16,4 +16,4 @@ ExecStart=/etc/ax25/ax25-up
 ExecStop=/etc/ax25/ax25-down
 
 [Install]
-WantedBy=deault.target
+WantedBy=default.target
