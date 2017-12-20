@@ -17,7 +17,7 @@ TOOLS=ax25tools/
 APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
 GET_K4GBB=false # needs to be replaced with smarter method!
-
+UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 # ===== Function List =====
 
 function CreateAx25_Folders {
@@ -247,21 +247,24 @@ echo -e "=== Installing Startup Files"
 #fi
 
 # Setup ax25 systemd service
-if [ ! -f /lib/systemd/system/ax25.service ]; then
+if [ ! -f /etc/systemd/system/ax25.service ]; then
    echo -e "... Setting up ax25 systemd service"
-   cp $START_DIR/systemd/ax25.service /lib/systemd/system/ax25.service
+   cp $START_DIR/systemd/ax25.service /etc/systemd/system/ax25.service
    systemctl enable ax25.service
    systemctl daemon-reload
    service ax25 start
    chk_service $service_name
 fi
 
+if [ "$UPD_CONF_FILES" = "true" ]; then
 cd /etc/ax25
 cp $START_DIR/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
 cp $START_DIR/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
 cp $START_DIR/k4gbb/axports /etc/ax25/axports
 cp $START_DIR/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
 touch nrports rsports
+fi
+
 echo -e "=== Install Finished"
 }
 # ===== End Functions list =====
