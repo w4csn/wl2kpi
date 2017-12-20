@@ -171,8 +171,8 @@ do
 		autohs)
 			echo -e "${BluW}$scriptname: Install autohotspot${Reset}"
 			# install autohotspot
-			pushd $START_DIR/autohotspot
-			source ./autohotspot_config.sh
+			pushd $START_DIR/autohs
+			source ./autohs_config.sh
 			popd > /dev/null
 			echo -e "${BluW}$scriptname: autohotspot installation FINISHED${Reset}"
 			echo
