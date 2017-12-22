@@ -138,7 +138,7 @@ echo
 # Modify hciattach.service to configure BT for /dev/ttyS0
 echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
 if [ ! -e /lib/systemd/system/hciattach.service ]; then
-	cp $START_DIR/rpi/hciattach.service /lib/systemd/system/hciattach.service
+	cp $START_DIR/systemd/hciattach.service /lib/systemd/system/hciattach.service
 else
 	echo -e "\t ... hciattach.service already exists."
 fi
