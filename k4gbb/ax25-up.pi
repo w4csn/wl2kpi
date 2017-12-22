@@ -10,8 +10,8 @@ sysctl -wq kernel.panic_on_oops=30
 echo "Start Port 0"
 
 # Attach KISS-device /dev/ttyAMA0 to Port 0
- /usr/local/sbin/kissattach /dev/ttyAMA0 0 44.128.1.19 >/tmp/ax25-config.tmp
-# /usr/local/sbin/kissattach /dev/ttyUSB0 0 44.128.1.19 >/tmp/ax25-config.tmp
+ /usr/local/sbin/kissattach /dev/ttyAMA0 0 44.128.1.19 > /tmp/ax25-config.tmp
+# /usr/local/sbin/kissattach /dev/ttyUSB0 0 44.128.1.19 > /tmp/ax25-config.tmp
 
 awk '/device/ { print $7 }' /tmp/ax25-config.tmp > /tmp/ax25-config-tmp
 read Device < /tmp/ax25-config-tmp
