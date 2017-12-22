@@ -72,7 +72,7 @@ fi
 # ===== Main =====
 sleep 2 
 clear
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): core_config.sh: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_config.sh: script STARTED ${Reset}"
 echo

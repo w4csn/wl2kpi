@@ -96,7 +96,7 @@ fi
 # ===== Main =====
 clear
 sleep 2
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): core_install.sh: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_install.sh: script STARTED ${Reset}"
 echo
@@ -118,7 +118,7 @@ install_build_tools
 install_nonessential_pkgs
 
 
-if [ ! -d /lib/modules/$(uname -r)/ ] ; then
+if [ ! -d /lib/modules/$(uname -r)/ ]; then
    echo "Modules directory /lib/modules/$(uname -r)/ does NOT exist"
    echo "Probably need to reboot, type: "
    echo "shutdown -r now"
@@ -135,15 +135,23 @@ fi
 echo -e "\t ${Green} === Finished. ${Reset}"
 echo
 
-# Modify hciattach.service to configure BT for /dev/ttyS0
-echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
-if [ ! -e /lib/systemd/system/hciattach.service ]; then
-	cp $START_DIR/systemd/hciattach.service /lib/systemd/system/hciattach.service
+# If Using RPi3 reconfigure BT
+is_rpi3 > /dev/null 2>&1
+if [ $? -eq "0" ]; then
+   echo -e "Not running on an RPi 3... Skipping BT Configuration"
 else
-	echo -e "\t ... hciattach.service already exists."
+	# Modify hciattach.service to configure BT for /dev/ttyS0
+	echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
+	if [ ! -e /lib/systemd/system/hciattach.service ]; then
+		cp $START_DIR/systemd/hciattach.service /lib/systemd/system/hciattach.service
+		systemctl enable hciattach.service
+		systemctl daemon-reload
+	else
+		echo -e "\t ... hciattach.service already exists."
+	fi
+	echo -e "\t ${Green}=== Finished ${Reset}"
+	echo
 fi
-echo -e "\t ${Green}=== Finished ${Reset}"
-echo
 
 # Modify config.txt
 echo -e "\t ${Blue}=== Modify /boot/config.txt ${Reset}"
@@ -156,14 +164,18 @@ grep "enable_uart=1" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    echo "enable_uart=1" >> $CONFIGDIR
 fi
-grep "dtoverlay=pi3-miniuart-bt" $CONFIGDIR >/dev/null 2>&1
-if [ $? -ne 0 ]; then
-   echo "dtoverlay=pi3-miniuart-bt" >> $CONFIGDIR
+is_rpi3 > /dev/null 2>&1
+if [ $? -ne "0" ]; then
+	grep "dtoverlay=pi3-miniuart-bt" $CONFIGDIR >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "dtoverlay=pi3-miniuart-bt" >> $CONFIGDIR
+	fi
+	grep "core_freq=250" $CONFIGDIR > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "core_freq=250" >> $CONFIGDIR
+	fi
 fi
-grep "core_freq=250" $CONFIGDIR > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-   echo "core_freq=250" >> $CONFIGDIR
-fi
+
 echo -e "\t ${Green}=== Finished. ${Reset}"
 echo
 
@@ -173,7 +185,7 @@ sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
 echo -e "\t ${Green}=== Finished. ${Reset}"
 echo
 
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): core_install: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_install.sh: script FINISHED ${Reset}"
 echo
