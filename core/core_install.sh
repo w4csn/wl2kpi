@@ -140,19 +140,7 @@ echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
 if [ ! -e /lib/systemd/system/hciattach.service ]; then
 	cp $START_DIR/rpi/hciattach.service /lib/systemd/system/hciattach.service
 else
-	cat << EOT >> /lib/systemd/system/hciattach.service
-[Unit]
-ConditionPathIsDirectory=/proc/device-tree/soc/gpio@7e200000/bt_pins
-Before=bluetooth.service
-After=dev-ttyS0.device
-
-[Service]
-Type=forking
-ExecStart=/usr/bin/hciattach /dev/ttyS0 bcm43xx 921600 noflow -
-
-[Install]
-WantedBy=multi-user.target
-EOT
+	echo -e "\t ... hciattach.service already exists."
 fi
 echo -e "\t ${Green}=== Finished ${Reset}"
 echo
@@ -168,9 +156,9 @@ grep "enable_uart=1" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    echo "enable_uart=1" >> $CONFIGDIR
 fi
-grep "dtoverlay=pi-miniuart-bt" $CONFIGDIR >/dev/null 2>&1
+grep "dtoverlay=pi3-miniuart-bt" $CONFIGDIR >/dev/null 2>&1
 if [ $? -ne 0 ]; then
-   echo "dtoverlay=pi-miniuart-bt" >> $CONFIGDIR
+   echo "dtoverlay=pi3-miniuart-bt" >> $CONFIGDIR
 fi
 grep "core_freq=250" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
