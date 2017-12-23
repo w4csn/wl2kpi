@@ -60,7 +60,7 @@ else
 		exit 1
 	fi
 fi
-echo -e "${Cyanlt}OS is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
+echo -e "${Cyanlt}OS${Reset} is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
@@ -82,7 +82,7 @@ fi
 while true
 do
 	clear
-	echo -e "OS is ${Green}$DIST $VER${Reset}"
+	echo -e "${Cyanlt}OS${Reset} is ${Green}$DIST $VER${Reset}"
 	echo ""
 	echo -e "\t${Blue}wl2kpi Install Menu${Reset}"
 	echo ""
