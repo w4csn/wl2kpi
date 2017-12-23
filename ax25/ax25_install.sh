@@ -76,7 +76,7 @@ echo -e "\t=== Downloading AX25 archives"
 if [ ! -d .git ]; then
   echo -e "\t\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
-  $UPD_CONF_FILES=true
+  UPD_CONF_FILES=true
 else
   echo -e "\t\t Updating AX25 from $AX25REPO"
   git pull
