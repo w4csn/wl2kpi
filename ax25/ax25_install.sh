@@ -105,7 +105,7 @@ echo -e "\t=== Compiling AX.25"
 make clean > /dev/null
 
 # Compile
-echo -e "\t\t=== Compiling AX.25 Libraries"
+echo -e "\t\t Compiling AX.25 Libraries"
 make > liberror.txt 2>&1
 if [ $? -ne 0 ]
     then
@@ -117,14 +117,14 @@ else
 fi
 
 # Install
-echo -e "\t=== Installing Runtime Lib files"
+echo -e "\t\t Installing Runtime Lib files"
 make install >> liberror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
-    echo -e "\t${Green} AX.25 Libraries Installed"
+    echo -e "\t${Green} AX.25 Libraries Installed${Reset}"
     rm liberror.txt
 fi
 
@@ -132,9 +132,9 @@ fi
 echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 
 # Ax25-Apps
-echo -e "\t=== Compiling AX.25 Applications"
+echo -e "\t\t Compiling AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
-echo -e "\t Creating Makefiles for AX25apps"
+echo -e "\t\t Creating Makefiles for AX25apps"
 ./autogen.sh >  appserror.txt 2>&1
 ./configure >> appserror.txt 2>&1
 
@@ -142,7 +142,7 @@ echo -e "\t Creating Makefiles for AX25apps"
 make clean > /dev/null
 
 # Compile Ax25-apps
-echo -e "\t\t Compiling Ax25 apps"
+echo -e "\t\t Compiling AX.25 apps"
 make > appserror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Apps Compile ${Red}error${Reset} - see appserror.txt"
@@ -151,19 +151,19 @@ if [ $? -ne 0 ]; then
 fi
 
 # Install Ax25-apps
-echo -e "\t\t Installing Ax25 apps"
+echo -e "\t\t Installing AX.25 apps"
 make  install >> appserror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Apps Install ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else
-    echo -e "\t${Green} Ax25-apps Installed${Reset}"
+    echo -e "\t\t${Green} AX.25-apps Installed${Reset}"
     rm appserror.txt
 fi
 
 # Ax25-tools
-echo -e "\t=== Compiling AX.25 Tools"
+echo -e "\t\t Compiling AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
 echo -e "\t\t Creating Makefiles for AX25tools"
 ./autogen.sh > toolserror.txt 2>&1
@@ -182,7 +182,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Install Ax.25 tools
-echo -e "\t=== Installing AX.25 tools"
+echo -e "\t\t Installing AX.25 tools"
 make install >> toolserror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 tools Install ${Red}error${Reset} - See toolserror.txt"
@@ -265,7 +265,7 @@ if [ ! -f /etc/systemd/system/ax25.service ]; then
    systemctl enable ax25.service
    systemctl daemon-reload
    service ax25 start
-   chk_service $service_name
+   chk_service ax25
 fi
 
 if [ "$UPD_CONF_FILES" = "true" ]; then
