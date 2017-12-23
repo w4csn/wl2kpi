@@ -135,8 +135,24 @@ echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 echo -e "\t\t Compiling AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
 echo -e "\t\t Creating Makefiles for AX25apps"
-(./autogen.sh >  appserror.txt 2>&1) & spinner
-(./configure >> appserror.txt 2>&1) & spinner
+taskCount=2
+taskDone=0
+while [ $tasksDone -le $taskCount ]; do
+
+  # Do your task
+  (( tasksDone += 1 ))
+  ./autogen.sh >  appserror.txt 2>&1
+  ./configure >> appserror.txt 2>&1
+
+  # Add some friendly output
+  text=$(echo "somefile-$tasksDone.dat")
+
+  # Draw the progress bar
+  progressBar $taskCount $taskDone $text
+
+  sleep 0.01
+done
+
 
 # Clear old binaries
 make clean > /dev/null
