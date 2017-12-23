@@ -35,14 +35,19 @@ piver="$(grep "Revision" $CPUINFO_FILE)"
 piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
 
 case $piver in
+000d)
+	echo
+	echo -e "${Red} Pi  Model B Mfg by Egoman${Reset}"
+	echo
+;;
 a01040)
    echo
-   echo -e "${Red} Pi 2 Model B Mfg by Unknown${Reset}"
+   echo -e "${Red} Pi 2 Model B Mfg by Sony UK${Reset}"
    echo
 ;;
 a01041)
    echo
-   echo -e "${Red} Pi 2 Model B Mfg by Sony${Reset}"
+   echo -e "${Red} Pi 2 Model B Mfg by Sony UK${Reset}"
    echo
 ;;
 a21041)
@@ -57,13 +62,19 @@ a22042)
 ;;
 a02082)
    echo
-   echo -e "${Green} Pi 3 Model B Mfg by Sony${Reset}"
+   echo -e "${Green} Pi 3 Model B Mfg by Sony UK${Reset}"
    echo
    HAS_WIFI=1
 ;;
 a22082)
    echo
    echo -e "${Green} Pi 3 Model B Mfg by Embest${Reset}"
+   echo
+   HAS_WIFI=1
+;;
+a32082)
+   echo
+   echo -e "${Green} Pi 3 Model B Mfg by Sony Japan${Reset}"
    echo
    HAS_WIFI=1
 ;;
