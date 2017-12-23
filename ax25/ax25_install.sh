@@ -22,7 +22,7 @@ UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 # ===== Function List =====
 
 function CreateAx25_Folders {
-echo -e "\t${Blue}=== Creating file folders necessary for Ax.25 {Reset}"
+echo -e "\t=== Creating file folders necessary for ${Green}Ax.25${Reset}"
 if [ ! -d "/usr/local/etc" ]; then
    echo -e "\t\t Creating file folders for Config files."
    mkdir /usr/local/etc
@@ -46,12 +46,15 @@ if [ ! -d "/usr/etc/ax25" ]; then
 fi
 
 if [ ! -d /usr/local/src ]; then
-   echo -e "\t\t Creating file folders for source files."
+   echo -e "\t\t Creating /usr/local/src"
    mkdir /usr/local/src
+fi
+if [ ! -d /usr/local/src ]; then
+   echo -e "\t\t Creating /usr/local/src/ax25"
    mkdir /usr/local/src/ax25
 fi
-
-echo -e "\t${Blue}=== Creating symlinks to standard directories${Reset}"
+mkdir /usr/local/src/ax25
+echo -e "\t=== Creating symlinks to standard directories"
 if [ ! -L /var/ax25 ]; then
    ln -s /usr/local/var/ax25/ /var/ax25
 fi
@@ -69,7 +72,7 @@ fi
 
 function DownloadAx25 {
 cd /usr/local/src/ax25
-echo -e "\t${Blue}=== Downloading AX25 archives${Reset}"
+echo -e "\t=== Downloading AX25 archives"
 if [ ! -d .git ]; then
   echo -e "\t\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
@@ -83,7 +86,7 @@ echo
 }
 
 function Configure_libax25 {
-echo -e "\t${Blue}=== Libax25 - Runtime Library files${Reset}"
+echo -e "\t=== Libax25 - Runtime Library files"
 echo -e "\t\t Creating Makefiles for Ax25lib."
 cd /usr/local/src/ax25/$LIBAX25
 ./autogen.sh > liberror.txt 2>&1
@@ -97,12 +100,12 @@ echo
 }
 
 function CompileAx25 {
-echo -e "\t${Blue}=== Compiling AX.25${Reset}"
+echo -e "\t=== Compiling AX.25"
 # Clean old binaries
 make clean > /dev/null
 
 # Compile
-echo -e "\t\t${Blue} === Compiling AX.25 Libraries"
+echo -e "\t\t=== Compiling AX.25 Libraries"
 make > liberror.txt 2>&1
 if [ $? -ne 0 ]
     then
@@ -114,7 +117,7 @@ else
 fi
 
 # Install
-echo -e "\t${Blue}=== Installing Runtime Lib files${Reset}"
+echo -e "\t=== Installing Runtime Lib files"
 make install >> liberror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
@@ -129,7 +132,7 @@ fi
 echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 
 # Ax25-Apps
-echo -e "\t${Blue}=== Compiling AX.25 Applications${Reset}"
+echo -e "\t=== Compiling AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
 echo -e "\t Creating Makefiles for AX25apps"
 ./autogen.sh >  appserror.txt 2>&1
@@ -160,7 +163,7 @@ else
 fi
 
 # Ax25-tools
-echo -e "\t${Blue}=== Compiling AX.25 Tools${Reset}"
+echo -e "\t=== Compiling AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
 echo -e "\t\t Creating Makefiles for AX25tools"
 ./autogen.sh > toolserror.txt 2>&1
@@ -179,7 +182,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Install Ax.25 tools
-echo -e "\t${Blue}=== Installing AX.25 tools${Reset}"
+echo -e "\t=== Installing AX.25 tools"
 make install >> toolserror.txt 2>&1
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 tools Install ${Red}error${Reset} - See toolserror.txt"
@@ -189,7 +192,7 @@ else
     echo -e "\t\t${Green} AX.25 tools Installed${Reset}"
     rm toolserror.txt
 fi
-echo -e "\t${Blue}=== Compile AX.25 ${Green}Finished${Reset}"
+echo -e "\t=== Compile AX.25 ${Green}Finished${Reset}"
 echo
 }
 
@@ -201,7 +204,7 @@ cd /usr/local/bin/
 chmod 4775 *
 echo
 
-echo -e "\t${Blue}=== Enable AX.25 Modules${Reset}"
+echo -e "\t=== Enable AX.25 Modules"
 grep ax25 /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    lsmod | grep -i ax25 > /dev/null 2>&1
@@ -255,7 +258,7 @@ echo
 #fi
 
 # Setup ax25 systemd service
-echo -e "\t${Blue}=== Installing Startup Files${Reset}"
+echo -e "\t=== Installing Startup Files"
 if [ ! -f /etc/systemd/system/ax25.service ]; then
    echo -e "\t\t Setting up ax25 systemd service"
    cp $START_DIR/systemd/ax25.service /etc/systemd/system/ax25.service
@@ -266,7 +269,7 @@ if [ ! -f /etc/systemd/system/ax25.service ]; then
 fi
 
 if [ "$UPD_CONF_FILES" = "true" ]; then
-echo -e "\t${Blue}=== Installing AX.25 Configuration Files${Reset}"
+echo -e "\t=== Installing AX.25 Configuration Files"
 cd /etc/ax25
 cp $START_DIR/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
 cp $START_DIR/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
