@@ -88,6 +88,7 @@ echo
 function Configure_libax25 {
 echo -e "\t=== Libax25 - Runtime Library files"
 echo -e "\t\t Creating Makefiles for Ax25lib."
+echo
 cd /usr/local/src/ax25/$LIBAX25
 echo "Executing autogen.sh, Please Wait..."
 (./autogen.sh > liberror.txt 2>&1) &
@@ -96,9 +97,11 @@ echo "Executing configure, Please Wait..."
 (./configure >> liberror.txt 2>&1) &
 spinner $!
 if [ $? -ne 0 ]; then
+	echo
     echo -e "\t\t Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
     exit 1
 fi
+echo
 echo -e "\t${Green}=== Libax25 Config Finished${Reset}"
 echo
 }
