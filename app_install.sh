@@ -22,6 +22,7 @@ Red='\e[31m'
 Green='\e[32m'
 Yellow='\e[33m'
 Blue='\e[34m'
+Cyan='\e[36m'
 Cyanlt='\e[96m'
 White='\e[37m'
 BluW='\e[37;44m'
@@ -82,7 +83,7 @@ fi
 while true
 do
 	clear
-	echo -e "${Cyanlt}OS${Reset} is ${Green}$DIST $VER${Reset}"
+	echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER${Reset}"
 	echo ""
 	echo -e "\t${Blue}wl2kpi Install Menu${Reset}"
 	echo ""
