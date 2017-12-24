@@ -110,12 +110,11 @@ echo
 
 function CompileAx25 {
 echo -e "\t=== Compiling AX.25"
-# Clean old binaries
-echo "Cleaning Source Folder, Please Wait..."
-(make clean > /dev/null) &
-spinner $!
-echo "Done!"
-# Compile
+
+# Remove old binaries
+make clean > /dev/null
+
+# Compile ax25 libraries
 echo -e "\t\t Compiling AX.25 Libraries"
 echo "Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
@@ -130,7 +129,7 @@ else
     echo -e "\t\t${Green}AX.25 Libraries Compiled${Reset}"	
 fi
 
-# Install
+# Install ax25 libraries
 echo -e "\t\t Installing Runtime Lib files"
 echo "Installing, Please Wait..."
 (make install >> liberror.txt 2>&1) &
@@ -161,7 +160,7 @@ echo "Executing configure, Please Wait..."
 spinner $!
 echo "Done!"
 
-# Clear old binaries
+# Remove old binaries
 make clean > /dev/null
 
 # Compile Ax25-apps
@@ -181,7 +180,7 @@ echo -e "\t\t Installing AX.25 apps"
 echo "Installing, Please Wait..."
 (make  install >> appserror.txt 2>&1) &
 spinner $!
-echo "Done1"
+echo "Done!"
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Apps Install ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE
@@ -195,21 +194,24 @@ fi
 echo -e "\t\t Compiling AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
 echo -e "\t\t Creating Makefiles for AX25tools"
-echo "Pleast Wait..."
+echo "Executing autogen.sh, Please Wait..."
 (./autogen.sh > toolserror.txt 2>&1) &
 spinner $!
 echo "Done!"
-echo "Please Wait..."
+echo "Executing configure, Please Wait..."
 (./configure >> toolserror.txt 2>&1) &
 spinner $!
 echo "Done!"
 
-# Clear old binaries
+# Remove old binaries
 make clean > /dev/null
 
 # Compile Ax.25 tools
 echo -e " \t\t Compiling AX.25 tools"
-make > toolserror.txt 2>&1
+echo "Compiling, Please Wait..."
+(make > toolserror.txt 2>&1) &
+spinner $!
+echo "Done!"
 if [ $? -ne 0 ]; then
     echo -e " ${Red} \t\t AX.25 tools Compile ${Red}error${Reset} - See toolserror.txt ${Reset}"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Tools" >> $WL2KPI_INSTALL_LOGFILE
@@ -218,7 +220,10 @@ fi
 
 # Install Ax.25 tools
 echo -e "\t\t Installing AX.25 tools"
-make install >> toolserror.txt 2>&1
+echo "Installing, Please Wait..."
+(make install >> toolserror.txt 2>&1) &
+spinner $!
+echo "Done!"
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 tools Install ${Red}error${Reset} - See toolserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Tools" >> $WL2KPI_INSTALL_LOGFILE
