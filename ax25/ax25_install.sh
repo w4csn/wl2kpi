@@ -114,10 +114,10 @@ echo -e "\t=== Compiling AX.25"
 echo "Cleaning Source Folder, Please Wait..."
 (make clean > /dev/null) &
 spinner $!
-echo "Done"
+echo "Done!"
 # Compile
 echo -e "\t\t Compiling AX.25 Libraries"
-echo "Please Wait..."
+echo "Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
 spinner$!
 echo "Done!"
@@ -132,7 +132,7 @@ fi
 
 # Install
 echo -e "\t\t Installing Runtime Lib files"
-echo "Please Wait..."
+echo "Installing, Please Wait..."
 (make install >> liberror.txt 2>&1) &
 spinner $!
 echo "Done!"
@@ -152,17 +152,21 @@ echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 echo -e "\t\t Compiling AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
 echo -e "\t\t Creating Makefiles for AX25apps"
-echo "./autogen.sh"
+echo "Executing autogen.sh, Please Wait..."
 (./autogen.sh >  appserror.txt 2>&1) &
 spinner $!
 echo "Done!"
-echo "./configure"
+echo "Executing configure, Please Wait..."
 (./configure >> appserror.txt 2>&1) &
 spinner $!
 echo "Done!"
+
+# Clear old binaries
+make clean > /dev/null
+
 # Compile Ax25-apps
 echo -e "\t\t Compiling AX.25 apps"
-echo "Please Wait..."
+echo "Compiling, Please Wait..."
 (make > appserror.txt 2>&1) &
 spinner $!
 echo "Done!"
@@ -174,7 +178,10 @@ fi
 
 # Install Ax25-apps
 echo -e "\t\t Installing AX.25 apps"
-make  install >> appserror.txt 2>&1
+echo "Installing, Please Wait..."
+(make  install >> appserror.txt 2>&1) &
+spinner $!
+echo "Done1"
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Apps Install ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE
@@ -188,8 +195,14 @@ fi
 echo -e "\t\t Compiling AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
 echo -e "\t\t Creating Makefiles for AX25tools"
-./autogen.sh > toolserror.txt 2>&1
-./configure >> toolserror.txt 2>&1
+echo "Pleast Wait..."
+(./autogen.sh > toolserror.txt 2>&1) &
+spinner $!
+echo "Done!"
+echo "Please Wait..."
+(./configure >> toolserror.txt 2>&1) &
+spinner $!
+echo "Done!"
 
 # Clear old binaries
 make clean > /dev/null
