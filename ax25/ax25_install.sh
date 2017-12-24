@@ -22,7 +22,7 @@ UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 # ===== Function List =====
 
 function CreateAx25_Folders {
-echo -e "\t=== Creating file folders necessary for ${Green}Ax.25${Reset}"
+echo -e "\t${Cyan)=== Creating file folders necessary for Ax.25${Reset}"
 if [ ! -d "/usr/local/etc" ]; then
    echo -e "\t\t Creating file folders for Config files."
    mkdir /usr/local/etc
@@ -93,9 +93,11 @@ cd /usr/local/src/ax25/$LIBAX25
 echo "Executing autogen.sh, Please Wait..."
 (./autogen.sh > liberror.txt 2>&1) &
 spinner $!
+echo "Done!"
 echo "Executing configure, Please Wait..."
 (./configure >> liberror.txt 2>&1) &
 spinner $!
+echo "Done!"
 if [ $? -ne 0 ]; then
 	echo
     echo -e "\t\t Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
@@ -109,11 +111,16 @@ echo
 function CompileAx25 {
 echo -e "\t=== Compiling AX.25"
 # Clean old binaries
-make clean > /dev/null
-
+echo "Cleaning Source Folder, Please Wait..."
+(make clean > /dev/null) &
+spinner $!
+echo "Done"
 # Compile
 echo -e "\t\t Compiling AX.25 Libraries"
-make > liberror.txt 2>&1
+echo "Please Wait..."
+(make > liberror.txt 2>&1) &
+spinner$!
+echo "Done!"
 if [ $? -ne 0 ]
     then
     echo -e "\t\t Libax25 Compile ${Red}error${Reset} - See liberror.txt"
@@ -125,7 +132,10 @@ fi
 
 # Install
 echo -e "\t\t Installing Runtime Lib files"
-make install >> liberror.txt 2>&1
+echo "Please Wait..."
+(make install >> liberror.txt 2>&1) &
+spinner $!
+echo "Done!
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
@@ -145,16 +155,17 @@ echo -e "\t\t Creating Makefiles for AX25apps"
 echo "./autogen.sh"
 (./autogen.sh >  appserror.txt 2>&1) &
 spinner $!
+echo "Done!"
 echo "./configure"
 (./configure >> appserror.txt 2>&1) &
 spinner $!
-
-# Clear old binaries
-make clean > /dev/null
-
+echo "Done!"
 # Compile Ax25-apps
 echo -e "\t\t Compiling AX.25 apps"
-make > appserror.txt 2>&1
+echo "Please Wait..."
+(make > appserror.txt 2>&1) &
+spinner $!
+echo "Done!"
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Apps Compile ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE

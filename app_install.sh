@@ -23,7 +23,6 @@ Green='\e[32m'
 Yellow='\e[33m'
 Blue='\e[34m'
 Cyan='\e[36m'
-Cyanlt='\e[96m'
 White='\e[37m'
 BluW='\e[37;44m'
 
@@ -47,21 +46,21 @@ if [ $DIST != "Raspbian" ]; then
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 	exit 1
 else
-	echo -e "${Cyanlt}OS:${Green} $DIST${Reset}"
+	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
 		VER="Jessie"
-		echo -e "${Cyanlt}Version:${Green} $VER${Reset}"
+		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 		
 	elif [ $VERSION -eq "9" ]; then
 		VER="Stretch"
-		echo -e "${Cyanlt}Version:${Green} $VER${Reset}"
+		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	else
 		echo -e "${Red}INVALID VERSION${Reset}"	
 		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		exit 1
 	fi
 fi
-echo -e "${Cyanlt}OS${Reset} is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
+echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
