@@ -8,8 +8,6 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-START_DIR=/home/pi/wl2kpi
-WL2KPI_INSTALL_LOGFILE=/var/log/wl2kpi.log
 source $START_DIR/core/core_functions.sh
 # ===== Main =====
 sleep 3
