@@ -135,7 +135,7 @@ echo -e "\t\t Installing Runtime Lib files"
 echo "Please Wait..."
 (make install >> liberror.txt 2>&1) &
 spinner $!
-echo "Done!
+echo "Done!"
 if [ $? -ne 0 ]; then
     echo -e "\t\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE

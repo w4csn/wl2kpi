@@ -60,7 +60,7 @@ else
 		exit 1
 	fi
 fi
-echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER :${Green} Proceeding...${Reset}"
+echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER : Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
