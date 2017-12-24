@@ -13,7 +13,7 @@ source $START_DIR/core/core_functions.sh
 # ===== Function List =====
 
 function CreateAx25_Folders {
-echo -e "\t${Cyan)=== Creating file folders necessary for Ax.25${Reset}"
+echo -e "\t${Cyan}=== Creating file folders necessary for Ax.25${Reset}"
 if [ ! -d "/usr/local/etc" ]; then
    echo -e "\t\t Creating file folders for Config files."
    mkdir /usr/local/etc

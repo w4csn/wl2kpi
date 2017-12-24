@@ -120,7 +120,7 @@ do
 			echo "$scriptname: Install AX.25"
 			# install ax25 files
 			pushd $START_DIR/ax25
-			source ./ax25_test.sh
+			source ./ax25_install.sh
 			#source ./ax25_config.sh
 			popd > /dev/null
 			echo "$scriptname: AX.25 installation FINISHED"
