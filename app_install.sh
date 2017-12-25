@@ -60,7 +60,7 @@ else
 		exit 1
 	fi
 fi
-echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER : Proceeding...${Reset}"
+echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
@@ -84,7 +84,7 @@ do
 	clear
 	echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER${Reset}"
 	echo ""
-	echo -e "\t${Blue}wl2kpi Install Menu${Reset}"
+	echo -e "\t${Cyan}wl2kpi Install Menu${Reset}"
 	echo ""
 	echo "" 
 	echo -e "${Green}core${Reset}    Install CORE (Do this first!)"
@@ -108,7 +108,7 @@ do
 		core)
 			echo -e "${BluW}$scriptname: Install core${Reset}"
 			# install core files
-			pushd $START_DIR/core
+			pushd $START_DIR/core > /dev/null
 			source ./core_install.sh
 			source ./core_config.sh
 			popd > /dev/null
@@ -119,7 +119,7 @@ do
 		ax25)
 			echo "$scriptname: Install AX.25"
 			# install ax25 files
-			pushd $START_DIR/ax25
+			pushd $START_DIR/ax25 > /dev/null
 			source ./ax25_install.sh
 			#source ./ax25_config.sh
 			popd > /dev/null
@@ -130,7 +130,7 @@ do
 		rmsgw)
 			echo "$scriptname: Install RMS Gateway"
 			# install rmsgw
-			pushd $START_DIR/rmsgw
+			pushd $START_DIR/rmsgw > /dev/null
 			source ./rmsgw_install.sh
 			source ./rmsgw_config.sh
 			popd > /dev/null
@@ -141,7 +141,7 @@ do
 		plu)
 			echo "$scriptname: Install paclink-unix basic"
 			# install paclink-unix basic
-			pushd $START_DIR/plu
+			pushd $START_DIR/plu > /dev/null
 			source ./plu_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix installation FINISHED"
@@ -151,7 +151,7 @@ do
 		pluimap)
 			echo "$scriptname: Install paclink-unix with imap"
 			# install paclink-unix with imap
-			pushd $START_DIR/plu
+			pushd $START_DIR/plu > /dev/null
 			source ./pluimap_install.sh
 			popd > /dev/null
 			echo "$scriptname: paclink-unix with imap installation FINISHED"
@@ -161,7 +161,7 @@ do
 		hostap)
 			echo -e "${BluW}$scriptname: Install hostapd${Reset}"
 			# install hostapd
-			pushd $START_DIR/hostap
+			pushd $START_DIR/hostap > /dev/null
 			source ./hostap_install.shcore
 			source ./hostap_config.sh
 			popd > /dev/null
@@ -172,7 +172,7 @@ do
 		autohs)
 			echo -e "${BluW}$scriptname: Install autohotspot${Reset}"
 			# install autohotspot
-			pushd $START_DIR/autohs
+			pushd $START_DIR/autohs > /dev/null
 			source ./autohs_config.sh
 			popd > /dev/null
 			echo -e "${BluW}$scriptname: autohotspot installation FINISHED${Reset}"

@@ -22,9 +22,9 @@ UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 # ===== Function List =====
 
 function CreateAx25_Folders {
-echo -e "\t${Cyan}=== Creating file folders necessary for Ax.25${Reset}"
+echo -e "${Cyan}=== Creating folders necessary for AX.25${Reset}"
 if [ ! -d "/usr/local/etc" ]; then
-   echo -e "\t\t Creating file folders for Config files."
+   echo -e "\t Creating folders for Config files."
    mkdir /usr/local/etc
 fi
 
@@ -33,7 +33,7 @@ if [ ! -d "/usr/local/etc/ax25" ]; then
 fi
 
 if [ ! -d "/usr/local/var/" ]; then
-	echo -e "\t\t Creating file folders for Data files."
+	echo -e "\t Creating file folders for Data files."
 	mkdir /usr/local/var
 fi
 
@@ -46,33 +46,34 @@ if [ ! -d "/usr/etc/ax25" ]; then
 fi
 
 if [ ! -d /usr/local/src ]; then
-   echo -e "\t\t Creating /usr/local/src"
+   echo -e "\t Creating folder for source code"
    mkdir /usr/local/src
 fi
-if [ ! -d /usr/local/src ]; then
-   echo -e "\t\t Creating /usr/local/src/ax25"
+if [ ! -d /usr/local/src/ax25 ]; then
+   echo -e "\t Creating folder for AX.25 source code"
    mkdir /usr/local/src/ax25
 fi
-mkdir /usr/local/src/ax25
-echo -e "\t=== Creating symlinks to standard directories"
+
+echo -e "${Cyan}=== Creating symlinks to standard directories${Reset}"
 if [ ! -L /var/ax25 ]; then
-   ln -s /usr/local/var/ax25/ /var/ax25
+    ln -s /usr/local/var/ax25/ /var/ax25
 fi
 if [ ! -L /etc/ax25 ]; then
-   ln -s /usr/local/etc/ax25/ /etc/ax25
+	ln -s /usr/local/etc/ax25/ /etc/ax25
 fi
 
+
 if [ -f /usr/lib/libax25.a ]; then
-	echo -e "\t\t Moving Old Libax25 files out of the way"
+	echo -e "${Cyan}=== Moving Old Libax25 files out of the way${Reset}"
 	mkdir /usr/lib/ax25lib
 	mv /usr/lib/libax25* /usr/lib/ax25lib/
 fi
 }
 
 
-function DownloadAx25 {
+function Download_Ax25 {
 cd /usr/local/src/ax25
-echo -e "\t=== Downloading AX25 archives"
+echo -e "${Cyan}=== Downloading AX25 archives${Reset}"
 if [ ! -d .git ]; then
   echo -e "\t\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
@@ -87,13 +88,14 @@ echo
 
 function Configure_libax25 {
 echo -e "\t=== Libax25 - Runtime Library files"
-echo -e "\t\t Creating Makefiles for Ax25lib."
 echo
+echo -e "Creating Makefiles for Ax25 Libraries"
 cd /usr/local/src/ax25/$LIBAX25
 echo "Executing autogen.sh, Please Wait..."
 (./autogen.sh > liberror.txt 2>&1) &
 spinner $!
 echo "Done!"
+echo
 echo "Executing configure, Please Wait..."
 (./configure >> liberror.txt 2>&1) &
 spinner $!
@@ -104,11 +106,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo
-echo -e "\t${Green}=== Libax25 Config Finished${Reset}"
+echo -e "\t${Green}=== Libax25 Finished${Reset}"
 echo
 }
 
-function CompileAx25 {
+function Compile_Ax25 {
 echo -e "\t=== Compiling AX.25"
 
 # Remove old binaries
@@ -118,7 +120,7 @@ make clean > /dev/null
 echo -e "\t\t Compiling AX.25 Libraries"
 echo "Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
-spinner$!
+spinner $!
 echo "Done!"
 if [ $? -ne 0 ]
     then
@@ -337,13 +339,13 @@ chk_root
 CreateAx25_Folders
 
 # Download source files
-DownloadAx25
+Download_Ax25
 
 # Configure source files
 Configure_libax25
 
 # Compile source
-CompileAx25
+Compile_Ax25
 
 # Clean up and install startup files
 FinishAx25_Install
