@@ -75,14 +75,14 @@ function Download_Ax25 {
 cd /usr/local/src/ax25
 echo -e "${Cyan}=== Downloading AX25 archives${Reset}"
 if [ ! -d .git ]; then
-  echo -e "\t\t Cloning AX25 from $AX25REPO"
+  echo -e "\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
   UPD_CONF_FILES=true
 else
-  echo -e "\t\t Updating AX25 from $AX25REPO"
+  echo -e "\t Updating AX25 from $AX25REPO"
   git pull
 fi
-echo -e "\t${Green}=== Download Finished${Reset}"
+echo -e "${Green}=== Download Finished${Reset}"
 echo
 }
 
