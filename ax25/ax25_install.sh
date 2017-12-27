@@ -5,6 +5,7 @@
 # (https://groups.yahoo.com/neo/groups/LinuxRMS/files)
 # by C Schuman, K4GBB k4gbb1gmail.com
 #
+
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"

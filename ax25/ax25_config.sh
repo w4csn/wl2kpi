@@ -85,24 +85,25 @@ function configure_axports() {
 # =====  Main =====
 sleep 3
 clear
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): ax25_config.sh: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW}ax25_config.sh: script STARTED${Reset}"
 echo
 
 # Be sure we're running as root
 chk_root
 
-if [ ! -f "/etc/ax25/axports" ]; then
-   echo "Need to install libax25, tools & apps"
-   exit 1
-fi
+# Unneeded Check
+#if [ ! -f "/etc/ax25/axports" ]; then
+#   echo -e "AX.25 ${Red}NOT${Reset} Installed, make sure that ax25_install.sh ran successfully"
+#   exit 1
+#fi
 
 # check if /etc/ax25 exists as a directory or symbolic link
 if [ ! -d "/etc/ax25" ] || [ ! -L "/etc/ax25" ] ; then
    if [ ! -d "/usr/local/etc/ax25" ] ; then
-      echo "ax25 directory /usr/local/etc/ax25 DOES NOT exist, install ax25 first"
-      exit
+      echo -e "AX.25 ${Red}NOT${Reset} Installed, make sure that ax25_install.sh ran successfully"
+      exit 1
    else
       echo "Making symbolic link to /etc/ax25"
       ln -s /usr/local/etc/ax25 /etc/ax25
@@ -120,15 +121,15 @@ fi
 get_callsign
 
 # === Configure axports
-echo -e "=== Configuring axports"
+echo -e "${Cyan}=== Configuring axports${Reset}"
 echo
 grep -i "$AX25PORT" $AX25_CFGDIR/axports
 if [ $? -eq 1 ] ; then
    echo
-   echo "No ax25 ports defined"
+   echo -e "\t No ax25 ports defined"
    echo
    mv $AX25_CFGDIR/axports $AX25_CFGDIR/axports-dist
-   echo "Original ax25 axports saved as axports-dist"
+   echo -e "\t Original ax25 axports saved as axports-dist"
    echo
    prompt_read
 {
@@ -139,16 +140,16 @@ echo "# portname	callsign	speed	paclen	window	description"
 echo "$AX25PORT            $CALLSIGN-$SSID         19200    256     7       TNC-Pi port"
 } > $AX25_CFGDIR/axports
 else
-   echo "AX.25 port $AX25PORT already configured"
+   echo -e "\t AX.25 port $AX25PORT already configured"
    echo
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== axports Configuration ${Green}Finished${Reset}"
 echo
 
 # === Configure ax25d.conf
 # Set up a listening socket, for testing
 # Make it different than previous SSID
-echo -e "=== Configuring ax25d.conf"
+echo -e "${Cyan}=== Configuring ax25d.conf${Reset}"
 echo
 if ((SSID < 15)) ; then
    AX25DSSID=$((SSID+1))
@@ -158,10 +159,10 @@ fi
 
 grep  "n0one" /etc/ax25/ax25d.conf >/dev/null
 if [ $? -eq 0 ] ; then
-   echo "ax25d not configured"
+   echo -e "\t ax25d.conf not configured"
    echo
    mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
-   echo "Original ax25d.conf saved as ax25d.conf-dist"
+   echo -e "\t Original ax25d.conf saved as ax25d.conf-dist"
    echo
    # copy first 1 line of file
    sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
@@ -173,22 +174,22 @@ echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
 } > $AX25_CFGDIR/ax25d.conf
    sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 else
-   echo "ax25d.conf already configured"
+   echo -e "\t ax25d.conf already configured"
    echo
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== Configuration ${Green}Finished${Reset}"
 echo
 
 # === Configure ax25-up
-echo -e "=== Configuring ax25-up"
+echo -e "${Cyan}=== Configuring ax25-up${Reset}"
 echo
 sed -i -e "/n0one/ s/n0one/$CALLSIGN/" $AX25_CFGDIR/ax25-up > /dev/null 2>&1
 
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== ax25-up Configuration ${Green}Finished${Reset}"
 echo
 
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): ax25_config.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW}ax25_config.sh: script FINISHED${Reset}"
 echo
 # ===== END Main ====
