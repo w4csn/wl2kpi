@@ -46,11 +46,10 @@ if [ ! -d "/usr/etc/ax25" ]; then
 fi
 
 if [ ! -d /usr/local/src ]; then
-   echo -e "\t Creating folder for source code"
+   echo -e "\t Creating folder for AX.25 source code"
    mkdir /usr/local/src
 fi
 if [ ! -d /usr/local/src/ax25 ]; then
-   echo -e "\t Creating folder for AX.25 source code"
    mkdir /usr/local/src/ax25
 fi
 
@@ -82,63 +81,60 @@ else
   echo -e "\t Updating AX25 from $AX25REPO"
   git pull
 fi
-echo -e "${Green}=== Download Finished${Reset}"
+echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
 echo
 }
 
 function Configure_libax25 {
-echo -e "\t=== Libax25 - Runtime Library files"
+echo -e "${Cyan}=== Libax25 - Runtime Library files${Reset}"
 echo
-echo -e "Creating Makefiles for Ax25 Libraries"
+echo -e "\t Preparing to create makefiles for Ax25 Libraries"
 cd /usr/local/src/ax25/$LIBAX25
-echo "Executing autogen.sh, Please Wait..."
+echo -e "\t\t Creating Makefiles for AX.25 Libraries, Please Wait..."
 (./autogen.sh > liberror.txt 2>&1) &
 spinner $!
-echo "Done!"
-echo
-echo "Executing configure, Please Wait..."
 (./configure >> liberror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
 	echo
-    echo -e "\t\t Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
+    echo -e "\t Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
     exit 1
 fi
 echo
-echo -e "\t${Green}=== Libax25 Finished${Reset}"
+echo -e "\t${Cyan}=== Libax25 ${Green}Finished${Reset}"
 echo
 }
 
 function Compile_Ax25 {
-echo -e "\t=== Compiling AX.25"
+echo -e "${Cyan}=== Compiling AX.25${Reset}"
 
 # Remove old binaries
 make clean > /dev/null
 
 # Compile ax25 libraries
-echo -e "\t\t Compiling AX.25 Libraries"
-echo "Compiling, Please Wait..."
+echo -e "\t Preparing to Compile AX.25 Libraries"
+echo -e "\t\t Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo "\t\t Finished!"
 if [ $? -ne 0 ]
     then
-    echo -e "\t\t Libax25 Compile ${Red}error${Reset} - See liberror.txt"
+    echo -e "\t Libax25 Compile ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
-    echo -e "\t\t${Green}AX.25 Libraries Compiled${Reset}"	
+    echo -e "\t${Green}AX.25 Libraries Compiled${Reset}"	
 fi
 
 # Install ax25 libraries
-echo -e "\t\t Installing Runtime Lib files"
-echo "Installing, Please Wait..."
+echo -e "\t Preparing to install AX.25 Libraries"
+echo -e "\t\t Installing, Please Wait..."
 (make install >> liberror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
-    echo -e "\t\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
+    echo -e "\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
@@ -150,91 +146,81 @@ fi
 echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 
 # Ax25-Apps
-echo -e "\t\t Compiling AX.25 Applications"
+echo -e "\t Preparing to compile AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
-echo -e "\t\t Creating Makefiles for AX25apps"
-echo "Executing autogen.sh, Please Wait..."
+echo -e "\t\t Creating Makefiles for AX.25 Applications, Please Wait..."
 (./autogen.sh >  appserror.txt 2>&1) &
 spinner $!
-echo "Done!"
-echo "Executing configure, Please Wait..."
 (./configure >> appserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 
 # Remove old binaries
 make clean > /dev/null
 
 # Compile Ax25-apps
-echo -e "\t\t Compiling AX.25 apps"
-echo "Compiling, Please Wait..."
+echo -e "\t\t Compiling AX.25 Applications, Please Wait..."
 (make > appserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
-    echo -e "\t\t AX.25 Apps Compile ${Red}error${Reset} - see appserror.txt"
+    echo -e "\t AX.25 Applications Compile ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 fi
 
 # Install Ax25-apps
-echo -e "\t\t Installing AX.25 apps"
-echo "Installing, Please Wait..."
+echo -e "\t\t Installing AX.25 Applications, Please Wait..."
 (make  install >> appserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
-    echo -e "\t\t AX.25 Apps Install ${Red}error${Reset} - see appserror.txt"
+    echo -e "\t AX.25 Applications Install ${Red}error${Reset} - see appserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Apps" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else
-    echo -e "\t\t${Green} AX.25-apps Installed${Reset}"
+    echo -e "\t${Green} AX.25-apps Installed${Reset}"
     rm appserror.txt
 fi
 
 # Ax25-tools
-echo -e "\t\t Compiling AX.25 Tools"
+echo -e "\t Preparing to Compile AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
-echo -e "\t\t Creating Makefiles for AX25tools"
-echo "Executing autogen.sh, Please Wait..."
+echo -e "\t\t Creating Makefiles for AX.25 Tools, Please Wait..."
 (./autogen.sh > toolserror.txt 2>&1) &
 spinner $!
-echo "Done!"
-echo "Executing configure, Please Wait..."
 (./configure >> toolserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 
 # Remove old binaries
 make clean > /dev/null
 
 # Compile Ax.25 tools
-echo -e " \t\t Compiling AX.25 tools"
-echo "Compiling, Please Wait..."
+echo -e " \t\t Compiling AX.25 Tools, Please Wait"
 (make > toolserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
-    echo -e " ${Red} \t\t AX.25 tools Compile ${Red}error${Reset} - See toolserror.txt ${Reset}"
+    echo -e "\t AX.25 Tools Compile ${Red}error${Reset} - See toolserror.txt ${Reset}"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Tools" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 fi
 
 # Install Ax.25 tools
-echo -e "\t\t Installing AX.25 tools"
-echo "Installing, Please Wait..."
+echo -e "\t\t Installing AX.25 Tools. Please Wait..."
 (make install >> toolserror.txt 2>&1) &
 spinner $!
-echo "Done!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]; then
-    echo -e "\t\t AX.25 tools Install ${Red}error${Reset} - See toolserror.txt"
+    echo -e "\t AX.25 Tools Install ${Red}error${Reset} - See toolserror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Tools" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else
-    echo -e "\t\t${Green} AX.25 tools Installed${Reset}"
+    echo -e "\t${Green} AX.25 tools Installed${Reset}"
     rm toolserror.txt
 fi
-echo -e "\t=== Compile AX.25 ${Green}Finished${Reset}"
+echo -e "${Cyan}=== Compile AX.25 ${Green}Finished${Reset}"
 echo
 }
 
@@ -246,12 +232,12 @@ cd /usr/local/bin/
 chmod 4775 *
 echo
 
-echo -e "\t=== Enable AX.25 Modules"
+echo -e "${Cyan}=== Preparing to enable AX.25 modules${Reset}"
 grep ax25 /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    lsmod | grep -i ax25 > /dev/null 2>&1
    if [ $? -ne 0 ]; then
-      echo -e "\t\t Enabling ax25 module"
+      echo -e "\t Enabling AX.25 module"
       insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
    fi
 echo "ax25" >> /etc/modules
@@ -260,16 +246,17 @@ grep rose /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    lsmod | grep -i rose > /dev/null 2>&1
    if [ $? -ne 0 ]; then
-      echo -e"\t\t Enabling rose module"
+      echo -e"\t Enabling rose module"
       insmod /lib/modules/$(uname -r)/kernel/net/rose/rose.ko
    fi
 echo "rose" >> /etc/modules
 fi
 grep mkiss /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
+   echo -e"\t Enabling mkiss module"
    echo -e "mkiss" >> /etc/modules
 fi
-echo -e "\t${Green}=== AX.25 Modules Finished${Reset}"
+echo -e "${Cyan}=== AX.25 Modules ${Green}Finished${Reset}"
 echo
 
 # Download start up files (Possibly remove - the script depends on specific initial configuration)
@@ -300,18 +287,19 @@ echo
 #fi
 
 # Setup ax25 systemd service
-echo -e "\t=== Installing Startup Files"
+echo -e "${Cyan}=== Installing Startup Files${Reset}"
 if [ ! -f /etc/systemd/system/ax25.service ]; then
-   echo -e "\t\t Setting up ax25 systemd service"
+   echo -e "\t Setting up ax25 systemd service"
    cp $START_DIR/systemd/ax25.service /etc/systemd/system/ax25.service
    systemctl enable ax25.service
    systemctl daemon-reload
    service ax25 start
    chk_service ax25
 fi
-
+echo -e "${Cyan}=== Startup Files ${Green}Installed${Reset}"
+echo
 if [ "$UPD_CONF_FILES" = "true" ]; then
-echo -e "\t=== Installing AX.25 Configuration Files"
+echo -e "${Cyan}=== Installing AX.25 Configuration Files${Reset}"
 cd /etc/ax25
 cp $START_DIR/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
 cp $START_DIR/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
@@ -319,8 +307,9 @@ cp $START_DIR/k4gbb/axports /etc/ax25/axports
 cp $START_DIR/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
 touch nrports rsports
 fi
-
-echo -e "=== Install Finished"
+echo -e "${Cyan}=== Configuration Files ${Green}Installed${Reset}"
+echo
+echo -e "${Green}=== AX.25 Installation Finished${Reset}"
 }
 # ===== End Functions list =====
 
