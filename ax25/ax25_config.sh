@@ -68,11 +68,11 @@ return 1
 # ===== function prompt_read
 function prompt_read() {
 while get_callsign ; do
-  echo "Input error, try again"
+  echo -e "Input ${Red}error${Reset}, try again"
 done
 
 while get_ssid ; do
-  echo "Input error, try again"
+  echo -e "Input ${Red}error${Reset}, try again"
 done
 }
 
