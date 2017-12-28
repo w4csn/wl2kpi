@@ -85,31 +85,31 @@ return $HAS_WIFI
 
 # function is_rasbian
 function is_rasbian() {
-HAS_RASBIAN=0
+HAS_RASPBIAN=0
 DIST=$(lsb_release -si)
 VER=""
 read -d . VERSION < /etc/debian_version
 if [ $DIST != "Raspbian" ]; then
-	echo "INVALID OS"
+	echo -e "${Red}INVALID OS${Reset}"
 	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
 else
-	$HAS_RASBIAN=1
-	echo "OS: $DIST"
+	$HAS_RASPBIAN=1
+	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
 		$VER="Jessie"
-		echo "Version: Jessie"
+		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 		
 	elif [ $VERSION -eq "9" ]; then
 		$VER="Stretch"
-		echo "Version: Stretch"
+		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	else
-		echo "INVALID VERSION"	
+		echo -e "${Red}INVALID VERSION${Reset}"		
 		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
-		$HAS_RASBIAN=0
+		$HAS_RASPBIAN=0
 	fi
 fi
-echo "OS is $DIST $VER : Proceeding..."
-sleep 3
+echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
+sleep 2
 return $HAS_RASBIAN
 }
 

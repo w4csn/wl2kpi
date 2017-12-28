@@ -65,7 +65,7 @@ sleep 2
 
 # move OS Check to core_functions, simplifies code
 # is_raspbian
-#if [ $? -eq "0" ] ; then
+#if [ $? -ne "0" ] ; then
 #   echo "Not running Raspbian Jessie or Stretch ... exiting"
 #   exit 1
 #fi
@@ -117,24 +117,24 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		ax25)
-			echo "$scriptname: Install AX.25"
+			echo -e "${BluW}$scriptname: Install AX.25${Reset}"
 			# install ax25 files
 			pushd $START_DIR/ax25 > /dev/null
 			source ./ax25_install.sh
-			#source ./ax25_config.sh
+			source ./ax25_config.sh
 			popd > /dev/null
-			echo "$scriptname: AX.25 installation FINISHED"
+			echo "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		rmsgw)
-			echo "$scriptname: Install RMS Gateway"
+			echo -e "${BluW}$scriptname: Install RMS Gateway${Reset}"
 			# install rmsgw
 			pushd $START_DIR/rmsgw > /dev/null
 			source ./rmsgw_install.sh
 			source ./rmsgw_config.sh
 			popd > /dev/null
-			echo "$scriptname: RMS Gateway installation FINISHED"
+			echo -e "${BluW}$scriptname: RMS Gateway installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
