@@ -7,6 +7,7 @@ DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 
+HOSTNAME=$(cat /etc/hostname | tail -1)
 SERVICELIST="autohotspot hostapd dnsmasq"
 SERVICELIST="hostapd dnsmasq"
 SSID="NOT_SET"
@@ -16,7 +17,7 @@ function copy_dnsmasq() {
 
 echo "DEBUG: copy_dnsmasq arg: $1"
 if [ -z "$1" ] ; then
-   echo "$scriptname: function copy_dnsmasq() needs an argument ... exiting"
+   echo "hostap_config.sh: function copy_dnsmasq() needs an argument ... exiting"
    exit 1
 fi
 
@@ -44,10 +45,10 @@ fi
 
 # Create a new file
 
-echo "Enter Service set identifier (SSID) for new WiFi access point, followed by [enter]:"
-read -e SSID
-echo "Enter Passphrase for new WiFi access point, followed by [enter]:"
-read -e PASSPHRASE
+#echo "Enter Service set identifier (SSID) for new WiFi access point, followed by [enter]:"
+read -e -p "Enter Service set identifier (SSID) for new WiFi access point, followed by [enter]: " -i "$HOSTNAME" SSID
+#echo "Enter Passphrase for new WiFi access point, followed by [enter]:"
+read -e -p "Enter Passphrase for new WiFi access point, followed by [enter]: " PASSPHRASE
 # Create a new file
 cat > $1/hostapd.conf <<EOT
 interface=wlan0
@@ -135,7 +136,7 @@ fi
 # ===== Main =====
 sleep 3
 clear
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): hostap_config.sh: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}hostap_config.sh: script STARTED${Reset}"
 echo
@@ -227,7 +228,7 @@ for service_name in `echo ${SERVICELIST}` ; do
    fi
 done
 
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): hostap_config.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}hostap_config.sh: script FINISHED${Reset}"
 echo
