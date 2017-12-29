@@ -73,7 +73,7 @@ fi
 
 function Download_Ax25 {
 cd /usr/local/src/ax25
-echo -e "${Cyan}=== Downloading AX25 archives${Reset}"
+echo -e "${Cyan}=== Download AX25 from Source${Reset}"
 if [ ! -d .git ]; then
   echo -e "\t Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .

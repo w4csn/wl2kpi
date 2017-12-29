@@ -2,12 +2,11 @@
 #
 # Configure an RMS Gateway installation
 #
+# Uncomment this statement for debug echos
+DEBUG=1
+set -u # Exit if there are uninitialized variables.
+source $START_DIR/core/core_functions.sh
 
-DEBUG=1 # Uncomment this statement for debug echos
-set -u # Exit if there are unitialized variables.
-scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-wd=$(pwd)
 CALLSIGN="N0ONE"
 GRIDSQUARE="AA00aa"
 AX25PORT="0"
@@ -18,18 +17,6 @@ RMSGW_CFG_FILES="gateway.conf channels.xml banner"
 REQUIRED_PRGMS="rmschanstat python rmsgw rmsgw_aci"
 
 # ===== Function List =====
-
-# ===== function dbecho
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
-# ===== function chk_root 
-function chk_root {
-# Check for Root
-if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
-   exit 1
-fi
-}
 
 # ===== function get_callsign
 function get_callsign() {
@@ -171,12 +158,12 @@ sed -i -e "/144000000/ s/144000000/$FREQUENCY/" $RMSGW_CHANFILE
 }
 # ===== End of Functions list =====
 
-# ===== main
+# ===== Main
 sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW}$scriptname: script STARTED${Reset}"
 echo
 # Make sure user is root
 chk_root
@@ -375,5 +362,5 @@ echo
 	
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW}$scriptname: script FINISHED${Reset}"
 echo

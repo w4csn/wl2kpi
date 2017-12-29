@@ -131,9 +131,12 @@ do
 			echo -e "${BluW}$scriptname: Install RMS Gateway${Reset}"
 			# install rmsgw
 			pushd $START_DIR/rmsgw > /dev/null
+			scriptname="rmsgw_install"
 			source ./rmsgw_install.sh
+			scriptname="rmsgw_config"
 			source ./rmsgw_config.sh
 			popd > /dev/null
+			scriptname="`basename $0`"
 			echo -e "${BluW}$scriptname: RMS Gateway installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"

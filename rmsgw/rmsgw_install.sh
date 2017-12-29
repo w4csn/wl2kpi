@@ -4,25 +4,16 @@
 # (https://k4gbb.no-ip.org/docs/scripts)
 # by C Schuman, K4GBB k4gbb1gmail.com
 #
-DEBUG=1 # Uncomment this statement for debug echos
-set -u # Exit if there are unitialized variables.
-scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
-wd=$(pwd)
-uid=$(id -u)
+# Uncomment this statement for debug echos
+DEBUG=1
+set -u # Exit if there are uninitialized variables.
+source $START_DIR/core/core_functions.sh
 
-# Color Codes
-Reset='\e[0m'
-Red='\e[31m'
-Green='\e[32m'
-Yellow='\e[33m'
-Blue='\e[34m'
-White='\e[37m'
-BluW='\e[37;44m'
+uid=$(id -u)
 
 UDATE="NO"
 GWOWNER="rmsgw"
-RMSGW=https://github.com/nwdigitalradio/rmsgw
+RMSGWREPO=https://github.com/nwdigitalradio/rmsgw
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src/rmsgw"
 SRC_FILE="rmsgw-2.4.0-182.zip"
@@ -31,29 +22,10 @@ RMS_BUILD_FILE="rmsgwbuild.txt"
 
 # ===== Function List =====
 
-# ===== function dbecho
-function dbgecho { if [ ! -z "$DEBUG" ] ; then echo "$*"; fi }
-
-# ===== function chk_root 
-function chk_root {
-# Check for Root
-if [[ $EUID != 0 ]] ; then
-   echo -e "Must be root"
-   exit 1
-fi
-}
-
-# ===== function is_pkg_installed
-function is_pkg_installed() {
-
-return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
-}
-
-
 function install_tools
 {
 # check if packages are installed
-echo -e "=== Installing Required Packages"
+echo -e "${Cyan}=== Installing Required Packages${Reset}"
 dbgecho "Check packages: $PKG_REQUIRE"
 needs_pkg=false
 
@@ -68,7 +40,7 @@ for pkg_name in `echo ${PKG_REQUIRE}` ; do
 done
 
 if [ "$needs_pkg" = "true" ] ; then
-   echo -e "${BluW}\t Installing Support libraries \t${Reset}"
+   echo -e "\t Installing Support libraries "
 
    apt-get install -y -q $PKG_REQUIRE
    if [ "$?" -ne 0 ] ; then
@@ -78,7 +50,7 @@ if [ "$needs_pkg" = "true" ] ; then
    fi
 fi
 
-echo -e "=== All required packages installed."
+echo -e "${Cyan}=== All required packages ${Green}installed.${Reset}"
 echo
 }
 
@@ -108,25 +80,34 @@ fi
 
 function download_rmsgw #Pull rmsgw from github
 {
-echo -e "${BluW}\t Downloading RMS Source file \t${Reset}"
-cd /usr/local/src
-if [ ! -d $SRC_DIR ]; then
-  echo -e "${Green} Downloading rmsgw source ${Reset}"
-  git clone $RMSGW
-else
-  echo -e "${Green} Updating local rmsgw source ${Reset}"
-  git pull $RMSGW
+echo -e "${Cyan}=== Download RMSGW-Linux from Source${Reset}"
+if [ ! -d $SRC_DIR ] ; then
+   mkdir -p $SRC_DIR
+   if [ "$?" -ne 0 ] ; then
+      echo -e "\t${Red}ERROR${Reset}: Problems creating source directory: $SRC_DIR"
+      exit 1
+   fi
 fi
+cd $SRC_DIR
+if [ ! -d .git ]; then
+  echo -e "\t Cloning rmsgw-linux from $RMSGWREPO"
+  git clone $RMSGWREPO .
+else
+  echo -e "\t Updating rmsgw-linux from $RMSGWREPO"
+  git pull $RMSGWREPO
+fi
+echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
+echo
 }
 
 function copy_rmsgw # Copy rmsgw from install folder
 {
-echo -e "${BluW}\t Copy RMS Gateway Source File from Source Folder  \t${Reset}"
+echo -e "${Cyan}=== Copy RMSGW-Linux from Source Folder${Reset}"
 # Does source directory exist?
 if [ ! -d $SRC_DIR ] ; then
    mkdir -p $SRC_DIR
    if [ "$?" -ne 0 ] ; then
-      echo "Problems creating source directory: $SRC_DIR"
+      echo -e "\t${Red}ERROR${Reset}: Problems creating source directory: $SRC_DIR"
       exit 1
    fi
 fi
@@ -134,10 +115,10 @@ cd $SRC_DIR
 # Determine if any rmsgw zip files have been copied to $SRC_DIR"
 ls rmsgw-*.zip 2>/dev/null
 if [ $? -ne 0 ]; then
-   echo -e "${BluW}\t Copying RMS Gateway Source file \t${Reset}"
-   cp $wd/src/$SRC_FILE $SRC_DIR > /dev/null 2>&1
+   echo -e "\t Copying RMS Gateway Source file"
+   cp $START_DIR/src/$SRC_FILE $SRC_DIR > /dev/null 2>&1
    if [ $? -ne 0 ]; then
-	  echo "Problems Copying file"
+	  echo -e "\t${Red}ERROR${Reset}: Problems creating source directory: $SRC_DIR"
 	  exit 1
 	fi
 else
@@ -155,37 +136,46 @@ done
 dbgecho "Unzipping this installation file: $filename, version: $rms_ver"
 
 #tar xf $filename
+echo -e "\t Unzipping $filename"
 unzip -o $filename
 if [ $? -ne 0 ] ; then
- echo -e "${BluW}${Red}\t $filename File not available \t${Reset}"
+ echo -e "\t${Red}ERROR${Reset}: $filename File not available"
  exit 1
 fi
+echo -e "${Cyan}=== Copy ${Green}Finished${Reset}"
+echo
 }
 
 function compile_rmsgw
 {
 # rmsgw 
-echo -e "${BluW}\t Compiling RMS Source file \t${Reset}"
+echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
 chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
 # Clean old binaries
 make clean
-make -j$num_cores > $RMS_BUILD_FILE 2>&1
+echo -e "\t\t Compiling, Please Wait..."
+(make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
+spinner $!
+echo "\t\t Finished!"
 if [ $? -ne 0 ]
  then
- echo -e "${BluW}$Red}\t Compile error${White} - check RMS.txt File \t${Reset}"
+ echo -e "\t${Red}ERROR${Reset}: Compile error - check RMS.txt File"
  exit 1
 else 
  rm $RMS_BUILD_FILE
 fi
-make install
+echo -e "\t\t Compiling, Please Wait..."
+(make install) &
+spinner $!
+echo "\t\t Finished!"
 if [ $? -ne 0 ] ; then
-  echo "Error during install."
+  echo -e "\t${Red}ERROR${Reset}: Error during install."
   exit 1
 fi
-echo -e "${BluW}RMS Gateway Installed \t${Reset}"
+echo -e "${Cyan}=== RMSGW-Linux ${Green}installed.${Reset}"
 }
 
 function finish_rmsgw
@@ -193,24 +183,24 @@ function finish_rmsgw
 # Copy rmschanstat to /usr/local/bin
 if [ -f /usr/local/bin/rmschanstat ]; then
 	mv /usr/local/bin/rmschanstat /usr/local/bin/rmschanstat-dist
-	cp -f $wd/rmsgw/rmschanstat /usr/local/bin/rmschanstat
+	cp -f $START_DIR/rmsgw/rmschanstat /usr/local/bin/rmschanstat
 else
 	# Use old rmschanstat file.
-    cp /usr/local/bin/rmschanstat.~1~ /usr/local/bin/rmschanstat
+    cp -f $START_DIR/rmsgw/rmschanstat /usr/local/bin/rmschanstat
 fi
-# remove all duplicate files due to recompiles
-
+# remove all duplicate files due to recompile
+rm -f /usr/local/bin/rmschanstat.*
 echo -e "${BluW}Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
 }
 
 # ===== End of Functions list =====
 
 # ===== Main
-sleep 3
+sleep 2
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script STARTED"
+echo -e "${BluW}$scriptname: script STARTED${Reset}"
 echo
 
 chk_root
@@ -223,5 +213,5 @@ finish_rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo "$scriptname: script FINISHED"
+echo -e "${BluW}$scriptname: script FINISHED${Reset}"
 echo
