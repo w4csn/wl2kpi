@@ -53,6 +53,7 @@ fi
 if [ ! -d /usr/local/src/ax25 ]; then
    mkdir /usr/local/src/ax25
 fi
+echo -e "${Cyan}=== AX.25 Folder Creation ${Green}Finished${Reset}"
 echo
 echo -e "${Cyan}=== Creating symlinks to standard directories${Reset}"
 if [ ! -L /var/ax25 ]; then
@@ -68,6 +69,7 @@ if [ -f /usr/lib/libax25.a ]; then
 	mkdir /usr/lib/ax25lib
 	mv /usr/lib/libax25* /usr/lib/ax25lib/
 fi
+echo -e "${Cyan}=== AX.25 symlinks ${Green}Finished${Reset}"
 echo
 }
 
@@ -99,7 +101,7 @@ spinner $!
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
 	echo
-    echo -e "=== Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
+    echo -e "${Cyan}=== Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
     exit 1
 fi
 echo
@@ -114,32 +116,32 @@ echo -e "${Cyan}=== Compiling AX.25${Reset}"
 make clean > /dev/null
 
 # Compile ax25 libraries
-echo -e "\t Preparing to Compile AX.25 Libraries"
-echo -e "\t\t Compiling, Please Wait..."
+echo -e " Preparing to Compile AX.25 Libraries"
+echo -e " Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
 spinner $!
-echo -e "\t\t Finished!"
+echo -e " Finished!"
 if [ $? -ne 0 ]
     then
-    echo -e "\t Libax25 Compile ${Red}error${Reset} - See liberror.txt"
+    echo -e " Libax25 Compile ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
-    echo -e "\t${Green}AX.25 Libraries Compiled${Reset}"	
+    echo -e "${Green}AX.25 Libraries Compiled${Reset}"	
 fi
 
 # Install ax25 libraries
-echo -e "\t Preparing to install AX.25 Libraries"
-echo -e "\t\t Installing, Please Wait..."
+echo -e " Preparing to install AX.25 Libraries"
+echo -e " Installing, Please Wait..."
 (make install >> liberror.txt 2>&1) &
 spinner $!
-echo -e "\t\t Finished!"
+echo -e " Finished!"
 if [ $? -ne 0 ]; then
-    echo -e "\t AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
+    echo -e " AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Installing AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
-    echo -e "\t${Green} AX.25 Libraries Installed${Reset}"
+    echo -e "${Green} AX.25 Libraries Installed${Reset}"
     rm liberror.txt
 fi
 
