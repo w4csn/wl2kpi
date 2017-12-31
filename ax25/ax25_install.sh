@@ -53,7 +53,7 @@ fi
 if [ ! -d /usr/local/src/ax25 ]; then
    mkdir /usr/local/src/ax25
 fi
-
+echo
 echo -e "${Cyan}=== Creating symlinks to standard directories${Reset}"
 if [ ! -L /var/ax25 ]; then
     ln -s /usr/local/var/ax25/ /var/ax25
@@ -68,6 +68,7 @@ if [ -f /usr/lib/libax25.a ]; then
 	mkdir /usr/lib/ax25lib
 	mv /usr/lib/libax25* /usr/lib/ax25lib/
 fi
+echo
 }
 
 
