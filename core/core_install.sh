@@ -185,6 +185,7 @@ sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
 echo -e "\t ${Green}=== Finished. ${Reset}"
 echo
 
+cd $START_DIR/core
 echo "$(date "+%Y %m %d %T %Z"): core_install: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_install.sh: script FINISHED ${Reset}"

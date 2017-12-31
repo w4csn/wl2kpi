@@ -103,7 +103,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo
-echo -e "\t${Cyan}=== Libax25 ${Green}Finished${Reset}"
+echo -e "${Cyan}=== Libax25 ${Green}Finished${Reset}"
 echo
 }
 
@@ -118,7 +118,7 @@ echo -e "\t Preparing to Compile AX.25 Libraries"
 echo -e "\t\t Compiling, Please Wait..."
 (make > liberror.txt 2>&1) &
 spinner $!
-echo "\t\t Finished!"
+echo -e "\t\t Finished!"
 if [ $? -ne 0 ]
     then
     echo -e "\t Libax25 Compile ${Red}error${Reset} - See liberror.txt"
@@ -340,6 +340,7 @@ Compile_Ax25
 # Clean up and install startup files
 FinishAx25_Install
 
+cd $START_DIR/ax25
 echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: AX.25 Installation Completed" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo

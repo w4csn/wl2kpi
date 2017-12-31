@@ -123,7 +123,7 @@ do
 			source ./ax25_install.sh
 			source ./ax25_config.sh
 			popd > /dev/null
-			echo "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
+			echo -e "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
