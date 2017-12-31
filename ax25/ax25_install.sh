@@ -75,11 +75,11 @@ function Download_Ax25 {
 cd /usr/local/src/ax25
 echo -e "${Cyan}=== Download AX25 from Source${Reset}"
 if [ ! -d .git ]; then
-  echo -e "\t Cloning AX25 from $AX25REPO"
+  echo -e " Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
   UPD_CONF_FILES=true
 else
-  echo -e "\t Updating AX25 from $AX25REPO"
+  echo -e " Updating AX25 from $AX25REPO"
   git pull
 fi
 echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
@@ -88,18 +88,17 @@ echo
 
 function Configure_libax25 {
 echo -e "${Cyan}=== Libax25 - Runtime Library files${Reset}"
-echo
-echo -e "\t Preparing to create makefiles for Ax25 Libraries"
+echo -e " Preparing to create makefiles for Ax25 Libraries"
 cd /usr/local/src/ax25/$LIBAX25
-echo -e "\t\t Creating Makefiles for AX.25 Libraries, Please Wait..."
+echo -e " Creating Makefiles for AX.25 Libraries, Please Wait..."
 (./autogen.sh > liberror.txt 2>&1) &
 spinner $!
 (./configure >> liberror.txt 2>&1) &
 spinner $!
-echo -e "\t\t Finished!"
+echo -e " Finished!"
 if [ $? -ne 0 ]; then
 	echo
-    echo -e "\t Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
+    echo -e "=== Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
     exit 1
 fi
 echo
@@ -198,7 +197,7 @@ echo -e "\t\t Finished!"
 make clean > /dev/null
 
 # Compile Ax.25 tools
-echo -e " \t\t Compiling AX.25 Tools, Please Wait"
+echo -e " \t\t Compiling AX.25 Tools, Please Wait..."
 (make > toolserror.txt 2>&1) &
 spinner $!
 echo -e "\t\t Finished!"
