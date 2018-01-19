@@ -191,6 +191,8 @@ fi
 # remove all duplicate files due to recompile
 rm -f /usr/local/bin/rmschanstat.*
 echo -e "${BluW}Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
+# Chown /etc/rmsgw/stat folder
+chown -Rf rmsgw:rmsgw /etc/rmsgw/stat
 }
 
 # ===== End of Functions list =====
