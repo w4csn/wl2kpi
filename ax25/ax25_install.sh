@@ -17,6 +17,7 @@ LIBAX25=libax25/
 TOOLS=ax25tools/
 APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
+SRC_DIR="/usr/local/src/ax25"
 #GET_K4GBB=false # needs to be replaced with smarter method!
 UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 
@@ -75,8 +76,15 @@ echo
 
 
 function Download_Ax25 {
-cd /usr/local/src/ax25
 echo -e "${Cyan}=== Download AX25 from Source${Reset}"
+if [ ! -d $SRC_DIR ] ; then
+   mkdir -p $SRC_DIR
+   if [ "$?" -ne 0 ] ; then
+      echo -e "\t${Red}ERROR${Reset}: Problems creating source directory: $SRC_DIR"
+      exit 1
+   fi
+fi
+cd $SRC_DIR
 if [ ! -d .git ]; then
   echo -e " Cloning AX25 from $AX25REPO"
   git clone $AX25REPO .
