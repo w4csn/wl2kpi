@@ -19,7 +19,7 @@ APPS=ax25apps/
 AX25REPO=https://github.com/ve7fet/linuxax25
 SRC_DIR="/usr/local/src/ax25"
 #GET_K4GBB=false # needs to be replaced with smarter method!
-UPD_CONF_FILES=true # If set to false don't replace files in /etc/ax25
+UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 
 # ===== Function List =====
 
@@ -134,7 +134,7 @@ if [ $? -ne 0 ]
 	echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: Error Compiling AX.25 Libraries" >> $WL2KPI_INSTALL_LOGFILE
     exit 1
 else   
-    echo -e "${Green}AX.25 Libraries Compiled${Reset}"	
+    echo -e "${Green} AX.25 Libraries Compiled${Reset}"	
 fi
 
 # Install ax25 libraries
@@ -309,6 +309,9 @@ if [ ! -f /etc/systemd/system/ax25.service ]; then
 fi
 echo -e "${Cyan}=== Startup Files ${Green}Installed${Reset}"
 echo
+if [ -z "$(ls -A /etc/ax25)" ]; then
+   UPD_CONF_FILES=true
+fi
 if [ "$UPD_CONF_FILES" = "true" ]; then
 echo -e "${Cyan}=== Installing AX.25 Configuration Files${Reset}"
 cd /etc/ax25
