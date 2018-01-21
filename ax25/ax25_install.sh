@@ -75,7 +75,8 @@ echo
 }
 
 
-function Download_Ax25 {
+function Download_Ax25 # Pull ax25 from repo
+{
 echo -e "${Cyan}=== Download AX25 from Source${Reset}"
 if [ ! -d $SRC_DIR ] ; then
    mkdir -p $SRC_DIR
