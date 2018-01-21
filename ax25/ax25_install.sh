@@ -26,7 +26,7 @@ UPD_CONF_FILES=false # If set to false don't replace files in /etc/ax25
 function CreateAx25_Folders {
 echo -e "${Cyan}=== Creating folders necessary for AX.25${Reset}"
 if [ ! -d "/usr/local/etc" ]; then
-   echo -e "\t Creating folders for Config files."
+   echo -e "Creating folders for Config files."
    mkdir /usr/local/etc
 fi
 
