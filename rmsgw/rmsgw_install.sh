@@ -100,7 +100,7 @@ echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
 echo
 }
 
-function copy_rmsgw # Copy rmsgw from install folder
+function copy_rmsgw # DEPRECATED... USE DOWNLOAD_RMSGW function Copy rmsgw from install folder
 {
 echo -e "${Cyan}=== Copy RMSGW-Linux from Source Folder${Reset}"
 # Does source directory exist?
@@ -208,7 +208,7 @@ echo
 chk_root
 install_tools
 create_users
-copy_rmsgw
+download_rmsgw
 compile_rmsgw
 finish_rmsgw
 
