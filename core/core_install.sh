@@ -31,7 +31,7 @@ trap ctrl_c INT
 function install_build_tools() {
 # build tools install section
 
-echo -e "\t ${Blue}=== Check Build Tools ${Reset}"
+echo -e "${Cyan}=== Check Build Tools ${Reset}"
 needs_pkg=false
 
 for pkg_name in `echo ${BUILDTOOLS_PKG_LIST}` ; do
@@ -55,7 +55,7 @@ if [ "$needs_pkg" = "true" ] ; then
    fi
 fi
 
-echo -e "${Green}=== Build Tools packages installed. ${Reset}"
+echo -e "${Cyan}=== Build Tools packages installed. ${Reset}"
 echo
 }
 
@@ -64,7 +64,7 @@ function install_nonessential_pkgs () {
 # NON essential package install section
 if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    # Check if non essential packages have been installed
-   echo -e "=== Check for non essential packages"
+   echo -e "${Cyan}=== Check for non essential packages"
    needs_pkg=false
 
    for pkg_name in `echo ${NONESSENTIAL_PKG_LIST}` ; do
@@ -87,7 +87,7 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
       fi
    fi
 
-   echo -e "${Green}=== Non essential packages installed. ${Reset}"
+   echo -e "${Cyan}=== Non essential packages installed. ${Reset}"
    echo
 fi
 }
@@ -106,10 +106,10 @@ chk_root
 
 
 if [ "$UPDATE_NOW" = "true" ] ; then
-   echo -e "\t ${Blue} === Check for updates ${Reset}"
+   echo -e "${Cyan} === Check for updates ${Reset}"
    apt-get update -y -q
    apt-get upgrade -y -q
-   echo -e "\t ${Green} === updates finished ${Reset}"
+   echo -e "${Cyan}=== updates ${Green}finished ${Reset}"
    echo
 fi
 
@@ -126,13 +126,13 @@ if [ ! -d /lib/modules/$(uname -r)/ ]; then
    exit 1
 fi
 
-echo -e "\t ${Blue}=== Enabling Kernel Modules ${Reset}"
+echo -e "${Cyan}=== Enable Kernel Modules ${Reset}"
 # Add Kernel modules
 grep i2c-dev /etc/modules > /dev/null 2>&1
 if [ $? -ne 0 ]; then
    echo "i2c-dev" >> /etc/modules
 fi
-echo -e "\t ${Green} === Finished. ${Reset}"
+echo -e "${Cyan}=== Enable Kernel Modules ${Green}Finished. ${Reset}"
 echo
 
 # If Using RPi3 reconfigure BT
