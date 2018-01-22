@@ -13,7 +13,7 @@ uid=$(id -u)
 
 UDATE="NO"
 GWOWNER="rmsgw"
-RMSGWREPO=https://github.com/nwdigitalradio/rmsgw
+RMSGWREPO=https://github.com/w4csn/rmsgw
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src/rmsgw"
 SRC_FILE="rmsgw-2.4.0-182.zip"
@@ -151,12 +151,16 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
-chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
+# Make sure Build environment is sane.
+#chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+#chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+#cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
+chown root:root -R $SRC_DIR
+chmod 755 -R $SRC_DIR
+cd $SRC_DIR
 num_cores=$(nproc --all)
 # Clean old binaries
-make clean > $RMS_BUILD_FILE 2>&1
+make clean > /dev/null
 echo -e " Compiling, Please Wait..."
 (make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
 spinner $!
@@ -193,7 +197,7 @@ fi
 # remove all duplicate files due to recompile
 rm -f /usr/local/bin/rmschanstat.*
 echo -e "${BluW}Be Sure to Update/Edit the channels.xml and gateway.config file${Reset}"
-# Chown /etc/rmsgw/stat folder
+# Make sure /etc/rmsgw/stat folder is owned by rmsgw for status updates
 chown -Rf rmsgw:rmsgw /etc/rmsgw/stat
 }
 
@@ -210,7 +214,7 @@ echo
 chk_root
 install_tools
 create_users
-copy_rmsgw
+download_rmsgw
 compile_rmsgw
 finish_rmsgw
 

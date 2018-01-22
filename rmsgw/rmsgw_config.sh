@@ -18,8 +18,9 @@ REQUIRED_PRGMS="rmschanstat python rmsgw rmsgw_aci"
 
 # ===== Function List =====
 
-# ===== function get_callsign
-function get_callsign() {
+
+function get_callsign() # ===== function get_callsign
+{
 # Check if call sign var has already been set
 if [ "$CALLSIGN" == "N0ONE" ] ; then
    echo "Enter call sign, followed by [enter]:"
@@ -39,8 +40,9 @@ fi
 dbgecho "Using CALL SIGN: $CALLSIGN"
 }
 
-# ===== function get_gridsquaree
-function get_gridsquare() {
+
+function get_gridsquare() # ===== function get_gridsquare
+{
 
 # Check if gridsquare var has already been set
 if [ "$GRIDSQUARE" == "AA00aa" ] ; then
@@ -60,9 +62,10 @@ fi
 dbgecho "Using Grid Square: $GRIDSQUARE"
 }
 
-# ===== function prompt_read_gwcfg
 
-function prompt_read_gwcfg() {
+
+function prompt_read_gwcfg() # ===== function prompt_read_gwcfg
+{
 
 # Use default SSID 10
 #echo "Enter ssid, followed by [enter]:"
@@ -92,9 +95,10 @@ done
 echo
 }
 
-# ===== function prompt_read_chanxml
 
-function prompt_read_chanxml() {
+
+function prompt_read_chanxml() # ===== function prompt_read_chanxml
+{
 
 echo "Enter Winlink Gateway password, followed by [enter]:"
 read -e PASSWD
@@ -123,9 +127,39 @@ echo "You can change any of the above by manually editing $RMSGW_CHANFILE"
 echo
 }
 
-# ===== function cfg_ax25d
+function chk_req_pgms()
+{
+echo -e "${Cyan}=== Checking for required files ...${Reset}"
+EXITFLAG=false
+for prog_name in `echo ${REQUIRED_PRGMS}` ; do
+   type -P $prog_name &>/dev/null
+   if [ $? -ne 0 ] ; then
+      echo "$scriptname: RMS Gateway not installed properly"
+      echo "$scriptname: Need to Install $prog_name program"
+      EXITFLAG=true
+   fi
+done
+if [ "$EXITFLAG" = "true" ] ; then
+  exit 1
+fi
+echo -e "${Cyan}=== Finished${Reset}"
+}
 
-function cfg_ax25d() {
+function chk_user()
+{
+# RMSGW user created in rmsgw_install.sh
+# Does the RMSGW user exist?
+getent passwd rmsgw > /dev/null 2>&1
+if [ $? -ne 0 ] ; then
+   echo "user rmsgw does NOT exist, creating"
+   adduser --no-create-home --system rmsgw
+else
+   echo "user rmsgw exists"
+fi
+}
+
+function cfg_ax25d() # ===== function cfg_ax25d
+{
 {
 echo "#"
 echo "[$CALLSIGN-$SSID VIA $AX25PORT]"
@@ -137,14 +171,15 @@ echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U"
 
 }
 
-# ===== function cfg_chan_xml
+
+
+
+function cfg_chan_xml() # ===== function cfg_chan_xml
+{
 # Configure the following:
 # channel name, basecall, callsign, password,
 #  gridsquare, frequency
 # sed -i  save result to input file
-
-function cfg_chan_xml() {
-
 RMSGW_CHANFILE=$RMSGW_CFGDIR/channels.xml
 prompt_read_chanxml
 
@@ -158,7 +193,7 @@ sed -i -e "/144000000/ s/144000000/$FREQUENCY/" $RMSGW_CHANFILE
 }
 # ===== End of Functions list =====
 
-# ===== Main
+# ===== Main =====
 sleep 3
 clear
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >>$WL2KPI_INSTALL_LOGFILE
@@ -167,31 +202,20 @@ echo -e "${BluW}$scriptname: script STARTED${Reset}"
 echo
 # Make sure user is root
 chk_root
-
-echo "Check for required files ..."
-EXITFLAG=false
-for prog_name in `echo ${REQUIRED_PRGMS}` ; do
-   type -P $prog_name &>/dev/null
-   if [ $? -ne 0 ] ; then
-      echo "$scriptname: RMS Gateway not installed properly"
-      echo "$scriptname: Need to Install $prog_name program"
-      EXITFLAG=true
-   fi
-done
-if [ "$EXITFLAG" = "true" ] ; then
-  exit 1
-fi
+chk_req_pgms
+#chk_user
 
 # if there are any args on command line assume it's a callsign
 if (( $# != 0 )) ; then
    CALLSIGN="$1"
+   echo -e "Found Call Sign: $CALLSIGN"
+else
+   get_callsign # Check for a valid callsign
 fi
 
-# Check for a valid callsign
-get_callsign
 
 # Create a /etc/ax25d.conf entry
-echo -e "=== Configuring ax25d.conf for rmsgw"
+echo -e "${Cyan}=== Configuring ax25d.conf for rmsgw ${Reset}"
 CHECK_CALL="k4gbb"
 bye
    mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
@@ -211,30 +235,22 @@ else
    if [ $? -eq 0 ] ; then
       echo "ax25d.conf already configured for RMS Gateway"
    else
-      echo "ax25d NOT configured for RMS Gateway"
+      echo "ax25d.conf NOT configured for RMS Gateway"
       get_callsign
 	  sed '$d' $AX25_CFGDIR/ax25d.conf
       cfg_ax25d
 	  sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
   fi
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== ax25d.conf Configuration ${Green}Finished${Reset}"
 echo
 
-# RMSGW user created in rmsgw_install.sh
-# Does the RMSGW user exist?
-#getent passwd rmsgw > /dev/null 2>&1
-#if [ $? -ne 0 ] ; then
-#   echo "user rmsgw does NOT exist, creating"
-#   adduser --no-create-home --system rmsgw
-#else
-#   echo "user rmsgw exists"
-#fi
+
 
 # Edit gateway.conf
 # Need to set:
 # GWCALL, GRIDSQUARE, LOGFACILITY (should match syslog entry)
-echo -e "=== Configure gateway.conf"
+echo -e "${Cyan}=== Configure gateway.conf${Reset}"
 RMSGW_GWCFGFILE=$RMSGW_CFGDIR/gateway.conf
 CHECK_CALL="N0CALL"
 
@@ -256,7 +272,7 @@ if [ $? -eq 0 ] ; then
 else
    echo "$RMSGW_GWCFGFILE already configured."
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== gateway.conf Configuration ${Green}Finished${Reset}"
 echo
 
 # Edit channels.xml
@@ -272,11 +288,11 @@ if [ $? -eq 0 ] ; then
 else
    echo "$RMSGW_CFGDIR/channels.xml already configured"
 fi
-echo -e " Configuration Finished"
+echo -e "${Cyan}=== Channels.xml Configuration ${Green}Finished${Reset}"
 echo
 
 # Edit banner
-echo -e "=== Configure banner"
+echo -e "${Cyan}=== Configure banner${Reset}"
 CHECK_CALL="N0CALL"
 grep -i "$CHECK_CALL" $RMSGW_CFGDIR/banner  > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -287,11 +303,11 @@ else
    cat $RMSGW_CFGDIR/banner
    echo
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== Banner Configuration ${Green}Finished${Reset}"
 echo
 
 # Install Logging
-echo -e "=== Configuring log files"
+echo -e "${Cyan}=== Configuring log files${Reset}"
 # Install Logging
 filename="/etc/rsyslog.d/60-rms.conf"
 if [ ! -f $filename ]; then
@@ -334,7 +350,7 @@ cat > $filename <<EOT
 }
 EOT
 fi
-echo -e "=== Configuration Finished"
+echo -e "${Cyan}=== Log file Configuration ${Green}Finished${Reset}"
 echo
 
 # create a sysop record
