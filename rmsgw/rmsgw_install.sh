@@ -75,6 +75,7 @@ if [ "$GWOWNER" != root ]; then
  # while the account is locked, make the password to
  # never expire so that cron will be happy
  chage -E-1 $GWOWNER >/dev/null
+ echo
 fi
 }
 
@@ -90,10 +91,10 @@ if [ ! -d $SRC_DIR ] ; then
 fi
 cd $SRC_DIR
 if [ ! -d .git ]; then
-  echo -e "\t Cloning rmsgw-linux from $RMSGWREPO"
+  echo -e " Cloning rmsgw-linux from $RMSGWREPO"
   git clone $RMSGWREPO .
 else
-  echo -e "\t Updating rmsgw-linux from $RMSGWREPO"
+  echo -e " Updating rmsgw-linux from $RMSGWREPO"
   git pull $RMSGWREPO
 fi
 echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
@@ -150,16 +151,16 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
-chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
+#chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+#chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+cd $SRC_DIR
 num_cores=$(nproc --all)
 # Clean old binaries
 make clean
-echo -e "\t\t Compiling, Please Wait..."
+echo -e " Compiling, Please Wait..."
 (make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
 spinner $!
-echo "\t\t Finished!"
+echo " Finished!"
 if [ $? -ne 0 ]
  then
  echo -e "\t${Red}ERROR${Reset}: Compile error - check RMS.txt File"
@@ -167,10 +168,10 @@ if [ $? -ne 0 ]
 else 
  rm $RMS_BUILD_FILE
 fi
-echo -e "\t\t Compiling, Please Wait..."
+echo -e " Compiling, Please Wait..."
 (make install) &
 spinner $!
-echo "\t\t Finished!"
+echo -e " Finished!"
 if [ $? -ne 0 ] ; then
   echo -e "\t${Red}ERROR${Reset}: Error during install."
   exit 1
