@@ -151,14 +151,14 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
-#chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-#chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-cd $SRC_DIR
+chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
 # Clean old binaries
 make clean > $RMS_BUILD_FILE 2>&1
 echo -e " Compiling, Please Wait..."
-(make -j$num_cores >> $RMS_BUILD_FILE 2>&1) &
+(make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
 spinner $!
 echo " Finished!"
 if [ $? -ne 0 ]
@@ -210,7 +210,7 @@ echo
 chk_root
 install_tools
 create_users
-download_rmsgw
+copy_rmsgw
 compile_rmsgw
 finish_rmsgw
 
