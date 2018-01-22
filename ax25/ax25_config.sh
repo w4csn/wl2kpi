@@ -78,7 +78,8 @@ if [ ! -d "/etc/ax25" ] || [ ! -L "/etc/ax25" ] ; then
       ln -s /usr/local/etc/ax25 /etc/ax25
    fi
 else
-   echo -e "Found /etc/ax25 symbolic link"
+   echo -e "${Green}Found${Reset} /etc/ax25 symbolic link"
+   echo
 fi
 }
 
@@ -125,6 +126,7 @@ echo "# portname	callsign	speed	paclen	window	description"
 echo "$AX25PORT            $CALLSIGN-$SSID         19200    256     7       TNC-Pi port"
 } > $AX25_CFGDIR/axports
 else
+   echo
    echo -e " AX.25 port $AX25PORT already configured"
 fi
 echo -e "${Cyan}=== axports Configuration ${Green}Finished${Reset}"
@@ -158,7 +160,6 @@ echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
    sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 else
    echo -e " ax25d.conf already configured"
-   echo
 fi
 echo -e "${Cyan}=== Configuration ${Green}Finished${Reset}"
 echo
@@ -167,7 +168,6 @@ echo
 echo -e "${Cyan}=== Configuring ax25-up${Reset}"
 echo
 sed -i -e "/n0one/ s/n0one/$CALLSIGN/" $AX25_CFGDIR/ax25-up > /dev/null 2>&1
-
 echo -e "${Cyan}=== ax25-up Configuration ${Green}Finished${Reset}"
 echo
 
