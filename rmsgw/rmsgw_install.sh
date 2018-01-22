@@ -166,6 +166,7 @@ if [ $? -ne 0 ]
  echo -e "\t${Red}ERROR${Reset}: Compile error - check RMS.txt File"
  exit 1
 else 
+ echo
  #rm $RMS_BUILD_FILE
 fi
 echo -e " Installing, Please Wait..."
