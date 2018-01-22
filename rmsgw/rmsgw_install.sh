@@ -156,9 +156,9 @@ echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
 cd $SRC_DIR
 num_cores=$(nproc --all)
 # Clean old binaries
-make clean
+make clean > $RMS_BUILD_FILE 2>&1
 echo -e " Compiling, Please Wait..."
-(make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
+(make -j$num_cores >> $RMS_BUILD_FILE 2>&1) &
 spinner $!
 echo " Finished!"
 if [ $? -ne 0 ]
@@ -168,7 +168,7 @@ if [ $? -ne 0 ]
 else 
  rm $RMS_BUILD_FILE
 fi
-echo -e " Compiling, Please Wait..."
+echo -e " Installing, Please Wait..."
 (make install) &
 spinner $!
 echo -e " Finished!"
@@ -213,7 +213,7 @@ download_rmsgw
 compile_rmsgw
 finish_rmsgw
 
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed - $ROOTFILE_NAME$rms_ver" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}$scriptname: script FINISHED${Reset}"
