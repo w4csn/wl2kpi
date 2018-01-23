@@ -141,7 +141,7 @@ if [ $? -eq "0" ]; then
    echo -e "Not running on an RPi 3... Skipping BT Configuration"
 else
 	# Modify hciattach.service to configure BT for /dev/ttyS0
-	echo -e "\t ${Blue}=== Configure BT for ttyS0 ${Reset}"
+	echo -e "${Cyan}=== Configure BT for ttyS0 ${Reset}"
 	if [ ! -e /lib/systemd/system/hciattach.service ]; then
 		cp $START_DIR/systemd/hciattach.service /lib/systemd/system/hciattach.service
 		systemctl enable hciattach.service
@@ -149,12 +149,12 @@ else
 	else
 		echo -e "\t ... hciattach.service already exists."
 	fi
-	echo -e "\t ${Green}=== Finished ${Reset}"
+	echo -e "${cyan}=== Configure BT for ttyS0 ${Green}Finished ${Reset}"
 	echo
 fi
 
 # Modify config.txt
-echo -e "\t ${Blue}=== Modify /boot/config.txt ${Reset}"
+echo -e "${Cyan}=== Modify /boot/config.txt ${Reset}"
 CONFIGDIR=/boot/config.txt
 grep "# User Mods" $CONFIGDIR > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -176,13 +176,13 @@ if [ $? -ne "0" ]; then
 	fi
 fi
 
-echo -e "\t ${Green}=== Finished. ${Reset}"
+echo -e "${Cyan}=== Modify /boot/config.txt ${Green}Finished. ${Reset}"
 echo
 
 # Remove Serial Console
-echo -e "\t ${Blue}=== Remove Serial Console from /boot/cmdline.txt ${Reset}"
+echo -e "${Cyan}=== Remove Serial Console from /boot/cmdline.txt ${Reset}"
 sed -i -e "/console/ s/console=serial0,115200// " /boot/cmdline.txt
-echo -e "\t ${Green}=== Finished. ${Reset}"
+echo -e "${Cyan}=== Remove Serial Console ${Green}Finished. ${Reset}"
 echo
 
 cd $START_DIR/core
