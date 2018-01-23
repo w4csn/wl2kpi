@@ -12,9 +12,10 @@ source $START_DIR/core/core_functions.sh
 trap ctrl_c INT
 
 # ===== Function List =====
-function chng_passwd {
+function chng_passwd
+{
 # Check for default password
-echo -e "\t${Blue} === Verify not using default password ${Reset}"
+echo -e "${Cyan}=== Verify pi not using default password ${Reset}"
 # is there even a user pi?
 ls /home | grep pi > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
@@ -47,12 +48,13 @@ if [ $? -eq 0 ] ; then
 else
    echo -e "User ${Yellow}pi${Reset} ${Red}NOT${Reset} found"
 fi
+echo -e "${Cyan}=== Verify Password ${Green}Complete${Reset}"
 echo
 }
 
 function chng_hostname {
 # Change hostname from default
-echo -e "\t${Blue} === Verify hostname${Reset}"
+echo -e "${Cyan}=== Verify hostname${Reset}"
 echo
 HOSTNAME=$(cat /etc/hostname | tail -1)
 echo -e "Current hostname: ${Yellow}$HOSTNAME${Reset}"
@@ -65,7 +67,8 @@ if [ "$HOSTNAME" = "raspberrypi" ] || [ "$HOSTNAME" = "compass" ] ; then
    read -e HOSTNAME
    echo "$HOSTNAME" > /etc/hostname
 fi
-
+echo -e "${Cyan}=== Verify hostname ${Green}Finished${Reset}"
+echo
 }
 # ===== End Function List =====
 
@@ -90,12 +93,14 @@ chng_hostname
 HOSTNAME=$(cat /etc/hostname | tail -1)
 
 # Set up /etc/mailname
-echo -e "\t${Blue} === Configure /etc/mailname with  ${Yellow}$HOSTNAME${Reset}"
+echo -e "${Cyan}=== Configure /etc/mailname with  ${Yellow}$HOSTNAME${Reset}"
 echo
 echo "$HOSTNAME.localhost" > /etc/mailname
+echo -e "${Cyan}=== Configure mailname ${Green}Finished${Reset}"
+echo
 
 # Set  up /etc/hosts
-echo -e "\t${Blue} === Configure /etc/hosts${Reset}"
+echo -e "${Cyan}=== Configure /etc/hosts${Reset}"
 echo
 grep "127.0.1.1" /etc/hosts
 if [ $? -eq 0 ] ; then
@@ -116,6 +121,8 @@ else
       echo "Failed to modify /etc/hosts file"
    fi
 fi
+echo -e "${Cyan}=== Configure /etc/hosts ${Green}Finished${Reset}"
+echo
 
 # Change Time Zone
 DATETZ=$(date +%Z)
