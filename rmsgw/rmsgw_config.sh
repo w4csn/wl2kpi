@@ -143,6 +143,7 @@ if [ "$EXITFLAG" = "true" ] ; then
   exit 1
 fi
 echo -e "${Cyan}=== Finished${Reset}"
+echo
 }
 
 function chk_user()
@@ -238,7 +239,6 @@ fi
 # Create a /etc/ax25d.conf entry
 echo -e "${Cyan}=== Configuring ax25d.conf for rmsgw ${Reset}"
 CHECK_CALL="k4gbb"
-bye
    mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
    echo "Original ax25d.conf saved as ax25d.conf-dist"
    # copy first 1 line of original file
