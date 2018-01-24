@@ -191,6 +191,27 @@ sed -i -e "/password/ s/password/$PASSWD/2" $RMSGW_CHANFILE
 sed -i -e "/AA00AA/ s/AA00AA/$GRIDSQUARE/" $RMSGW_CHANFILE
 sed -i -e "/144000000/ s/144000000/$FREQUENCY/" $RMSGW_CHANFILE
 }
+
+function cfg_cron() 
+{
+echo -e "=== Setting up cron"
+# Add RMS_ACI to Crontab
+# Is there already a entry for user rmsgw?
+grep rmsgw  /etc/crontab  > /dev/null 2>&1
+if [ $? -eq 1 ] ; then
+	echo "Creating crontab entry for user: rmsgw"
+	{
+	echo "6,36 * * * *   rmsgw    /usr/local/bin/rmsgw_aci > /dev/null 2>&1"
+	echo "# (End) " 
+	} >> /etc/crontab
+else
+	echo "Crontab entry already exist"
+fi
+echo
+echo -e "=== Finished"
+echo
+}
+
 # ===== End of Functions list =====
 
 # ===== Main =====
@@ -353,26 +374,11 @@ fi
 echo -e "${Cyan}=== Log file Configuration ${Green}Finished${Reset}"
 echo
 
+#cfg_cron
+
 # create a sysop record
 # run mksysop.py
 # Check /etc/rmsgw/new-sysop.xml
-
-echo -e "=== Setting up cron"
-# Add RMS_ACI to Crontab
-# Is there already a entry for user rmsgw?
-grep rmsgw  /etc/crontab  > /dev/null 2>&1
-if [ $? -eq 1 ] ; then
-	echo "Creating crontab entry for user: rmsgw"
-	{
-	echo "6,36 * * * *   rmsgw    /usr/local/bin/rmsgw_aci > /dev/null 2>&1"
-	echo "# (End) " 
-	} >> /etc/crontab
-else
-	echo "Crontab entry already exist"
-fi
-echo
-echo -e "=== Finished"
-echo
 
 
 	
