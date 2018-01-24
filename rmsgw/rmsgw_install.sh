@@ -143,6 +143,10 @@ if [ $? -ne 0 ] ; then
  echo -e "\t${Red}ERROR${Reset}: $filename File not available"
  exit 1
 fi
+# Make sure Build environment is sane.
+chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
+chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/install.sh
+chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/admin/admin_install.sh
 echo -e "${Cyan}=== Copy ${Green}Finished${Reset}"
 echo
 }
@@ -151,9 +155,6 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
-# Make sure Build environment is sane.
-#chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-#chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
 # Clean old binaries
