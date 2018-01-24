@@ -146,7 +146,7 @@ fi
 # Make sure Build environment is sane.
 chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/install.sh
-chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/admin/admin_install.sh
+chmod 755 $SRC_DIR/$ROOTFILE_NAME$rms_ver/admin/admin-install.sh
 echo -e "${Cyan}=== Copy ${Green}Finished${Reset}"
 echo
 }
