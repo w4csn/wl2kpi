@@ -216,7 +216,7 @@ create_users
 copy_rmsgw
 compile_rmsgw
 finish_rmsgw
-cd /
+cd $START_DIR/rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
