@@ -179,7 +179,8 @@ if [ $? -ne 0 ] ; then
   echo -e "\t${Red}ERROR${Reset}: Error during install."
   exit 1
 fi
-echo -e "${Cyan}=== RMSGW-Linux ${Green}installed.${Reset}"
+echo -e "${Cyan}=== RMSGW-Linux ${Green}installed${Reset}"
+echo
 }
 
 function finish_rmsgw
@@ -215,7 +216,7 @@ create_users
 copy_rmsgw
 compile_rmsgw
 finish_rmsgw
-
+cd /
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
