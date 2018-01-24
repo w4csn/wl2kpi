@@ -15,7 +15,7 @@ UDATE="NO"
 GWOWNER="rmsgw"
 RMSGWREPO=https://github.com/w4csn/rmsgw
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
-SRC_DIR="/usr/local/src/rmsgw"
+SRC_DIR="/usr/local/src"
 SRC_FILE="rmsgw-2.4.0-182.zip"
 ROOTFILE_NAME="rmsgw-"
 RMS_BUILD_FILE="rmsgwbuild.txt"
@@ -154,10 +154,7 @@ echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
 # Make sure Build environment is sane.
 #chown root:root -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
 #chmod 755 -R $SRC_DIR/$ROOTFILE_NAME$rms_ver
-#cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
-chown root:root -R $SRC_DIR
-chmod 755 -R $SRC_DIR
-cd $SRC_DIR
+cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
 num_cores=$(nproc --all)
 # Clean old binaries
 make clean > /dev/null
@@ -214,7 +211,7 @@ echo
 chk_root
 install_tools
 create_users
-download_rmsgw
+copy_rmsgw
 compile_rmsgw
 finish_rmsgw
 
