@@ -20,10 +20,11 @@ AX25_CFGDIR="/etc/ax25"
 function get_callsign()
 { 
 # Check if call sign var has already been set
+echo -e "${Cyan}=== Get Call Sign${Reset}"
 if [ "$CALLSIGN" == "N0ONE" ] ; then
    read -t 1 -n 10000 discard
    echo "Enter call sign, followed by [enter]:"
-   read CALLSIGN
+   read -e CALLSIGN
    sizecallstr=${#CALLSIGN}
    if (( sizecallstr > 6 )) || ((sizecallstr < 3 )) ; then
       echo "Invalid call sign: $CALLSIGN, length = $sizecallstr"
@@ -33,11 +34,14 @@ if [ "$CALLSIGN" == "N0ONE" ] ; then
    CALLSIGN=$(echo "$CALLSIGN" | tr '[a-z]' '[A-Z]')
 fi
 dbgecho "Using CALL SIGN: $CALLSIGN"
+echo -e "${Cyan}=== Get Call Sign ${Green}Finished${Reset}"
+echo
 return 1
 }
 
 function get_ssid()
 {
+echo -e "${Cyan}=== Get SSID ${Reset}"
 read -t 1 -n 10000 discard
 echo "Enter ssid (0 - 15) followed by [enter]:"
 read -e SSID
@@ -51,6 +55,8 @@ if (( sizessidstr > 2 )) || ((sizessidstr < 0 )) ; then
    return 0
 fi
 dbgecho "Using SSID: $SSID"
+echo -e "${Cyan}=== Get SSID ${Green}Finished${Reset}"
+echo
 return 1
 }
 

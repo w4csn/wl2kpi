@@ -10,6 +10,7 @@ source $START_DIR/core/core_functions.sh
 CALLSIGN="N0ONE"
 GRIDSQUARE="AA00aa"
 AX25PORT="0"
+SSID="10"
 AX25DSSID="10"
 AX25_CFGDIR="/etc/ax25"
 RMSGW_CFGDIR="/etc/rmsgw"
@@ -24,25 +25,43 @@ function get_callsign() # ===== function get_callsign
 # Check if call sign var has already been set
 echo -e "${Cyan}=== Get Call Sign${Reset}"
 if [ "$CALLSIGN" == "N0ONE" ] ; then
+   read -t 1 -n 10000 discard
    echo "Enter call sign, followed by [enter]:"
    read -e CALLSIGN
-
    sizecallstr=${#CALLSIGN}
-
    if (( sizecallstr > 6 )) || ((sizecallstr < 3 )) ; then
       echo "Invalid call sign: $CALLSIGN, length = $sizecallstr"
-      exit 1
+      return 0
    fi
-
    # Convert callsign to upper case
    CALLSIGN=$(echo "$CALLSIGN" | tr '[a-z]' '[A-Z]')
 fi
-
 dbgecho "Using CALL SIGN: $CALLSIGN"
 echo -e "${Cyan}=== Get Call Sign ${Green}Finished${Reset}"
 echo
+return 1
 }
 
+function get_ssid()
+{
+echo -e "${Cyan}=== Get SSID ${Reset}"
+read -t 1 -n 10000 discard
+echo "Enter ssid (0 - 15) followed by [enter]:"
+read -e SSID
+if [ -z "${SSID##*[!0-9]*}" ] ; then
+   echo "Input: $SSID, not a positive integer"
+   return 0
+fi
+sizessidstr=${#SSID}
+if (( sizessidstr > 2 )) || ((sizessidstr < 0 )) ; then
+   echo "Invalid ssid: $SSID, length = $sizessidstr, should be 1 or 2 numbers"
+   return 0
+fi
+dbgecho "Using SSID: $SSID"
+echo -e "${Cyan}=== Get SSID ${Green}Finished${Reset}"
+echo
+return 1
+}
 
 function get_gridsquare() # ===== function get_gridsquare
 {
@@ -71,8 +90,8 @@ function prompt_read_gwcfg() # ===== function prompt_read_gwcfg
 {
 
 # Use default SSID 10
-#echo "Enter ssid, followed by [enter]:"
-#read SSID
+echo "Enter ssid, followed by [enter]:"
+read SSID
 
 sizessidstr=${#SSID}
 
@@ -97,9 +116,6 @@ for filename in `echo ${RMSGW_CFG_FILES}` ; do
 done
 echo
 }
-
-
-
 function prompt_read_chanxml() # ===== function prompt_read_chanxml
 {
 
@@ -153,6 +169,7 @@ function chk_user()
 {
 # RMSGW user created in rmsgw_install.sh
 # Does the RMSGW user exist?
+echo -e "${Cyan}=== Checking for rmsgw user${Reset}"
 getent passwd rmsgw > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
    echo "user rmsgw does NOT exist, creating"
@@ -160,6 +177,7 @@ if [ $? -ne 0 ] ; then
 else
    echo "user rmsgw exists"
 fi
+echo -e "${Cyan}=== Checking for rmsgw user ${Green}Finished${Reset}"
 }
 
 function cfg_ax25d() # ===== function cfg_ax25d
@@ -174,9 +192,6 @@ echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U"
 } >> $AX25_CFGDIR/ax25d.conf
 
 }
-
-
-
 
 function cfg_chan_xml() # ===== function cfg_chan_xml
 {
@@ -228,31 +243,34 @@ echo
 # Make sure user is root
 chk_root
 chk_req_pgms
-#chk_user
+chk_user
 
 # if there are any args on command line assume it's a callsign
 if (( $# != 0 )) ; then
    CALLSIGN="$1"
    echo -e "Found Call Sign: $CALLSIGN"
-else
-   get_callsign # Check for a valid callsign
 fi
 
 
 # Create a /etc/ax25d.conf entry
 echo -e "${Cyan}=== Configuring ax25d.conf for rmsgw ${Reset}"
-CHECK_CALL="k4gbb"
-   mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
-   echo "Original ax25d.conf saved as ax25d.conf-dist"
+CHECK_CALL="N0ONE"
+grep -i "$CHECK_CALL" $AX25_CFGDIR/ax25d.conf > /dev/null 2>&1
+if [ $? -eq 0 ] ; then
+   echo "ax25d.conf not configured"
+   echo "Please run ax25_config.sh before continuing..."
+   exit 1
+   #mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
+   #echo "Original ax25d.conf saved as ax25d.conf-dist"
    # copy first 1 line of original file
-   sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
-{
-echo "[$CALLSIGN-$AX25DSSID VIA $AX25PORT]"
-echo "NOCALL   * * * * * *  L"
-echo "N0CALL   * * * * * *  L"
-echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
-} >> $AX25_CFGDIR/ax25d.conf
-	sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
+   #sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
+#{
+#echo "[$CALLSIGN-$AX25DSSID VIA $AX25PORT]"
+#echo "NOCALL   * * * * * *  L"
+#echo "N0CALL   * * * * * *  L"
+#echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
+#} >> $AX25_CFGDIR/ax25d.conf
+#	sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 else
    echo "ax25d is configured, checking for RMS Gateway entry"
    grep  "\-10" /etc/ax25/ax25d.conf  > /dev/null 2>&1
