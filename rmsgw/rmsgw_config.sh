@@ -10,7 +10,7 @@ source $START_DIR/core/core_functions.sh
 CALLSIGN="N0ONE"
 GRIDSQUARE="AA00aa"
 AX25PORT="0"
-SSID="10"
+AX25DSSID="10"
 AX25_CFGDIR="/etc/ax25"
 RMSGW_CFGDIR="/etc/rmsgw"
 RMSGW_CFG_FILES="gateway.conf channels.xml banner"
@@ -22,6 +22,7 @@ REQUIRED_PRGMS="rmschanstat python rmsgw rmsgw_aci"
 function get_callsign() # ===== function get_callsign
 {
 # Check if call sign var has already been set
+echo -e "${Cyan}=== Get Call Sign${Reset}"
 if [ "$CALLSIGN" == "N0ONE" ] ; then
    echo "Enter call sign, followed by [enter]:"
    read -e CALLSIGN
@@ -38,6 +39,8 @@ if [ "$CALLSIGN" == "N0ONE" ] ; then
 fi
 
 dbgecho "Using CALL SIGN: $CALLSIGN"
+echo -e "${Cyan}=== Get Call Sign ${Green}Finished${Reset}"
+echo
 }
 
 
