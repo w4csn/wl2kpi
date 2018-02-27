@@ -63,6 +63,16 @@ echo
 return 1
 }
 
+function prompt_read()
+{
+while get_callsign ; do
+  echo -e "Input ${Red}error${Reset}, try again"
+done
+while get_ssid ; do
+  echo -e "Input ${Red}error${Reset}, try again"
+done
+}
+
 function get_gridsquare() # ===== function get_gridsquare
 {
 
@@ -88,20 +98,6 @@ dbgecho "Using Grid Square: $GRIDSQUARE"
 
 function prompt_read_gwcfg() # ===== function prompt_read_gwcfg
 {
-
-# Use default SSID 10
-echo "Enter ssid, followed by [enter]:"
-read SSID
-
-sizessidstr=${#SSID}
-
-if (( sizessidstr > 2 )) || ((sizessidstr < 0 )) ; then
-   echo "Invalid ssid: $SSID, length = $sizessidstr"
-   exit 1
-fi
-
-dbgecho "Using SSID: $SSID"
-
 echo "Enter city name where gateway resides, follwed by [enter]:"
 read -e CITY
 
@@ -116,6 +112,7 @@ for filename in `echo ${RMSGW_CFG_FILES}` ; do
 done
 echo
 }
+
 function prompt_read_chanxml() # ===== function prompt_read_chanxml
 {
 
@@ -180,19 +177,6 @@ fi
 echo -e "${Cyan}=== Checking for rmsgw user ${Green}Finished${Reset}"
 }
 
-function cfg_ax25d() # ===== function cfg_ax25d
-{
-{
-echo "#"
-echo "[$CALLSIGN-$SSID VIA $AX25PORT]"
-echo "NOCALL   * * * * * *  L"
-echo "N0CALL   * * * * * *  L"
-#echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -l debug -P %d %U"
-echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U"
-} >> $AX25_CFGDIR/ax25d.conf
-
-}
-
 function cfg_chan_xml() # ===== function cfg_chan_xml
 {
 # Configure the following:
@@ -249,42 +233,44 @@ chk_user
 if (( $# != 0 )) ; then
    CALLSIGN="$1"
    echo -e "Found Call Sign: $CALLSIGN"
+else
+   prompt_read
 fi
 
 
-# Create a /etc/ax25d.conf entry
+#  === Configure ax25d.conf
+# Preserve listening socket
+# Create rmsgw entry
 echo -e "${Cyan}=== Configuring ax25d.conf for rmsgw ${Reset}"
-CHECK_CALL="N0ONE"
+CHECK_CALL="n0one"
 grep -i "$CHECK_CALL" $AX25_CFGDIR/ax25d.conf > /dev/null 2>&1
 if [ $? -eq 0 ] ; then
    echo "ax25d.conf not configured"
    echo "Please run ax25_config.sh before continuing..."
    exit 1
-   #mv $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist
-   #echo "Original ax25d.conf saved as ax25d.conf-dist"
-   # copy first 1 line of original file
-   #sed -n '1p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
-#{
-#echo "[$CALLSIGN-$AX25DSSID VIA $AX25PORT]"
-#echo "NOCALL   * * * * * *  L"
-#echo "N0CALL   * * * * * *  L"
-#echo "default  * * * * * *  - root /usr/sbin/ttylinkd ttylinkd"
-#} >> $AX25_CFGDIR/ax25d.conf
-#	sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
 else
-   echo "ax25d is configured, checking for RMS Gateway entry"
+   echo -e "ax25d.conf is ${Green}configured${Reset}, checking for RMS Gateway entry"
    grep  "\-10" /etc/ax25/ax25d.conf  > /dev/null 2>&1
    if [ $? -eq 0 ] ; then
       echo "ax25d.conf already configured for RMS Gateway"
    else
-      echo "ax25d.conf NOT configured for RMS Gateway"
-      get_callsign
+      echo -e "ax25d.conf ${Red}NOT configured${Reset} for RMS Gateway"
+	  cp -f $AX25_CFGDIR/ax25d.conf $AX25_CFGDIR/ax25d.conf-dist > /dev/null 2>&1
+      # Delete last line of file
 	  sed '$d' $AX25_CFGDIR/ax25d.conf
-      cfg_ax25d
-	  sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
-  fi
+{
+echo "#"
+echo "[$CALLSIGN-$SSID VIA $AX25PORT]"
+echo "NOCALL   * * * * * *  L"
+echo "N0CALL   * * * * * *  L"
+echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -l debug -P %d %U"
+echo "default  * * * * * *  - rmsgw /usr/local/bin/rmsgw rmsgw -P 0 %U"
+} >> $AX25_CFGDIR/ax25d.conf
+	  # Print last line 
+      sed -n '$p' $AX25_CFGDIR/ax25d.conf-dist >> $AX25_CFGDIR/ax25d.conf
+   fi
 fi
-echo -e "${Cyan}=== ax25d.conf Configuration ${Green}Finished${Reset}"
+echo -e "${Cyan}=== Configuration ${Green}Finished${Reset}"
 echo
 
 
@@ -302,15 +288,15 @@ if [ $? -eq 0 ] ; then
    mv $RMSGW_GWCFGFILE $RMSGW_CFGDIR/gateway.conf-dist
    echo "Original gateway.conf saved as gateway.conf-dist"
    prompt_read_gwcfg
-   {
-   echo "GWCALL=$CALLSIGN-$SSID"
-   echo "GRIDSQUARE=$GRIDSQUARE"
-   echo "CHANNELFILE=/etc/rmsgw/channels.xml"
-   echo "BANNERFILE=/etc/rmsgw/banner"
-   echo "LOGFACILITY=LOCAL0"
-   echo "LOGMASK=INFO"
-   echo "PYTHON=/usr/bin/python"
-   } > $RMSGW_GWCFGFILE
+{
+echo "GWCALL=$CALLSIGN-$SSID"
+echo "GRIDSQUARE=$GRIDSQUARE"
+echo "CHANNELFILE=/etc/rmsgw/channels.xml"
+echo "BANNERFILE=/etc/rmsgw/banner"
+echo "LOGFACILITY=LOCAL0"
+echo "LOGMASK=INFO"
+echo "PYTHON=/usr/bin/python"
+} > $RMSGW_GWCFGFILE
 else
    echo "$RMSGW_GWCFGFILE already configured."
 fi
