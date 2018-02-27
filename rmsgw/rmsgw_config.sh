@@ -398,6 +398,8 @@ echo
 #cfg_cron
 
 # create a sysop record
+#cp /etc/rmsgw/sysop-template.xml /etc/rmsgw/sysop.xml
+#sed 
 # run mksysop.py
 # Check /etc/rmsgw/new-sysop.xml
 

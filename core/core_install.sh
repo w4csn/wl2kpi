@@ -134,7 +134,7 @@ else
 	else
 		echo -e "\t ... hciattach.service already exists."
 	fi
-	echo -e "${cyan}=== Configure BT for ttyS0 ${Green}Finished ${Reset}"
+	echo -e "${Cyan}=== Configure BT for ttyS0 ${Green}Finished ${Reset}"
 	echo
 fi
 
