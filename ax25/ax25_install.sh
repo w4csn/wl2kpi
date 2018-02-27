@@ -299,8 +299,7 @@ echo
 # Setup ax25 systemd service
 echo -e "${Cyan}=== Installing Startup Files${Reset}"
 if [ ! -f /etc/systemd/system/ax25.service ]; then
-   echo -e "
-   Setting up ax25 systemd service"
+   echo -e "Setting up ax25 systemd service"
    cp $START_DIR/systemd/ax25.service /etc/systemd/system/ax25.service
    systemctl enable ax25.service
    systemctl daemon-reload
