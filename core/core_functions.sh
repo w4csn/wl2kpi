@@ -78,6 +78,12 @@ a32082)
    echo
    HAS_WIFI=1
 ;;
+a020d3)
+   echo
+   echo -e "${Green) Pi 3 Model B+ Mfg by Sony UK${Reset}"
+   echo
+   HAS_WIFI=1
+;;
 esac
 
 return $HAS_WIFI
