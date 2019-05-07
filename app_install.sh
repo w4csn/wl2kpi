@@ -89,6 +89,8 @@ do
 	echo "" 
 	echo -e "${Green}core${Reset}    Install CORE (Do this first!)"
 	echo -e "${Green}ax25${Reset}    Install AX.25"
+	echo -e "${Red}Direwolf${Reset}    Install Direwolf"
+	echo -e "${Red}linbpq${Reset}    Install LinBPQ"
 	echo -e "${Green}rmsgw${Reset}   Install RMS Gateway - Linux"
 	echo -e "${Red}plu${Reset}     Install paclink-unix  basic "
 	echo -e "${Red}pluimap${Reset} Install paclink-unix with imap "
