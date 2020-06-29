@@ -81,7 +81,9 @@ W4CSN
 * https://tnc-x.com/TNCPi.htm
 
 #### Installing an configuring ax25 and rms gateway
-* http://k4gbb.no-ip.org/docs/
+K4gbb links
+* http://packet-radio.net/docs/
+* https://packet-radio.net/downloads/
 
 #### Installing and configuring paclink-unix and postfix:
 * http://bazaudi.com/plu/doku.php
