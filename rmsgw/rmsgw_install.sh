@@ -231,7 +231,7 @@ install_tools
 #create_users
 download_rmsgw
 #copy_rmsgw
-#compile_rmsgw
+compile_rmsgw
 #finish_rmsgw
 cd $START_DIR/rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
