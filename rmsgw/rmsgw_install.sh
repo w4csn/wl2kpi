@@ -163,12 +163,19 @@ num_cores=$(nproc --all)
 # Clean old binaries
 make clean > /dev/null
 echo -e " Compiling, Please Wait..."
-(./autogen.sh > $RMS_BUILD_FILE 2>&1) &
-spinner $!
-(./configure > $RMS_BUILD_FILE 2>&1) &
-spinner $!
-(make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
-spinner $!
+./autogen.sh > $RMS_BUILD_FILE 2>&1
+
+# spinner function broken
+#(./autogen.sh > $RMS_BUILD_FILE 2>&1) &
+#spinner $!
+./configure > $RMS_BUILD_FILE 2>&1
+# spinner function broken
+#(./configure > $RMS_BUILD_FILE 2>&1) &
+#spinner $!
+make -j$num_cores > $RMS_BUILD_FILE 2>&1
+# spinner function broken
+#(make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
+#spinner $!
 echo " Finished!"
 if [ $? -ne 0 ]
  then
@@ -179,6 +186,8 @@ else
  #rm $RMS_BUILD_FILE
 fi
 #echo -e " Installing, Please Wait..."
+make install
+# spinner function broken
 #(make install) &
 #spinner $!
 echo -e " Finished!"
