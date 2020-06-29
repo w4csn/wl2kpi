@@ -186,7 +186,7 @@ else
  #rm $RMS_BUILD_FILE
 fi
 #echo -e " Installing, Please Wait..."
-make install
+#make install
 # spinner function broken
 #(make install) &
 #spinner $!
