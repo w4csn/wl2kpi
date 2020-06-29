@@ -13,7 +13,7 @@ uid=$(id -u)
 
 UDATE="NO"
 GWOWNER="rmsgw"
-RMSGWREPO=https://github.com/w4csn/rmsgw
+RMSGWREPO=https://github.com/w4csn/rmsgw-1
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src"
 SRC_FILE="rmsgw-2.4.0-182.zip"
