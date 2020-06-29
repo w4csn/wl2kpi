@@ -160,11 +160,8 @@ echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
 chown root:root -R $SRC_DIR/$ROOTDIR_NAME
 cd $SRC_DIR/$ROOTDIR_NAME
 num_cores=$(nproc --all)
-# Clean old binaries
-make clean > /dev/null
 echo -e " Compiling, Please Wait..."
 ./autogen.sh > $RMS_BUILD_FILE 2>&1
-
 # spinner function broken
 #(./autogen.sh > $RMS_BUILD_FILE 2>&1) &
 #spinner $!
@@ -186,7 +183,7 @@ else
  #rm $RMS_BUILD_FILE
 fi
 #echo -e " Installing, Please Wait..."
-#make install
+make install
 # spinner function broken
 #(make install) &
 #spinner $!
@@ -232,7 +229,7 @@ install_tools
 download_rmsgw
 #copy_rmsgw
 compile_rmsgw
-#finish_rmsgw
+finish_rmsgw
 cd $START_DIR/rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE

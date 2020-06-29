@@ -135,8 +135,8 @@ do
 			pushd $START_DIR/rmsgw > /dev/null
 			scriptname="rmsgw_install"
 			source ./rmsgw_install.sh
-			#scriptname="rmsgw_config"
-			#source ./rmsgw_config.sh
+			scriptname="rmsgw_config"
+			source ./rmsgw_config.sh
 			popd > /dev/null
 			scriptname="`basename $0`"
 			echo -e "${BluW}$scriptname: RMS Gateway installation FINISHED${Reset}"
