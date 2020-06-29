@@ -17,7 +17,7 @@ RMSGWREPO=https://github.com/w4csn/rmsgw-1
 PKG_REQUIRE="xutils-dev libxml2 libxml2-dev python-requests"
 SRC_DIR="/usr/local/src"
 SRC_FILE="rmsgw-2.4.0-182.zip"
-ROOTFILE_NAME="rmsgw-"
+ROOTFILE_NAME="rmsgw-1"
 RMS_BUILD_FILE="rmsgwbuild.txt"
 
 # ===== Function List =====
@@ -90,11 +90,11 @@ if [ ! -d $SRC_DIR ] ; then
    fi
 fi
 cd $SRC_DIR
-if [ ! -d $SRC_DIR/rmsgw-1 ]; then
+if [ ! -d $SRC_DIR/$ROOTFILE_NAME ]; then
   echo -e " Cloning rmsgw-linux from $RMSGWREPO"
   git clone $RMSGWREPO
 else
-  cd $SRC_DIR/rmsgw-1	
+  cd $SRC_DIR/$ROOTFILE_NAME	
   echo -e " Updating rmsgw-linux from $RMSGWREPO"
   git pull origin master
 fi
@@ -156,7 +156,9 @@ function compile_rmsgw
 {
 # rmsgw 
 echo -e "${Cyan}=== Compile RMSGW-Linux from Source${Reset}"
-cd $SRC_DIR/$ROOTFILE_NAME$rms_ver
+# Make sure Build environment is sane.
+chown root:root -R $SRC_DIR/$ROOTFILE_NAME
+cd $SRC_DIR/$ROOTFILE_NAME
 num_cores=$(nproc --all)
 # Clean old binaries
 make clean > /dev/null
@@ -216,7 +218,7 @@ install_tools
 #create_users
 download_rmsgw
 #copy_rmsgw
-#compile_rmsgw
+compile_rmsgw
 #finish_rmsgw
 cd $START_DIR/rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
