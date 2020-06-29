@@ -60,6 +60,7 @@ else
 		exit 1
 	fi
 fi
+spinner $!
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
