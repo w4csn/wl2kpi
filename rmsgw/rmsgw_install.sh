@@ -163,6 +163,8 @@ num_cores=$(nproc --all)
 # Clean old binaries
 make clean > /dev/null
 echo -e " Compiling, Please Wait..."
+(./autogen.sh > $RMS_BUILD_FILE 2>&1) &
+spinner $!
 (./configure > $RMS_BUILD_FILE 2>&1) &
 spinner $!
 (make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
