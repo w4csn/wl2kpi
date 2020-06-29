@@ -92,8 +92,9 @@ fi
 cd $SRC_DIR
 if [ ! -d .git ]; then
   echo -e " Cloning rmsgw-linux from $RMSGWREPO"
-  git clone $RMSGWREPO .
+  git clone $RMSGWREPO
 else
+  cd $SRC_DIR\rmsgw-1	
   echo -e " Updating rmsgw-linux from $RMSGWREPO"
   git pull $RMSGWREPO
 fi
@@ -212,10 +213,11 @@ echo
 
 chk_root
 install_tools
-create_users
-copy_rmsgw
-compile_rmsgw
-finish_rmsgw
+#create_users
+download_rmsgw
+#copy_rmsgw
+#compile_rmsgw
+#finish_rmsgw
 cd $START_DIR/rmsgw
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: RMS Gateway Installed." >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
