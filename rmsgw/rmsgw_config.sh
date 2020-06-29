@@ -337,12 +337,12 @@ echo
 # Install Logging
 echo -e "${Cyan}=== Configuring log files${Reset}"
 # Install Logging
-filename="/etc/rsyslog.d/60-rms.conf"
+filename="/etc/rsyslog.d/60-rmsgw.conf"
 if [ ! -f $filename ]; then
 	{
 	echo "# RMS Gate" 
-	echo "local0.info                    /var/log/rms"
-	echo "local0.debug                   /var/log/rms.debug"
+	echo "local0.info                    /var/log/rmsgw.log"
+	echo "local0.debug                   /var/log/rmsgw.debug"
 	echo "#local0.debug                  /dev/null" 
 	echo "# (End)"
 	} >> $filename
@@ -351,14 +351,14 @@ else
 	echo "file $filename already configured"
 fi
 
-filename="/etc/logrotate.d/rms"
+filename="/etc/logrotate.d/rmsgw"
 # Check if file exists.
 if [  -f "$filename" ] ; then
    echo "logrotate file is already configured."
 else
    echo "Creating $filename"
 cat > $filename <<EOT
-/var/log/rms {
+/var/log/rmsgw.log {
 	weekly
 	missingok
 	rotate 7
@@ -367,7 +367,7 @@ cat > $filename <<EOT
 	notifempty
 	create 640 root adm
 }
-/var/log/rms.debug {
+/var/log/rmsgw.debug {
 	weekly
 	missingok
 	rotate 7
