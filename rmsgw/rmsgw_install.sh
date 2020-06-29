@@ -96,7 +96,7 @@ if [ ! -d .git ]; then
 else
   cd $SRC_DIR\rmsgw-1	
   echo -e " Updating rmsgw-linux from $RMSGWREPO"
-  git pull $RMSGWREPO
+  git pull origin master
 fi
 echo -e "${Cyan}=== Download ${Green}Finished${Reset}"
 echo
