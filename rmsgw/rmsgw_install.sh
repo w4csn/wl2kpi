@@ -90,7 +90,7 @@ if [ ! -d $SRC_DIR ] ; then
    fi
 fi
 cd $SRC_DIR
-if [ ! -d $SRC_DIR\rmsgw-1 ]; then
+if [ ! -d $SRC_DIR/rmsgw-1 ]; then
   echo -e " Cloning rmsgw-linux from $RMSGWREPO"
   git clone $RMSGWREPO
 else
