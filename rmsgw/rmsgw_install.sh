@@ -163,6 +163,8 @@ num_cores=$(nproc --all)
 # Clean old binaries
 make clean > /dev/null
 echo -e " Compiling, Please Wait..."
+(./configure > $RMS_BUILD_FILE 2>&1) &
+spinner $!
 (make -j$num_cores > $RMS_BUILD_FILE 2>&1) &
 spinner $!
 echo " Finished!"
@@ -174,9 +176,9 @@ else
  echo
  #rm $RMS_BUILD_FILE
 fi
-echo -e " Installing, Please Wait..."
-(make install) &
-spinner $!
+#echo -e " Installing, Please Wait..."
+#(make install) &
+#spinner $!
 echo -e " Finished!"
 if [ $? -ne 0 ] ; then
   echo -e "\t${Red}ERROR${Reset}: Error during install."
