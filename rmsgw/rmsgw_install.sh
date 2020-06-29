@@ -94,7 +94,7 @@ if [ ! -d $SRC_DIR\rmsgw-1 ]; then
   echo -e " Cloning rmsgw-linux from $RMSGWREPO"
   git clone $RMSGWREPO
 else
-  cd $SRC_DIR\rmsgw-1	
+  cd $SRC_DIR/rmsgw-1	
   echo -e " Updating rmsgw-linux from $RMSGWREPO"
   git pull origin master
 fi
