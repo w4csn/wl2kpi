@@ -39,7 +39,7 @@ for pkg_name in `echo ${BUILDTOOLS_PKG_LIST}` ; do
 done
 if [ "$needs_pkg" = "true" ] ; then
    echo -e "\t ${Blue} Installing some build tool packages ${Reset}"
-   apt-get install -y -q $BUILDTOOLS_PKG_LIST
+   apt install -y -q $BUILDTOOLS_PKG_LIST
    if [ "$?" -ne 0 ] ; then
       echo -e "\t ${Red} Build tools package install failed. ${Reset}Please try this command manually:"
       echo -e "\t apt-get install -y $BUILDTOOLS_PKG_LIST"
@@ -67,7 +67,7 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    done
    if [ "$needs_pkg" = "true" ] ; then
       echo -e "Installing some non essential packages"
-      apt-get install -y -q $NONESSENTIAL_PKG_LIST
+      apt install -y -q $NONESSENTIAL_PKG_LIST
       if [ "$?" -ne 0 ] ; then
          echo -e "${Red}Non essential packages install failed. ${Reset}Please try this command manually:"
          echo "apt-get install -y $NONESSENTIAL_PKG_LIST"
