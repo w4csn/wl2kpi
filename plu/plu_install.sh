@@ -5,7 +5,7 @@
 #
 # Uncomment this statement for debug echos
 DEBUG=1
-DEFER_BUILD=1
+DEFER_BUILD=0
 
 scriptname="`basename $0`"
 UDR_INSTALL_LOGFILE="/var/log/udr_install.log"
