@@ -40,28 +40,31 @@ chk_root
 # OS Check
 
 DIST=$(lsb_release -si)
-VER=""
 read -d . VERSION < /etc/debian_version
+VER=""
 if [ $DIST != "Raspbian" ]; then
 	echo -e "${Red}INVALID OS${Reset}"
-	echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
+	echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
+	exit 1
 else
 	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
-		$VER="Jessie"
+		VER="Jessie"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
+		
 	elif [ $VERSION -eq "9" ]; then
-		$VER="Stretch"
+		VER="Stretch"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	elif [ $VERSION -eq "10" ]; then
-		$VER="Buster"
+		VER="Buster"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	else
-		echo -e "${Red}INVALID VERSION${Reset}"		
-		echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		echo -e "${Red}INVALID VERSION${Reset}"	
+		echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		exit 1
 	fi
 fi
-echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
+echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
 # move OS Check to core_functions, simplifies code
