@@ -204,7 +204,7 @@ if [ "$DEFER_BUILD" -ne 1 ] ; then
 
    popd > /dev/null
    else
-     echo "Build Defered"
+     echo "Build Deferred.... skipping!"
 fi
 
 echo "=== test files 'missing' & 'test-driver'"
