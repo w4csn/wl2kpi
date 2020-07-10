@@ -67,7 +67,7 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    done
    if [ "$needs_pkg" = "true" ] ; then
       echo -e "Installing some non essential packages"
-      apt install -y $NONESSENTIAL_PKG_LIST
+      apt install -y -q $NONESSENTIAL_PKG_LIST
       if [ "$?" -ne 0 ] ; then
          echo -e "${Red}Non essential packages install failed. ${Reset}Please try this command manually:"
          echo "apt-get install -y $NONESSENTIAL_PKG_LIST"
@@ -93,8 +93,8 @@ chk_root
 # Update OS
 if [ "$UPDATE_NOW" = "true" ] ; then
    echo -e "${Cyan} === Check for updates ${Reset}"
-   apt-get update -y -q
-   apt-get upgrade -y -q
+   apt update -y -q
+   apt upgrade -y -q
    echo -e "${Cyan}=== updates ${Green}finished ${Reset}"
    echo
 fi
