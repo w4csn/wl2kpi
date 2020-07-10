@@ -142,7 +142,7 @@ while ps a | awk '{print $1}' | grep -q "${pid}"; do
     sleep "${delay}"
     printf "\b\b\b\b\b\b"
 done
-#printf "    \b\b\b\b"
+printf "    \b\b\b\b"
 }
 
 

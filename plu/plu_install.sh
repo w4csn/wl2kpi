@@ -231,6 +231,6 @@ echo
 echo "paclink-unix install FINISHED"
 echo
 # install postfix
-source $CUR_DIR/postfix_install.sh
+#source $CUR_DIR/postfix_install.sh
 # install mutt
-source $CUR_DIR/mutt_install.sh $USER $CALLSIGN
+#source $CUR_DIR/mutt_install.sh $USER $CALLSIGN
