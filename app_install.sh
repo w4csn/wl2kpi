@@ -36,8 +36,7 @@ sleep 2
 
 # Be sure we're running as root
 chk_root
-is_raspbian
-sleep 5
+
 # OS Check
 
 DIST=$(lsb_release -si)
