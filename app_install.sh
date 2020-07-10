@@ -44,7 +44,7 @@ VER=""
 read -d . VERSION < /etc/debian_version
 if [ $DIST != "Raspbian" ]; then
 	echo -e "${Red}INVALID OS${Reset}"
-	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
+	echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
 else
 	$HAS_RASPBIAN=1
 	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
