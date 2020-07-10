@@ -46,7 +46,6 @@ if [ $DIST != "Raspbian" ]; then
 	echo -e "${Red}INVALID OS${Reset}"
 	echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
 else
-	$HAS_RASPBIAN=1
 	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
 		$VER="Jessie"
@@ -60,7 +59,6 @@ else
 	else
 		echo -e "${Red}INVALID VERSION${Reset}"		
 		echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
-		$HAS_RASPBIAN=0
 	fi
 fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
