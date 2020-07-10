@@ -109,7 +109,7 @@ return $HAS_WIFI
 }
 
 # function is_rasbian
-function is_rasbian() {
+function is_raspbian() {
 HAS_RASPBIAN=0
 DIST=$(lsb_release -si)
 VER=""
@@ -121,13 +121,13 @@ else
 	$HAS_RASPBIAN=1
 	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 	if [ $VERSION -eq "8" ]; then
-		$VER="Jessie"
+		VER="Jessie"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	elif [ $VERSION -eq "9" ]; then
-		$VER="Stretch"
+		VER="Stretch"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	elif [ $VERSION -eq "10" ]; then
-		$VER="Buster"
+		VER="Buster"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	else
 		echo -e "${Red}INVALID VERSION${Reset}"		
