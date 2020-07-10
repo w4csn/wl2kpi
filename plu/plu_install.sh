@@ -176,7 +176,7 @@ else
 fi
 
 ## For Debugging check conditional for building paclink-unix
-if [ -z "$DEFER_BUILD" ] ; then
+if [ "$DEFER_BUILD" -ne 1 ] ; then
    echo "=== building paclink-unix"
    echo "This will take a few minutes, output is captured to $(pwd)/paclink-unix/build_log.out"
 
@@ -203,6 +203,8 @@ if [ -z "$DEFER_BUILD" ] ; then
    if [ "$?" -ne 0 ] ; then echo "build failed at make install"; exit 1; fi
 
    popd > /dev/null
+   else
+     echo "Build Defered"
 fi
 
 echo "=== test files 'missing' & 'test-driver'"
