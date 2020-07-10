@@ -109,7 +109,7 @@ return $HAS_WIFI
 }
 
 # function is_rasbian
-function is_raspbian() {
+function is_raspbian {
 HAS_RASPBIAN=0
 DIST=$(lsb_release -si)
 VER=""
