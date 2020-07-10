@@ -87,19 +87,19 @@ a020d3)
 ;;
 a03111)
    echo
-   echo -e "${Green) Pi 4 Model B Mfg by Sony${Reset}"
+   echo -e "${Green) Pi 4 Model B 1GB Mfg by Sony${Reset}"
    echo
    HAS_WIFI=1
 ;;
 b03111)
    echo
-   echo -e "${Green) Pi 4 Model B Mfg by Sony${Reset}"
+   echo -e "${Green) Pi 4 Model B 2GB Mfg by Sony${Reset}"
    echo
    HAS_WIFI=1
 ;;
 c03111)
    echo
-   echo -e "${Green) Pi 4 Model B Mfg by Sony${Reset}"
+   echo -e "${Green) Pi 4 Model B 4GB Mfg by Sony${Reset}"
    echo
    HAS_WIFI=1
 ;;
