@@ -67,7 +67,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-# move OS Check to core_functions, simplifies code
+# FUTURE -- move OS Check to core_functions.sh, simplifies code
 # is_raspbian
 #if [ $? -ne "0" ] ; then
 #   echo "Not running Raspbian Jessie or Stretch ... exiting"
