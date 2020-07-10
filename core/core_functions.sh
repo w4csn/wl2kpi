@@ -123,7 +123,6 @@ else
 	if [ $VERSION -eq "8" ]; then
 		$VER="Jessie"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-		
 	elif [ $VERSION -eq "9" ]; then
 		$VER="Stretch"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
