@@ -127,9 +127,12 @@ else
 	elif [ $VERSION -eq "9" ]; then
 		$VER="Stretch"
 		echo -e "${Cyan}Version:${Green} $VER${Reset}"
+	elif [ $VERSION -eq "10" ]; then
+		$VER="Buster"
+		echo -e "${Cyan}Version:${Green} $VER${Reset}"
 	else
 		echo -e "${Red}INVALID VERSION${Reset}"		
-		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		$HAS_RASPBIAN=0
 	fi
 fi
