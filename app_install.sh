@@ -95,11 +95,11 @@ do
 	echo -e "${Green}ax25${Reset}    Install AX.25"
 	echo -e "${Red}Direwolf${Reset}    Install Direwolf"
 	echo -e "${Red}linbpq${Reset}    Install LinBPQ"
-	echo -e "${Green}rmsgw${Reset}   Install RMS Gateway - Linux"
+	echo -e "${Green}rmsgw${Reset}   Install RMS Gateway"
 	echo -e "${Red}plu${Reset}     Install paclink-unix  basic "
 	echo -e "${Red}pluimap${Reset} Install paclink-unix with imap "
-	echo -e "${Green}hostap${Reset}  Install WiFi Hotspot Rpi3 Only!"
-	echo -e "${Green}autohs${Reset}  Install Autohotspot Rpi3 Only!"
+	echo -e "${Green}hostap${Reset}  Install WiFi Hotspot, Rpi3 or later!"
+	echo -e "${Green}autohs${Reset}  Install Autohotspot, Rpi3 or later!"
 	echo ""
 	echo -e "${Green}bye${Reset}  EXIT PROGRAM"
 	echo ""
@@ -130,6 +130,20 @@ do
 			source ./ax25_config.sh
 			popd > /dev/null
 			echo -e "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
+			echo
+			read -n 1 -s -r -p "Press any key to continue"
+		;;
+		linbpq)
+			echo -e "${BluW}$scriptname: Install LinBPQ${Reset}"
+			# install pilinbpq
+			pushd $START_DIR/linbpq > /dev/null
+			scriptname="linbpq_install"
+			source ./linbpq_install.sh
+			scriptname="linbpq_config"
+			source ./linbpq_config.sh
+			popd > /dev/null
+			scriptname="`basename $0`"
+			echo -e "${BluW}$scriptname: LinBPQ installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
