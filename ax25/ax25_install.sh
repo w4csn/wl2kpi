@@ -103,10 +103,8 @@ echo -e "${Cyan}=== Libax25 - Runtime Library files${Reset}"
 echo -e " Preparing to create makefiles for Ax25 Libraries"
 cd /usr/local/src/ax25/$LIBAX25
 echo -e " Creating Makefiles for AX.25 Libraries, Please Wait..."
-(./autogen.sh > liberror.txt 2>&1) &
-spinner $!
-(./configure >> liberror.txt 2>&1) &
-spinner $!
+./autogen.sh > liberror.txt 2>&1
+./configure >> liberror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
 	echo -e "${Cyan}=== Libax25 Configuration ${Red}error${Reset} - See liberror.txt"
@@ -125,8 +123,7 @@ make clean > /dev/null
 # Compile ax25 libraries
 echo -e " Preparing to Compile AX.25 Libraries"
 echo -e " Compiling, Please Wait..."
-(make > liberror.txt 2>&1) &
-spinner $!
+make > liberror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]
     then
@@ -140,8 +137,7 @@ fi
 # Install ax25 libraries
 echo -e " Preparing to install AX.25 Libraries"
 echo -e " Installing, Please Wait..."
-(make install >> liberror.txt 2>&1) &
-spinner $!
+  make install >> liberror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
     echo -e " AX.25 Libraries Install ${Red}error${Reset} - See liberror.txt"
@@ -159,10 +155,8 @@ echo "/usr/local/lib" >> /etc/ld.so.conf && /sbin/ldconfig
 echo -e " Preparing to compile AX.25 Applications"
 cd /usr/local/src/ax25/$APPS
 echo -e " Creating Makefiles for AX.25 Applications, Please Wait..."
-(./autogen.sh >  appserror.txt 2>&1) &
-spinner $!
-(./configure >> appserror.txt 2>&1) &
-spinner $!
+./autogen.sh >  appserror.txt 2>&1
+./configure >> appserror.txt 2>&1
 echo -e " Finished!"
 
 # Remove old binaries
@@ -170,8 +164,8 @@ make clean > /dev/null
 
 # Compile Ax25-apps
 echo -e " Compiling AX.25 Applications, Please Wait..."
-(make > appserror.txt 2>&1) &
-spinner $!
+make > appserror.txt 2>&1
+
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
     echo -e " AX.25 Applications Compile ${Red}error${Reset} - see appserror.txt"
@@ -181,8 +175,7 @@ fi
 
 # Install Ax25-apps
 echo -e " Installing AX.25 Applications, Please Wait..."
-(make  install >> appserror.txt 2>&1) &
-spinner $!
+make  install >> appserror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
     echo -e " AX.25 Applications Install ${Red}error${Reset} - see appserror.txt"
@@ -197,10 +190,10 @@ fi
 echo -e " Preparing to Compile AX.25 Tools"
 cd /usr/local/src/ax25/$TOOLS
 echo -e " Creating Makefiles for AX.25 Tools, Please Wait..."
-(./autogen.sh > toolserror.txt 2>&1) &
-spinner $!
-(./configure >> toolserror.txt 2>&1) &
-spinner $!
+./autogen.sh > toolserror.txt 2>&1
+
+./configure >> toolserror.txt 2>&1
+
 echo -e " Finished!"
 
 # Remove old binaries
@@ -208,8 +201,7 @@ make clean > /dev/null
 
 # Compile Ax.25 tools
 echo -e " Compiling AX.25 Tools, Please Wait..."
-(make > toolserror.txt 2>&1) &
-spinner $!
+  make > toolserror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
     echo -e " AX.25 Tools Compile ${Red}error${Reset} - See toolserror.txt ${Reset}"
@@ -219,8 +211,7 @@ fi
 
 # Install Ax.25 tools
 echo -e " Installing AX.25 Tools. Please Wait..."
-(make install >> toolserror.txt 2>&1) &
-spinner $!
+  make install >> toolserror.txt 2>&1
 echo -e " Finished!"
 if [ $? -ne 0 ]; then
     echo -e " AX.25 Tools Install ${Red}error${Reset} - See toolserror.txt"
