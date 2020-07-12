@@ -14,6 +14,9 @@ source $START_DIR/core/core_functions.sh
 
 # ===== Main
 
+echo "$(date "+%Y %m %d %T %Z"): linbpq_install.sh: LinBPQInstallation Completed" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"): linbpq_install.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
-echo -e "${BluW}$scriptname: script FINISHED${Reset}"
+echo -e "${BluW} linbpq_install.sh: script FINISHED ${Reset}"
 echo
+# ===== End Main =====
