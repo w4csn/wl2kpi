@@ -150,6 +150,17 @@ systemctl is-active $service_name >/dev/null
    fi
 }
 
+function showContactMessage() {
+	echo "***"
+	echo "**** Something bad happened. "
+	echo "**** Contact snewton86@gmail.com"
+	echo -n
+	echo "Please Send the log from /var/log/wl2kpi_install.log"
+	echo "Thank you!"
+	echo "***"
+	return 0;
+}
+
 # function spinner -- BROKEN!!
 #function spinner() {
 #local -r pid="${1}"
