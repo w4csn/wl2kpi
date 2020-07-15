@@ -16,7 +16,11 @@ trap ctrl_c INT
 # ===== End of Functions list =====
 
 # ===== Main
+##Set the source folder for files needed to install BPQ
 SOURCE_DIR=$START_DIR/pilinbpq/src
+echo "* Reinstall IPUTILS-PING"
+sudo apt install --reinstall iputils-ping
+
 echo "$(date "+%Y %m %d %T %Z"): linbpq_install.sh: LinBPQInstallation Completed" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"): linbpq_install.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
