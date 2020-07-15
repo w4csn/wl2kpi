@@ -1,5 +1,5 @@
 #!/bin/bash
-# Installs/Updates LinBPQ
+# Installs PiLinBPQ
 # 
 #
 # Uncomment this statement for debug echos
