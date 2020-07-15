@@ -164,6 +164,7 @@ systemctl is-active $service_name >/dev/null
 #    printf "\b\b\b\b\b\b"
 #done
 #printf "    \b\b\b\b"
+#
 #}
 
 
