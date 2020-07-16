@@ -12,9 +12,9 @@ source $START_DIR/core/core_functions.sh
 UPDATE_NOW=false
 
 # Edit the following list with your favorite text editor and set NONESSENTIAL_PKG to true
-NONESSENTIAL_PKG_LIST="mg jed whois mc telnet tmux"
+NONESSENTIAL_PKG_LIST="mg jed whois mc telnet tmux "
 NONESSENTIAL_PKG=true # set this to true if you even want non essential packages installed
-BUILDTOOLS_PKG_LIST="rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev"
+BUILDTOOLS_PKG_LIST="rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev "
 REMOVE_PKG_LIST="triggeryhappy libreoffice minecraft-pi wolfram-engine scratch nuscratch"
 
 # trap ctrl-c and call function ctrl_c()
