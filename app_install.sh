@@ -94,7 +94,7 @@ do
 	echo -e "${Green}core${Reset}        Install CORE (Do this first!)"
 	echo -e "${Green}ax25${Reset}        Install AX.25"
 	echo -e "${Red}Direwolf${Reset}    Install Direwolf"
-	echo -e "${Green}pilinbpq${Reset}      Install PiLinBPQ"
+	echo -e "${Green}pibpq${Reset}      Install PiBPQ"
 	echo -e "${Green}rmsgw${Reset}       Install RMS Gateway"
 	echo -e "${Red}plu${Reset}         Install paclink-unix  basic "
 	echo -e "${Red}pluimap${Reset}     Install paclink-unix with imap "
@@ -134,16 +134,16 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		linbpq)
-			echo -e "${BluW}$scriptname: Install LinBPQ${Reset}"
-			# install pilinbpq
-			pushd $START_DIR/pilinbpq > /dev/null
-			scriptname="pilinbpq_install"
-			source ./pilinbpq_install.sh
-			scriptname="pilinbpq_config"
-			source ./pilinbpq_config.sh
+			echo -e "${BluW}$scriptname: Install PiBPQ${Reset}"
+			# install pibpq
+			pushd $START_DIR/pibpq > /dev/null
+			scriptname="pibpq_install"
+			source ./pibpq_install.sh
+			scriptname="pibpq_config"
+			source ./pibpq_config.sh
 			popd > /dev/null
 			scriptname="`basename $0`"
-			echo -e "${BluW}$scriptname: PiLinBPQ installation FINISHED${Reset}"
+			echo -e "${BluW}$scriptname: PiBPQ installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
