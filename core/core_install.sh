@@ -13,11 +13,9 @@ UPDATE_NOW=false
 
 # Edit the following list with your favorite text editor and set NONESSENTIAL_PKG to true
 NONESSENTIAL_PKG_LIST="mg jed whois mc telnet tmux"
-
 NONESSENTIAL_PKG=true # set this to true if you even want non essential packages installed
-
 BUILDTOOLS_PKG_LIST="rsync build-essential autoconf dh-autoreconf automake libtool git libasound2-dev libncurses5-dev"
-
+REMOVE_PKG_LIST="triggeryhappy libreoffice minecraft-pi wolfram-engine scratch nuscratch"
 
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
@@ -77,6 +75,33 @@ if [ "$NONESSENTIAL_PKG" = "true" ] ; then
    echo
 fi
 }
+
+function remove_pkgs()
+{
+# Remove unecessary packages
+echo -e "${Cyan}=== Removing Unecessary Pi Packages ${Reset}"
+needs_pkg=false
+for pkg_name in `echo ${REMOVE_PKG_LIST}` ; do
+   is_pkg_installed $pkg_name
+   if [ $? -ne 0 ] ; then
+      echo -e "\t ${Blue} core_install.sh: Will Remove $pkg_name program ${Reset}"
+      needs_pkg=true
+      break
+   fi
+done
+if [ "$needs_pkg" = "true" ] ; then
+   echo -e "\t ${Blue} Removing some Unecessary packages ${Reset}"
+   apt remove -y -q --purge $REMOVE_PKG_LIST
+   if [ "$?" -ne 0 ] ; then
+      echo -e "\t ${Red} Removal of "$REMOVE_PKG_LIST" package failed. ${Reset}Please try this command manually:"
+      echo -e "\t apt-get remove -y $BUILDTOOLS_PKG_LIST"
+      exit 1
+   fi
+   apt clean
+   apt autoremove -y
+fi
+echo -e "${Cyan}=== Unecessary packages Removed. ${Reset}"
+echo
 # ===== End Function List =====
 
 # ===== Main =====
@@ -90,11 +115,15 @@ echo
 # Be sure we're running as root
 chk_root
 
+# Remove Unecessary PI Packages
+Remove_pkgs
+
 # Update OS
 if [ "$UPDATE_NOW" = "true" ] ; then
    echo -e "${Cyan} === Check for updates ${Reset}"
-   apt update -y -q
-   apt upgrade -y -q
+   #apt update -y -q
+   #apt upgrade -y -q
+   apt dist-upgrade -y -q
    echo -e "${Cyan}=== updates ${Green}finished ${Reset}"
    echo
 fi

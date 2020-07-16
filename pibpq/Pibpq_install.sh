@@ -1,5 +1,5 @@
 #!/bin/bash
-# Installs PiLinBPQ
+# Installs/Updates PiBPQ
 # 
 #
 # Uncomment this statement for debug echos
@@ -7,6 +7,7 @@ DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 source $START_DIR/core/core_functions.sh
+linbpq_source=http://www.cantab.net/users/john.wiseman/Downloads
 # trap ctrl-c and call function ctrl_c()
 trap ctrl_c INT
 
