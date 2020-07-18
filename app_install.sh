@@ -77,7 +77,6 @@ echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}
 sleep 2
 
 is_rpi3()
-echo $HAS_WIFI
 echo $pi_result
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
