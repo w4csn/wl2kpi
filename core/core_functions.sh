@@ -64,28 +64,28 @@ a22042)
 a02082)
    echo
    echo -e "${Green} Pi 3 Model B Mfg by Sony UK${Reset}"
-   pi_result="Pi 3 Model B Mfg by Sony UK"
+   local pi_result='Pi 3 Model B Mfg by Sony UK'
    echo
    HAS_WIFI=1
 ;;
 a22082)
    echo
    echo -e "${Green} Pi 3 Model B Mfg by Embest${Reset}"
-   pi_result="Pi 3 Model B Mfg by Embest"
+   local pi_result='Pi 3 Model B Mfg by Embest'
    echo
    HAS_WIFI=1
 ;;
 a32082)
    echo
    echo -e "${Green} Pi 3 Model B Mfg by Sony Japan${Reset}"
-   pi_result=" Pi 3 Model B Mfg by Sony Japan"
+   local pi_result='Pi 3 Model B Mfg by Sony Japan'
    echo
    HAS_WIFI=1
 ;;
 a020d3)
    echo
    echo -e "${Green) Pi 3 Model B+ Mfg by Sony UK${Reset}"
-   pi_result="Pi 3 Model B+ Mfg by Sony UK"
+   local pi_result='Pi 3 Model B+ Mfg by Sony UK'
    echo
    HAS_WIFI=1
 ;;
@@ -109,7 +109,6 @@ c03111)
 ;;
 esac
 
-return $HAS_WIFI
 }
 
 # function is_rasbian
