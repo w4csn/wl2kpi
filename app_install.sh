@@ -10,8 +10,8 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/home/pi/Scripts/Temp/wl2kpi_install.log"
 START_DIR=$(pwd)
-#source $START_DIR/core/core_functions.sh
-.$START_DIR/core/core_functions.sh
+source $START_DIR/core/core_functions.sh
+
 CALLSIGN="N0ONE"
 APP_CHOICES="core, rmsgw, plu, pluimap, hostapd autohs"
 #APP_SELECT="hostapd"
