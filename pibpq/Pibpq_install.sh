@@ -11,6 +11,7 @@ source $START_DIR/core/core_functions.sh
 trap ctrl_c INT
 linbpq_source=http://www.cantab.net/users/john.wiseman/Downloads
 params_source=http://www.tnc-x.com
+RPI_PKG_LIST="python-dev python-serial python3-serial python-configparser pyserial tornado python-tornado multiprocessing  "
 ############
 ###Check for these files with linbpq_source
 ###pilinbpq
@@ -20,31 +21,39 @@ params_source=http://www.tnc-x.com
 ########################
 
 # ===== Function List =====
-
+function install_rasbpian_Packages()
+{
+# Install Apps
+echo -e "${Cyan}=== Check Build Tools ${Reset}"
+needs_pkg=false
+for pkg_name in `echo ${RPI_PKG_LIST}` ; do
+   is_pkg_installed $pkg_name
+   if [ $? -ne 0 ] ; then
+      echo -e "\t ${Blue} pibpq_install.sh: Will Install $pkg_name program ${Reset}"
+      needs_pkg=true
+      break
+   fi
+done
+if [ "$needs_pkg" = "true" ] ; then
+   echo -e "\t ${Blue} Installing some Rasbpian packages ${Reset}"
+   apt install -y -q --force=yes $RPI_PKG_LIST
+   if [ "$?" -ne 0 ] ; then
+      echo -e "\t ${Red} Rasbpian package install failed. ${Reset}Please try this command manually:"
+      echo -e "\t apt-get install -y $PIBPQ_PKG_LIST"
+      exit 1
+   fi
+fi
+echo -e "${Cyan}=== Raspbian packages installed. ${Reset}"
+echo
+}
 # ===== End of Functions list =====
 
 # ===== Main
 
 #### Install Necessary Packages for BPQ #####
-sudo apt-get install --reinstall iputils-ping
-sleep1
-sudo apt-get -y install ax25-tools
-sleep 1
-sudo apt-get -y install ax25-apps
-sleep 1
-sudo apt-get -y --force-yes install i2c-tools
-sleep 1
-sudo apt-get -y install libcap2-bin
-sleep 1
-sudo apt-get -y install libpcap0.8
-sleep 1
-sudo apt-get -y install libpcap-dev
-sleep 1
-sudo apt-get -y install minicom
-sleep 1
-sudo apt-get -y install conspy
-sleep 1
-sudo apt-get -y install vim
+
+install_rasbpian_Packages
+
 ####
 #### Get G8BPQ version of minicom ####
 sleep 1

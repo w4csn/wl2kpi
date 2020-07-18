@@ -94,6 +94,97 @@ function configure_axports()
 	sed -i -e "/k4gbb/ /k4gbb-1/$callsign/ " /etc/ax25/axports
 }
 
+function FinishAx25_Install
+{
+# Set permissions for /usr/local/sbin/ and /usr/local/bin
+cd /usr/local/sbin/
+chmod 4775 *
+cd /usr/local/bin/
+chmod 4775 *
+echo
+
+echo -e "${Cyan}=== Preparing to enable AX.25 modules${Reset}"
+grep ax25 /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   lsmod | grep -i ax25 > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+      echo -e " Enabling AX.25 module"
+      insmod /lib/modules/$(uname -r)/kernel/net/ax25/ax25.ko
+   fi
+echo "ax25" >> /etc/modules
+fi
+grep rose /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   lsmod | grep -i rose > /dev/null 2>&1
+   if [ $? -ne 0 ]; then
+      echo -e " Enabling rose module"
+      insmod /lib/modules/$(uname -r)/kernel/net/rose/rose.ko
+   fi
+echo "rose" >> /etc/modules
+fi
+grep mkiss /etc/modules > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+   echo -e " Enabling mkiss module"
+   echo -e "mkiss" >> /etc/modules
+fi
+echo -e "${Cyan}=== AX.25 Modules ${Green}Finished${Reset}"
+echo
+
+# Download start up files (Possibly remove - the script depends on specific initial configuration)
+#if [ "$GET_K4GBB" = "true" ]; then
+#   echo -e "=== Downloading Startup Files"
+#   cd $START_DIR/k4gbb
+#   wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25
+#   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25-up.pi
+#   wget -qt3 http://k4gbb.no-ip.info/docs/scripts/ax25-down
+#   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/axports
+#   wget -qt3 http://k4gbb.no-ip.info/docs/rpi/ax25d.conf
+#   wget -qt3 http://k4gbb.no.info/docs/rpi/calibrate_pi
+#   wget -qt3 http://k4gbb.no.info/docs/rpi/i2ckiss
+#   echo "=== Download Finished"
+#   echo
+#fi
+
+
+# Setup ax25 SysInitV (Deprecated - Do Not USE!)
+#if [ ! -f /etc/init.d/ax25 ]; then
+#   cp $START_DIR/k4gbb/ax25 /etc/init.d/ax25 
+#   if [ ! -L /usr/sbin/ax25 ]; then 
+#		ln -s /etc/init.d/ax25 /usr/sbin/ax25
+#   fi
+#   echo -e "... Setting up ax25 SysInitV"
+#   chmod 755 /etc/init.d/ax25
+	#   update-rc.d ax25 defaults
+#fi
+
+# Setup ax25 systemd service
+echo -e "${Cyan}=== Installing Startup Files${Reset}"
+if [ ! -f /etc/systemd/system/ax25.service ]; then
+   echo -e "Setting up ax25 systemd service"
+   cp $START_DIR/systemd/ax25.service /etc/systemd/system/ax25.service
+   systemctl enable ax25.service
+   systemctl daemon-reload
+   service ax25 start
+   chk_service ax25
+fi
+echo -e "${Cyan}=== Startup Files ${Green}Installed${Reset}"
+echo
+if [ -z "$(ls -A /etc/ax25)" ]; then
+   UPD_CONF_FILES=true
+fi
+if [ "$UPD_CONF_FILES" = "true" ]; then
+echo -e "${Cyan}=== Installing AX.25 Configuration Files${Reset}"
+cd /etc/ax25
+cp $START_DIR/k4gbb/ax25-up.pi /etc/ax25/ax25-up 
+cp $START_DIR/k4gbb/ax25-down /etc/ax25/ax25-down && chmod 755 ax25-*
+cp $START_DIR/k4gbb/axports /etc/ax25/axports
+cp $START_DIR/k4gbb/ax25d.conf /etc/ax25/ax25d.conf
+touch nrports rsports
+fi
+echo -e "${Cyan}=== Configuration Files ${Green}Installed${Reset}"
+echo
+echo -e "${Green}=== AX.25 Installation Finished${Reset}"
+}
 # ===== End Functions list =====
 
 # =====  Main =====
@@ -111,6 +202,9 @@ chk_config_dir
 if (( $# != 0 )) ; then
    CALLSIGN="$1"
 fi
+
+# Clean up and install startup files
+FinishAx25_Install
 
 # Configure axports
 echo -e "${Cyan}=== Configuring axports${Reset}"

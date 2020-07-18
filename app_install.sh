@@ -8,7 +8,7 @@
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
-WL2KPI_INSTALL_LOGFILE="/var/log/wl2kpi_install.log"
+WL2KPI_INSTALL_LOGFILE="/home/pi/Scripts/Temp/wl2kpi_install.log"
 START_DIR=$(pwd)
 source $START_DIR/core/core_functions.sh
 CALLSIGN="N0ONE"
@@ -28,6 +28,14 @@ BluW='\e[37;44m'
 
 # ===== Main =====
 clear
+# Create Temp dir for logs and flags if it doesn't exist.
+if [ -d /home/pi/Scripts/Temp ];
+then
+	echo \n
+else
+	mkdir /home/pi/Scripts/Temp
+fi
+
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
@@ -93,6 +101,7 @@ do
 	echo "" 
 	echo -e "${Green}core${Reset}        Install CORE (Do this first!)"
 	echo -e "${Green}ax25${Reset}        Install AX.25"
+	echo -e "${Green}ax25c${Reset}        Configure AX.25 (Don't do this if installing PiBPQ)"
 	echo -e "${Red}Direwolf${Reset}    Install Direwolf"
 	echo -e "${Green}pibpq${Reset}      Install PiBPQ"
 	echo -e "${Green}rmsgw${Reset}       Install RMS Gateway"
@@ -127,11 +136,22 @@ do
 			# install ax25 files
 			pushd $START_DIR/ax25 > /dev/null
 			source ./ax25_install.sh
-			source ./ax25_config.sh
+			
 			popd > /dev/null
 			echo -e "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
 			echo
 			read -n 1 -s -r -p "Press any key to continue"
+		;;
+		ax25c)
+			echo -e "${BluW}$scriptname: Configure AX.25${Reset}"
+			# Configure ax25 files
+			pushd $START_DIR/ax25 > /dev/null
+			source ./ax25_config.sh
+			popd > /dev/null
+			echo -e "${BluW}$scriptname: AX.25 installation FINISHED${Reset}"
+			echo
+			read -n 1 -s -r -p "Press any key to continue"	
+		
 		;;
 		linbpq)
 			echo -e "${BluW}$scriptname: Install PiBPQ${Reset}"

@@ -340,8 +340,7 @@ Configure_libax25
 # Compile source
 Compile_Ax25
 
-# Clean up and install startup files
-FinishAx25_Install
+
 
 cd $START_DIR/ax25
 echo "$(date "+%Y %m %d %T %Z"): ax25_install.sh: AX.25 Installation Completed" >> $WL2KPI_INSTALL_LOGFILE
