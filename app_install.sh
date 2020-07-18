@@ -76,7 +76,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-is_rpi3
+is_rpi3()
 echo $HASWIFI
 echo $pi_result
 
