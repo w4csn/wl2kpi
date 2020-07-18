@@ -75,8 +75,9 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-is_rpi3($HASWIFI)
-echo $$HASWIFI
+is_rpi3
+echo $HASWIFI
+echo $pi_result
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
 # is_raspbian
