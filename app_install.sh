@@ -31,7 +31,7 @@ clear
 # Create Temp dir for logs and flags if it doesn't exist.
 if [ -d /home/pi/Scripts/Temp ];
 then
-	echo \n
+	echo
 else
 	mkdir /home/pi/Scripts/Temp
 fi
@@ -74,7 +74,10 @@ else
 fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
-is_rpi3
+
+is_rpi3 > /dev/null 2>&1
+echo $?
+
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
 # is_raspbian
 #if [ $? -ne "0" ] ; then
