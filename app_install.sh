@@ -26,6 +26,30 @@ Cyan='\e[36m'
 White='\e[37m'
 BluW='\e[37;44m'
 
+
+
+# ===== Main =====
+clear
+# Create Temp dir for logs and flags if it doesn't exist.
+if [ -d /home/pi/Scripts/Temp ];
+then
+	echo
+else
+	mkdir /home/pi/Scripts/Temp
+fi
+LOG_DIR="/home/pi/Scripts/Temp"
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
+echo
+sleep 2
+
+# Be sure we're running as root
+chk_root
+
+# Hardware Check
+
+#is_rpi_valid
 #function is_rpi_valid {
 	CPUINFO_FILE="/proc/cpuinfo"
 	piver="$(grep "Revision" $CPUINFO_FILE)"
@@ -77,29 +101,6 @@ BluW='\e[37;44m'
 		echo 
 	fi
 #}
-
-# ===== Main =====
-clear
-# Create Temp dir for logs and flags if it doesn't exist.
-if [ -d /home/pi/Scripts/Temp ];
-then
-	echo
-else
-	mkdir /home/pi/Scripts/Temp
-fi
-LOG_DIR="/home/pi/Scripts/Temp"
-echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
-echo
-echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
-echo
-sleep 2
-
-# Be sure we're running as root
-chk_root
-
-# Hardware Check
-
-#is_rpi_valid
 exit 1
 # OS Check
 
