@@ -32,7 +32,7 @@ function is_rpi_valid {
 	echo "Stupid"
 }
 # function is_rpi3
-function is_rpi3
+function is_rpi3 {
 
 CPUINFO_FILE="/proc/cpuinfo"
 HAS_WIFI=0
