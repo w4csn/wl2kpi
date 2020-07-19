@@ -54,7 +54,10 @@ is_rpi_valid
 is_os_valid
 if [ $HAS_RASPBIAN -ne "0" ] ; then
 	echo "Not running Raspbian Jessie or Stretch ... exiting!"
+	echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${RED}Exiting!...${Reset}"
 	exit 1
+else
+	echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
 fi
 exit 1
 
