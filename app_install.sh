@@ -48,10 +48,10 @@ sleep 2
 chk_root
 
 # Hardware Check
-is_rpi_valid 
+chk_rpi_hardware 
 
 # OS Check
-is_os_valid
+chk_rpi_os
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
