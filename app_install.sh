@@ -38,7 +38,7 @@ else
 	mkdir /home/pi/Scripts/Temp
 fi
 LOG_DIR="/home/pi/Scripts/Temp"
-echo "$(date "+%x: %T"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%x %T"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
 echo
@@ -84,7 +84,7 @@ exit 1
 
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
-# is_raspbian
+is_raspbian
 #if [ $? -ne "0" ] ; then
 #   echo "Not running Raspbian Jessie or Stretch ... exiting"
 #   exit 1

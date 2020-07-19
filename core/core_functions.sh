@@ -15,11 +15,11 @@ function chk_root {
 # Check for Root
 if [[ $EUID != 0 ]] ; then
    echo "$scriptname: -- User Must be Root... Exiting!"
-   echo "$(date "+%Y %m %d %T %Z"): $scriptname: # User Must be Root... Exiting!" >> $WL2KPI_INSTALL_LOGFILE
+   echo "$(date "+%x %T"): $scriptname: # User Must be Root... Exiting!" >> $WL2KPI_INSTALL_LOGFILE
    exit 1
 else 
 	echo "$scriptname: User is Root... Proceeding!"
-	echo "$(date "+%Y %m %d %T %Z"): $scriptname: # User is Root... Proceeding!" >> $WL2KPI_INSTALL_LOGFILE
+	echo "$(date "+%x %T"): $scriptname: # User is Root... Proceeding!" >> $WL2KPI_INSTALL_LOGFILE
 fi
 }
 
