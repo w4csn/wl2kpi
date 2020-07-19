@@ -7,7 +7,6 @@
 # Uncomment this statement for debug echos
 DEBUG=1
 set -u # Exit if there are uninitialized variables.
-set -a
 scriptname="`basename $0`"
 WL2KPI_INSTALL_LOGFILE="/home/pi/Scripts/Temp/wl2kpi_install.log"
 START_DIR=$(pwd)
