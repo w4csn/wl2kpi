@@ -85,21 +85,21 @@ function chk_rpi_hardware {
 		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B+ Mfg by Sony UK${Reset}"
 		HARDWARE="RPi 3 Model B+ Mfg by Sony UK"
 	fi
-	if [ $piver == $ver4B1]; then
+	if [ $piver == $ver4B1 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 1GB Mfg by Sony${Reset}"
 		HARDWARE="RPi 4 Model B 1GB Mfg by Sony"
 	fi
-	if [ $piver == $ver4B2]; then
+	if [ $piver == $ver4B2 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 2GB Mfg by Sony${Reset}"
 		HARDWARE="RPi 4 Model B 2GB Mfg by Sony"
 	fi
-	if [ $piver == $ver4B3]; then
+	if [ $piver == $ver4B3 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
 		echo
