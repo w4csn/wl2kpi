@@ -47,8 +47,8 @@ chk_root
 
 # Hardware Check
 pi_result='Test'
-is_rpi_valid is_ok
-echo $is_ok
+is_rpi_valid
+echo $version_ok
 echo "$pi_result"
 is_rpi3
 exit 1
