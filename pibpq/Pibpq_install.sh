@@ -59,9 +59,11 @@ echo
 install_rasbpian_Packages
 
 ####
+#### Set user to pi
+sudo su pi
 #### Get G8BPQ version of minicom ####
 sleep 1
-cd /home/pi
+cd ~/
 rm -Rf minicom
 rm -f in*
 mkdir minicom
@@ -70,15 +72,16 @@ wget -o /dev/null $linbpq_source/piminicom.zip
 unzip piminicom.zip
 chmod +x piminicom
 wget -o /dev/null $linbpq_source/minicom.scr
-cd /home/pi
+cd ~/
 ####
 #### GIT: install GPIO wiringPi tools
 	git clone git://git.drogon.net/wiringPi
     cd wiringPi
     ./build
 ####
+exit
 #### Get TNC-PI Files
-wget -o /dev/null $_source_url/params.zip
+wget -o /dev/null $$params_source/params.zip
 #### wget -o /dev/null http://www.tnc-x.com/params.zip
 unzip params.zip
 chmod +x pitnc*
