@@ -61,29 +61,29 @@ function is_rpi_valid {
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Cyan}Hardware:${Green} Pi 3 Model B Mfg by Sony UK${Reset}"
-		HARDWARE="Pi 3 Model B Mfg by Sony UK"
+		echo -e "${Cyan}Hardware:${Green}RPi 3 Model B Mfg by Sony UK${Reset}"
+		HARDWARE="RPi 3 Model B Mfg by Sony UK"
 	fi
 	if [ $piver == $ver3B2 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Embest${Reset}"
-		HARDWARE="Pi 3 Model B Mfg by Embest"
+		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B Mfg by Embest${Reset}"
+		HARDWARE="RPi 3 Model B Mfg by Embest"
 	fi
 	if [ $piver == $ver3B3 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Sony Japan${Reset}"
-		HARDWARE="Pi 3 Model B Mfg by Sony Japan"
+		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B Mfg by Sony Japan${Reset}"
+		HARDWARE="RPi 3 Model B Mfg by Sony Japan"
 	fi
 	if [ $piver == $ver3B4 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B+ Mfg by Sony UK${Reset}"
-		HARDWARE="Pi 3 Model B+ Mfg by Sony UK"
+		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B+ Mfg by Sony UK${Reset}"
+		HARDWARE="RPi 3 Model B+ Mfg by Sony UK"
 	fi
 }
 function is_os_valid {
