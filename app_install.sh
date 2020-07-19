@@ -49,7 +49,7 @@ chk_root
 
 # Hardware Check
 is_rpi_valid 
-exit 1
+
 # OS Check
 
 DIST=$(lsb_release -si)
@@ -80,7 +80,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-
+exit 1
 
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
