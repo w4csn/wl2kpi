@@ -46,8 +46,8 @@ sleep 2
 chk_root
 
 # Hardware Check
-pi_result='Test'
-is_rpi3()
+#pi_result='Test'
+#is_rpi3()
 
 # OS Check
 
