@@ -87,7 +87,6 @@ function is_rpi_valid {
 	fi
 }
 function is_os_valid {
-	HAS_RASPBIAN=0
 	DIST=$(lsb_release -si)
 	VER=""
 	read -d . VERSION < /etc/debian_version
@@ -96,7 +95,6 @@ function is_os_valid {
 		echo "A RASPBIAN OS IS REQUIRED. PLEASE USE A FRESH IMAGE."
 		exit 1
 	else
-		HAS_RASPBIAN=1
 		echo -e "${Cyan}OS:${Green} $DIST${Reset}"
 		if [ $VERSION -eq "8" ]; then
 			VER="Jessie"
@@ -115,7 +113,6 @@ function is_os_valid {
 	fi
 	echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
 	sleep 2
-fi
 }
 
 # function is_rpi3
