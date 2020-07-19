@@ -59,28 +59,28 @@ function is_rpi_valid {
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Sony UK${Reset}"
+		echo -e "${Cyan}Hardware:${Green} Pi 3 Model B Mfg by Sony UK${Reset}"
 		echo 
 	fi
 	if [ $piver == $ver3B2 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Embest${Reset}"
+		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Embest${Reset}"
 		echo 
 	fi
 	if [ $piver == $ver3B3 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Sony Japan${Reset}"
+		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Sony Japan${Reset}"
 		echo 
 	fi
 	if [ $piver == $ver3B4 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
-		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
+		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B+ Mfg by Sony UK${Reset}"
 		echo 
 	fi
 }
