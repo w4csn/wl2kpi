@@ -46,6 +46,8 @@ sleep 2
 # Be sure we're running as root
 chk_root
 
+# Hardware Check
+is_rpi3
 # OS Check
 
 DIST=$(lsb_release -si)
@@ -76,8 +78,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-pi_result='Test'
-is_rpi3
+
 
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
