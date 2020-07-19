@@ -8,8 +8,11 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 source $START_DIR/core/core_functions.sh
 
+# trap ctrl-c and call function ctrl_c()
+trap ctrl_c INT
+
 # do upgrade, update outside of script since it can take some time
-UPDATE_NOW=false
+UPDATE_NOW="true"
 
 # Edit the following list with your favorite text editor and set NONESSENTIAL_PKG to true
 NONESSENTIAL_PKG_LIST="mg jed whois mc telnet tmux screen minmicom conspy vin"
@@ -124,9 +127,10 @@ sudo apt-get install --reinstall iputils-ping
 
 # Update OS
 if [ "$UPDATE_NOW" = "true" ] ; then
-   echo -e "${Cyan} === Check for updates ${Reset}"
-   #apt update -y -q
-   #apt upgrade -y -q
+   echo -e "${Cyan} === Check for Rasobuan updates ${Reset}"
+   echo -e "${Cyan} === Be Patient... This can take some time ${Reset}"
+   apt update -y -q
+   apt upgrade -y -q
    apt dist-upgrade -y -q
    echo -e "${Cyan}=== updates ${Green}finished ${Reset}"
    echo
@@ -155,10 +159,10 @@ echo
 
 # If Using RPi3 reconfigure BT
 echo -e "${Cyan}=== Configure BT for ttyS0 ${Reset}"
-is_rpi3 > /dev/null 2>&1
-if [ $? -eq "0" ]; then
-   echo -e "Not running on an RPi 3... Skipping BT Configuration"
+if [ $HAS_BT -eq 0 ]; then
+   echo -e "$HARDWARE... Skipping BT Configuration"
 else
+	echo -e "$HARDWARE... Configuring BT"
 	# Modify hciattach.service to configure BT for /dev/ttyS0
 	if [ ! -e /lib/systemd/system/hciattach.service ]; then
 		cp $START_DIR/systemd/hciattach.service /lib/systemd/system/hciattach.service

@@ -57,9 +57,11 @@ function chk_rpi_hardware {
 	ver4B6="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
 	IS_RPI_VALID=0
 	HAS_WIFI=0
+	HAS_BT=0
 	if [ $piver == $ver3B1 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}RPi 3 Model B Mfg by Sony UK${Reset}"
 		HARDWARE="RPi 3 Model B Mfg by Sony UK"
@@ -67,6 +69,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver3B2 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=0
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B Mfg by Embest${Reset}"
 		HARDWARE="RPi 3 Model B Mfg by Embest"
@@ -74,6 +77,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver3B3 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B Mfg by Sony Japan${Reset}"
 		HARDWARE="RPi 3 Model B Mfg by Sony Japan"
@@ -81,6 +85,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver3B4 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B+ Mfg by Sony UK${Reset}"
 		HARDWARE="RPi 3 Model B+ Mfg by Sony UK"
@@ -88,6 +93,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver4B1 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 1GB Mfg by Sony${Reset}"
 		HARDWARE="RPi 4 Model B 1GB Mfg by Sony"
@@ -95,6 +101,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver4B2 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 2GB Mfg by Sony${Reset}"
 		HARDWARE="RPi 4 Model B 2GB Mfg by Sony"
@@ -102,6 +109,7 @@ function chk_rpi_hardware {
 	if [ $piver == $ver4B3 ]; then
 		IS_RPI_VALID=1
 		HAS_WIFI=1
+		HAS_BT=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 4GB Mfg by Sony${Reset}"
 		HARDWARE="RPi 4 Model B 4GB Mfg by Sony"

@@ -8,8 +8,6 @@ set -u # Exit if there are uninitialized variables.
 scriptname="`basename $0`"
 source $START_DIR/core/core_functions.sh
 
-# trap ctrl-c and call function ctrl_c()
-trap ctrl_c INT
 
 # ===== Function List =====
 function chng_passwd
