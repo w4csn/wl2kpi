@@ -183,3 +183,4 @@ function showContactMessage() {
 
 
 # ===== End Function List =====
+export -f is_rpi3
