@@ -50,11 +50,10 @@ chk_root
 # Hardware Check
 
 #is_rpi_valid
-#function is_rpi_valid {
+function is_rpi_valid {
 	CPUINFO_FILE="/proc/cpuinfo"
 	piver="$(grep "Revision" $CPUINFO_FILE)"
 	piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
-	echo $piver
 	ver1B0="000d"     #### Pi  Model B Mfg by Egoman
 	ver1B1="000e"
 	ver2="000f"
@@ -101,7 +100,8 @@ chk_root
 		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
 		echo 
 	fi
-#}
+}
+is_rpi_valid 
 exit 1
 # OS Check
 
