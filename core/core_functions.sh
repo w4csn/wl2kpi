@@ -29,7 +29,7 @@ return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/
 
 # function is_rpi_valid
 function is_rpi_valid {
-	echo"Stupid"
+	echo "Stupid"
 }
 # function is_rpi3
 function is_rpi3
