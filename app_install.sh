@@ -26,7 +26,7 @@ Cyan='\e[36m'
 White='\e[37m'
 BluW='\e[37;44m'
 
-function is_rpi_valid {
+#function is_rpi_valid {
 	CPUINFO_FILE="/proc/cpuinfo"
 	piver="$(grep "Revision" $CPUINFO_FILE)"
 	piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
@@ -76,7 +76,7 @@ function is_rpi_valid {
 		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
 		echo 
 	fi
-}
+#}
 
 # ===== Main =====
 clear
