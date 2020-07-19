@@ -80,7 +80,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-exit 1
+
 
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
@@ -89,7 +89,7 @@ is_raspbian
 #   echo "Not running Raspbian Jessie or Stretch ... exiting"
 #   exit 1
 #fi
-
+exit 1
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
