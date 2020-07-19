@@ -49,6 +49,7 @@ chk_root
 pi_result='Test'
 is_rpi_valid
 echo "$pi_result"
+is_rpi3
 exit 1
 # OS Check
 
