@@ -113,7 +113,7 @@ function is_os_valid {
 		fi
 	fi
 	if [ $HAS_RASPBIAN -ne "0" ] ; then
-		echo "Not running Raspbian Jessie or Stretch ... exiting!"
+		echo "Not running Raspbian Jessie, Stretch or Buster ... exiting!"
 		echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Red}Exiting!...${Reset}"
 		exit 1
 	else
