@@ -76,7 +76,8 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-pi_ok=$(is_rpi3())
+pi_result=''
+is_rpi3()
 
 
 # FUTURE -- move OS Check to core_functions.sh, simplifies code
