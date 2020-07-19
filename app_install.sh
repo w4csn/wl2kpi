@@ -38,7 +38,7 @@ else
 	mkdir /home/pi/Scripts/Temp
 fi
 LOG_DIR="/home/pi/Scripts/Temp"
-echo "$(date "%x: %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%x: %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW} $scriptname: script STARTED \t${Reset}"
 echo
