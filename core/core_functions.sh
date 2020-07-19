@@ -28,57 +28,57 @@ return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/
 }
 
 # function is_rpi_valid
-function is_rpi_valid {
-	CPUINFO_FILE="/proc/cpuinfo"
-	piver="$(grep "Revision" $CPUINFO_FILE)"
-	piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
-	ver1B0="000d"     #### Pi  Model B Mfg by Egoman
-	ver1B1="000e"
-	ver2="000f"
-	ver3="0010"
-	ver4="0013"     ### Raspberry PI B + v2
-	ver2B1="a01040" 	### Pi 2 Model B Mfg by Sony UK
-	ver2B2="a01041"   ### Pi 2 Model B Mfg by Sony UK
-	ver2B3="a21041"   ### Pi 2 Model B Mfg by Embest
-	ver2B4="a22032"   ### Dylan's Raspberry PI 2B
-	ver2B5="a22042"	### Pi 2 Model B with BCM2837 Mfg by Embest
-	ver3B1="a02082"	### Pi 3 Model B Mfg by Sony UK
-	ver3B2="a22082"   ### Pi 3 Model B Mfg by Embest
-	ver3B3="a32082"   ### Pi 3 Model B Mfg by Sony Japan
-	ver3B4="a020d3"   ### Pi 3 Model B+ Mfg by Sony UK
-	ver7="900092"   #### Raspberry PI Zero
-	ver4B1="a03111"   #### Pi 4 Model B 1GB Mfg by Sony
-	ver4B2="b03111"   #### Pi 4 Model B 2GB Mfg by Sony
-	ver4B4="c03111"   #### Pi 4 Model B 4GB Mfg by Sony$
-	ver4B5="a03112"   #### Raspberry Pi 4 Model B Rev 1.2 1GB
-	ver4B6="b03112"   #### Raspberry Pi 4 Model B Rev 1.2 2GB
-	ver4B7="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
-	version_ok=0
-	if [ $piver == ver3B1 ]; then
-		version_ok=1
-		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Sony UK${Reset}"
-		echo 
-	fi
-	if [ $piver == ver3B2 ]; then
-		version_ok=1
-		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Embest${Reset}"
-		echo 
-	fi
-	if [ $piver == ver3B3 ]; then
-		version_ok=1
-		echo
-		echo -e "${Red} Pi 3 Model B Mfg by Sony Japan${Reset}"
-		echo 
-	fi
-	if [ $piver == ver3B4 ]; then
-		version_ok=1
-		echo
-		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
-		echo 
-	fi
-}
+#function is_rpi_valid {
+#	CPUINFO_FILE="/proc/cpuinfo"
+#	piver="$(grep "Revision" $CPUINFO_FILE)"
+#	piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
+#	ver1B0="000d"     #### Pi  Model B Mfg by Egoman
+#	ver1B1="000e"
+#	ver2="000f"
+#	ver3="0010"
+#	ver4="0013"     ### Raspberry PI B + v2
+#	ver2B1="a01040" 	### Pi 2 Model B Mfg by Sony UK
+#	ver2B2="a01041"   ### Pi 2 Model B Mfg by Sony UK
+#	ver2B3="a21041"   ### Pi 2 Model B Mfg by Embest
+#	ver2B4="a22032"   ### Dylan's Raspberry PI 2B
+#	ver2B5="a22042"	### Pi 2 Model B with BCM2837 Mfg by Embest
+#	ver3B1="a02082"	### Pi 3 Model B Mfg by Sony UK
+#	ver3B2="a22082"   ### Pi 3 Model B Mfg by Embest
+#	ver3B3="a32082"   ### Pi 3 Model B Mfg by Sony Japan
+#	ver3B4="a020d3"   ### Pi 3 Model B+ Mfg by Sony UK
+#	ver7="900092"   #### Raspberry PI Zero
+#	ver4B1="a03111"   #### Pi 4 Model B 1GB Mfg by Sony
+#	ver4B2="b03111"   #### Pi 4 Model B 2GB Mfg by Sony
+#	ver4B4="c03111"   #### Pi 4 Model B 4GB Mfg by Sony$
+#	ver4B5="a03112"   #### Raspberry Pi 4 Model B Rev 1.2 1GB
+#	ver4B6="b03112"   #### Raspberry Pi 4 Model B Rev 1.2 2GB
+#	ver4B7="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
+#	version_ok=0
+#	if [ $piver == ver3B1 ]; then
+#		version_ok=1
+#		echo
+#		echo -e "${Red} Pi 3 Model B Mfg by Sony UK${Reset}"
+#		echo 
+#	fi
+#	if [ $piver == ver3B2 ]; then
+#		version_ok=1
+#		echo
+#		echo -e "${Red} Pi 3 Model B Mfg by Embest${Reset}"
+#		echo 
+#	fi
+#	if [ $piver == ver3B3 ]; then
+#		version_ok=1
+#		echo
+#		echo -e "${Red} Pi 3 Model B Mfg by Sony Japan${Reset}"
+#		echo 
+#	fi
+#	if [ $piver == ver3B4 ]; then
+#		version_ok=1
+#		echo
+#		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
+#		echo 
+#	fi
+#}
 
 # function is_rpi3
 function is_rpi3 {
