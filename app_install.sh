@@ -49,46 +49,13 @@ chk_root
 
 # Hardware Check
 is_rpi_valid 
-is_raspbian
+
 # OS Check
-
-#DIST=$(lsb_release -si)
-#read -d . VERSION < /etc/debian_version
-#VER=""
-#if [ $DIST != "Raspbian" ]; then
-#	echo -e "${Red}INVALID OS${Reset}"
-#	echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
-#	exit 1
-#else
-#	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
-#	if [ $VERSION -eq "8" ]; then
-#		VER="Jessie"
-#		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-#		
-#	elif [ $VERSION -eq "9" ]; then
-#		VER="Stretch"
-#		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-#	elif [ $VERSION -eq "10" ]; then
-#		VER="Buster"
-#		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-#	else
-#		echo -e "${Red}INVALID VERSION${Reset}"	
-#		echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
-#		exit 1
-#	fi
-#fi
-#echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
-#sleep 2
-
-
-
-
-# FUTURE -- move OS Check to core_functions.sh, simplifies code
-#is_raspbian
-#if [ $? -ne "0" ] ; then
-#   echo "Not running Raspbian Jessie or Stretch ... exiting"
-#   exit 1
-#fi
+is_os_valid
+if [ $HAS_RASPBIAN -ne "0" ] ; then
+	echo "Not running Raspbian Jessie or Stretch ... exiting!"
+	exit 1
+fi
 exit 1
 
 # Check if there are any args on command line
