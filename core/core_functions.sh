@@ -78,6 +78,7 @@ function is_rpi_valid {
 		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
 		echo 
 	fi
+	eval $version_ok
 }
 # function is_rpi3
 function is_rpi3 {
