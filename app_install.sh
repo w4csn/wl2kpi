@@ -49,7 +49,7 @@ chk_root
 
 # Hardware Check
 is_rpi_valid 
-
+is_raspbian
 # OS Check
 
 DIST=$(lsb_release -si)
