@@ -100,7 +100,7 @@ while true
 do
 	clear
 	echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER${Reset}"
-	echo $pi_result
+	echo -e "$pi_result"
 	echo ""
 	echo -e "\t${Cyan}wl2kpi Install Menu${Reset}"
 	echo ""
