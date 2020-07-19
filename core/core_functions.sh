@@ -93,7 +93,8 @@ function is_os_valid {
 	read -d . VERSION < /etc/debian_version
 	if [ $DIST != "Raspbian" ]; then
 		echo -e "${Red}INVALID OS${Reset}"
-		echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		echo "A RASPBIAN OS IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		exit 1
 	else
 		HAS_RASPBIAN=1
 		echo -e "${Cyan}OS:${Green} $DIST${Reset}"
@@ -107,18 +108,13 @@ function is_os_valid {
 			VER="Buster"
 			echo -e "${Cyan}Version:${Green} $VER${Reset}"
 		else
-			echo -e "${Red}INVALID VERSION${Reset}"		
-			echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
-			HAS_RASPBIAN=0
+			echo "Not running Raspbian Jessie, Stretch or Buster ... exiting!"
+			echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Red}Exiting!...${Reset}"
+			exit 1
 		fi
 	fi
-	if [ $HAS_RASPBIAN -ne 1 ] ; then
-		echo "Not running Raspbian Jessie, Stretch or Buster ... exiting!"
-		echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Red}Exiting!...${Reset}"
-		exit 1
-	else
-		echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
-		sleep 2
+	echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
+	sleep 2
 fi
 }
 
