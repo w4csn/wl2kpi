@@ -54,6 +54,7 @@ chk_root
 	CPUINFO_FILE="/proc/cpuinfo"
 	piver="$(grep "Revision" $CPUINFO_FILE)"
 	piver="$(echo -e "${piver##*:}" | tr -d '[[:space:]]')"
+	echo $piver
 	ver1B0="000d"     #### Pi  Model B Mfg by Egoman
 	ver1B1="000e"
 	ver2="000f"
