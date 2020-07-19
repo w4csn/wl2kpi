@@ -77,25 +77,25 @@ chk_root
 	ver4B6="b03112"   #### Raspberry Pi 4 Model B Rev 1.2 2GB
 	ver4B7="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
 	version_ok=0
-	if [ $piver == ver3B1 ]; then
+	if [ $piver == $ver3B1 ]; then
 		version_ok=1
 		echo
 		echo -e "${Red} Pi 3 Model B Mfg by Sony UK${Reset}"
 		echo 
 	fi
-	if [ $piver == ver3B2 ]; then
+	if [ $piver == $ver3B2 ]; then
 		version_ok=1
 		echo
 		echo -e "${Red} Pi 3 Model B Mfg by Embest${Reset}"
 		echo 
 	fi
-	if [ $piver == ver3B3 ]; then
+	if [ $piver == $ver3B3 ]; then
 		version_ok=1
 		echo
 		echo -e "${Red} Pi 3 Model B Mfg by Sony Japan${Reset}"
 		echo 
 	fi
-	if [ $piver == ver3B4 ]; then
+	if [ $piver == $ver3B4 ]; then
 		version_ok=1
 		echo
 		echo -e "${Red} Pi 3 Model B+ Mfg by Sony UK${Reset}"
