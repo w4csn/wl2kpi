@@ -98,11 +98,8 @@ sleep 2
 chk_root
 
 # Hardware Check
-pi_result='Test'
-is_rpi_valid
-echo $version_ok
-echo "$pi_result"
-is_rpi3
+
+#is_rpi_valid
 exit 1
 # OS Check
 
