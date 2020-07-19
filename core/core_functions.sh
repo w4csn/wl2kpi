@@ -62,24 +62,28 @@ function is_rpi_valid {
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green} Pi 3 Model B Mfg by Sony UK${Reset}"
+		HARDWARE="Pi 3 Model B Mfg by Sony UK"
 	fi
 	if [ $piver == $ver3B2 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Embest${Reset}"
+		HARDWARE="Pi 3 Model B Mfg by Embest"
 	fi
 	if [ $piver == $ver3B3 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B Mfg by Sony Japan${Reset}"
+		HARDWARE="Pi 3 Model B Mfg by Sony Japan"
 	fi
 	if [ $piver == $ver3B4 ]; then
 		VERSION_OK=1
 		HAS_WIFI=1
 		echo
 		echo -e "${Cyan}Hardware:${Green}  Pi 3 Model B+ Mfg by Sony UK${Reset}"
+		HARDWARE="Pi 3 Model B+ Mfg by Sony UK"
 	fi
 }
 function is_os_valid {
@@ -89,7 +93,7 @@ function is_os_valid {
 	read -d . VERSION < /etc/debian_version
 	if [ $DIST != "Raspbian" ]; then
 		echo -e "${Red}INVALID OS${Reset}"
-		echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
+		echo "RASPBIAN JESSIE, STRETCH or BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
 	else
 		HAS_RASPBIAN=1
 		echo -e "${Cyan}OS:${Green} $DIST${Reset}"
@@ -108,8 +112,14 @@ function is_os_valid {
 			HAS_RASPBIAN=0
 		fi
 	fi
-	echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
-	sleep 2
+	if [ $HAS_RASPBIAN -ne "0" ] ; then
+		echo "Not running Raspbian Jessie or Stretch ... exiting!"
+		echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Red}Exiting!...${Reset}"
+		exit 1
+	else
+		echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
+		sleep 2
+fi
 }
 
 # function is_rpi3
@@ -195,38 +205,6 @@ c03111)
 ;;
 esac
 
-}
-
-# function is_rasbian
-function is_raspbian {
-HAS_RASPBIAN=0
-DIST=$(lsb_release -si)
-VER=""
-read -d . VERSION < /etc/debian_version
-if [ $DIST != "Raspbian" ]; then
-	echo -e "${Red}INVALID OS${Reset}"
-	echo "RASPBIAN JESSIE or STRETCH IS REQUIRED. PLEASE USE A FRESH IMAGE."
-else
-	$HAS_RASPBIAN=1
-	echo -e "${Cyan}OS:${Green} $DIST${Reset}"
-	if [ $VERSION -eq "8" ]; then
-		VER="Jessie"
-		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-	elif [ $VERSION -eq "9" ]; then
-		VER="Stretch"
-		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-	elif [ $VERSION -eq "10" ]; then
-		VER="Buster"
-		echo -e "${Cyan}Version:${Green} $VER${Reset}"
-	else
-		echo -e "${Red}INVALID VERSION${Reset}"		
-		echo "RASPBIAN JESSIE, STRETCH OR BUSTER IS REQUIRED. PLEASE USE A FRESH IMAGE."
-		$HAS_RASPBIAN=0
-	fi
-fi
-echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER : ${Green}Proceeding...${Reset}"
-sleep 2
-return $HAS_RASBIAN
 }
 
 # function chk_service

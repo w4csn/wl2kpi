@@ -52,7 +52,6 @@ is_rpi_valid
 
 # OS Check
 is_os_valid
-
 exit 1
 
 # Check if there are any args on command line
@@ -66,6 +65,7 @@ fi
 while true
 do
 	clear
+	echo -e "${Cyan}Hardware${Reset} is ${Green}$HARDWARE${Reset}"
 	echo -e "${Cyan}OS${Reset} is ${Green}$DIST $VER${Reset}"
 	echo ""
 	echo -e "\t${Cyan}wl2kpi Install Menu${Reset}"
