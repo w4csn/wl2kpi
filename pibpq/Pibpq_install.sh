@@ -49,7 +49,11 @@ echo
 # ===== End of Functions list =====
 
 # ===== Main
-
+clear
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo
+echo -e "${BluW}$scriptname: script STARTED ${Reset}"
+echo
 #### Install Necessary Packages for BPQ #####
 
 install_rasbpian_Packages
@@ -83,11 +87,10 @@ sudo mv pitnc* /usr/local/sbin
 
 ##Set the source folder for files needed to install BPQ
 SOURCE_DIR=$START_DIR/pilinbpq/src
-echo "* Reinstall IPUTILS-PING"
-sudo apt install --reinstall iputils-ping
 
-echo "$(date "+%Y %m %d %T %Z"): pibpq_install.sh: PIBPQInstallation Completed" >> $WL2KPI_INSTALL_LOGFILE
-echo "$(date "+%Y %m %d %T %Z"): pipq_install.sh: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+
+echo "$(date "+%Y %m %d %T %Z"): $scriptname: PIBPQInstallation Completed" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%Y %m %d %T %Z"):$scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW} pibpq_install.sh: script FINISHED ${Reset}"
 echo

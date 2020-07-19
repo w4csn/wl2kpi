@@ -219,7 +219,7 @@ do
 			read -n 1 -s -r -p "Press any key to continue"
 		;;
 		bye)
-			echo "$(date "+%Y %m %d %T %Z"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+			echo "$(date "+%x %T"): $scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 			echo
 			echo -e "${BluW} $scriptname: script FINISHED \t${Reset}"
 			echo
@@ -227,7 +227,7 @@ do
 		;;
 		*)
 			echo "Undefined app, must be one of $APP_CHOICES"
-			echo "$(date "+%Y %m %d %T %Z"): $scriptname: ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
+			echo "$(date "+%x %T"): $scriptname: ($APP_SELECT) script ERROR, undefined app" >> $WL2KPI_INSTALL_LOGFILE
 		;;
 	esac
 done

@@ -111,7 +111,7 @@ echo
 # ===== Main =====
 clear
 sleep 2
-echo "$(date "+%Y %m %d %T %Z"): core_install.sh: script START" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%x %T"): $scriptname: script START" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_install.sh: script STARTED ${Reset}"
 echo
@@ -207,7 +207,7 @@ echo -e "${Cyan}=== Remove Serial Console ${Green}Finished. ${Reset}"
 echo
 
 cd $START_DIR/core
-echo "$(date "+%Y %m %d %T %Z"): core_install: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
+echo "$(date "+%x %T"): core_install: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE
 echo
 echo -e "${BluW}core_install.sh: script FINISHED ${Reset}"
 echo
