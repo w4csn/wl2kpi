@@ -47,7 +47,9 @@ sleep 2
 chk_root
 
 # Hardware Check
+pi_result='Test'
 is_rpi3
+
 # OS Check
 
 DIST=$(lsb_release -si)
