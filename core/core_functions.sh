@@ -27,8 +27,8 @@ function is_pkg_installed() {
 return $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed" >/dev/null 2>&1)
 }
 
-# function is_rpi3
-function is_rpi3 {
+# function is_rpi_valid
+function is_rpi_valid
 
 CPUINFO_FILE="/proc/cpuinfo"
 HAS_WIFI=0
