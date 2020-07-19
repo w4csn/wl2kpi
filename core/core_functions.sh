@@ -51,10 +51,10 @@ function is_rpi_valid {
 	ver7="900092"   #### Raspberry PI Zero
 	ver4B1="a03111"   #### Pi 4 Model B 1GB Mfg by Sony
 	ver4B2="b03111"   #### Pi 4 Model B 2GB Mfg by Sony
-	ver4B4="c03111"   #### Pi 4 Model B 4GB Mfg by Sony$
-	ver4B5="a03112"   #### Raspberry Pi 4 Model B Rev 1.2 1GB
-	ver4B6="b03112"   #### Raspberry Pi 4 Model B Rev 1.2 2GB
-	ver4B7="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
+	ver4B3="c03111"   #### Pi 4 Model B 4GB Mfg by Sony
+	ver4B4="a03112"   #### Raspberry Pi 4 Model B Rev 1.2 1GB
+	ver4B5="b03112"   #### Raspberry Pi 4 Model B Rev 1.2 2GB
+	ver4B6="c03112"   #### Raspberry Pi 4 Model B Rev 1.2 4GB
 	VERSION_OK=0
 	HAS_WIFI=0
 	if [ $piver == $ver3B1 ]; then
@@ -84,6 +84,27 @@ function is_rpi_valid {
 		echo
 		echo -e "${Cyan}Hardware:${Green}  RPi 3 Model B+ Mfg by Sony UK${Reset}"
 		HARDWARE="RPi 3 Model B+ Mfg by Sony UK"
+	fi
+	if [ $piver == $ver4B1]; then
+		VERSION_OK=1
+		HAS_WIFI=1
+		echo
+		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 1GB Mfg by Sony${Reset}"
+		HARDWARE="RPi 4 Model B 1GB Mfg by Sony"
+	fi
+	if [ $piver == $ver4B2]; then
+		VERSION_OK=1
+		HAS_WIFI=1
+		echo
+		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 2GB Mfg by Sony${Reset}"
+		HARDWARE="RPi 4 Model B 2GB Mfg by Sony"
+	fi
+	if [ $piver == $ver4B3]; then
+		VERSION_OK=1
+		HAS_WIFI=1
+		echo
+		echo -e "${Cyan}Hardware:${Green}  RPi 4 Model B 4GB Mfg by Sony${Reset}"
+		HARDWARE="RPi 4 Model B 4GB Mfg by Sony"
 	fi
 }
 function is_os_valid {
