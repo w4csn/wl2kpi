@@ -76,7 +76,7 @@ fi
 echo -e "${Cyan}OS${Reset} is ${Yellow}$DIST $VER: ${Green}Proceeding...${Reset}"
 sleep 2
 
-pi_result=''
+pi_result='Test'
 is_rpi3()
 
 
