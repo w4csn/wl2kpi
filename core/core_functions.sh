@@ -17,7 +17,7 @@ if [[ $EUID != 0 ]] ; then
    echo "$scriptname: Must be root"
    exit 1
 else 
-	echo "scriptname: User is root"
+	echo "$scriptname: User is root"
 fi
 }
 
