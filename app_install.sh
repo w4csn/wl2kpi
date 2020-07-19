@@ -52,7 +52,6 @@ is_rpi_valid
 
 # OS Check
 is_os_valid
-exit 1
 
 # Check if there are any args on command line
 if (( $# != 0 )) ; then
