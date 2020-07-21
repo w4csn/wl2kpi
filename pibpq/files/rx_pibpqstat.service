@@ -1,0 +1,10 @@
+[Unit]
+Description=RX PIBPQSTAT Background Service see /var/log/rx_pibpqstat_service.log
+
+[Service]
+ExecStart=/usr/local/sbin/rx_tarpnstat.sh
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

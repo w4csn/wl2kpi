@@ -1,0 +1,10 @@
+[Unit]
+Descripton=rPI shutdown background service see /var/log/tarpn_pwrman.log/tarpn_pwrman
+
+[Service]
+ExecStart=/usr/local/sbin/pi_shutdown_background.sh
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
