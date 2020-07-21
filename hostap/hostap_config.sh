@@ -146,6 +146,7 @@ echo "=== Config hostap on an RPi 3"
 chk_root
 
 # Make sure we're running a Raspberry Pi 3
+chk_rpi_hardware >/dev/null 2>&1
 if [ $HAS_WIFI -eq 0 ] ; then
    echo -e "Must a Pi with WIFI: $HARDWARE  ... exiting"
    exit 1
