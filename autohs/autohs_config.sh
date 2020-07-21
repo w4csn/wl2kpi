@@ -57,10 +57,8 @@ echo
 chk_root
 
 # Make sure we're running a Raspberry Pi 3
-is_rpi3
-if [ $? -eq "0" ] ; then
-   echo -e "Not running on an RPi 3 ... ${Yellow}exiting${Reset}"
-   echo
+if [ $HAS_WIFI -eq 0 ] ; then
+   echo -e "Must a Pi with WIFI: $HARDWARE  ... exiting"
    exit 1
 fi
 

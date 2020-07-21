@@ -63,7 +63,7 @@ install_rasbpian_Packages
 sudo su pi
 #### Get G8BPQ version of minicom ####
 sleep 1
-cd ~/
+cd ~
 rm -Rf minicom
 rm -f in*
 mkdir minicom
@@ -72,7 +72,7 @@ wget -o /dev/null $linbpq_source/piminicom.zip
 unzip piminicom.zip
 chmod +x piminicom
 wget -o /dev/null $linbpq_source/minicom.scr
-cd ~/
+cd ~
 ####
 #### GIT: install GPIO wiringPi tools
 	git clone git://git.drogon.net/wiringPi
@@ -80,17 +80,56 @@ cd ~/
     ./build
 ####
 exit
-#### Get TNC-PI Files
-wget -o /dev/null $$params_source/params.zip
+
+#### Unpack TNC-PI Files and move to /usr/local/sbin
+cd $START_DIR/pibpq/src/params.zip
 #### wget -o /dev/null http://www.tnc-x.com/params.zip
 unzip params.zip
 chmod +x pitnc*
 sudo mv pitnc* /usr/local/sbin
 ####
 
-##Set the source folder for files needed to install BPQ
-SOURCE_DIR=$START_DIR/pilinbpq/src
+#### Create a BPQ directory below /home/pi
+echo "##### create bpq folder below /home/pi"
+sudo su pi
+cd ~
+rm -rf linbpq
+mkdir linbpq
+chmod 755 linbpq
+cd linbpq
+exit
 
+##### Get RUNBPQ.SH
+echo "##### get RUNBPQ"
+cd $START_DIR/pibpq/src
+if [ -f runbpq.sh ]; then
+   chown pi:pi runpbq.sh
+   chmod +x runbpq.sh
+   sudo cp runbpq.sh /usr/local/sbin/runbpq.sh;
+   echo "copy runpq.sh to /usr/local/bin"
+   echo "#####"
+else
+   echo "ERROR: Failure retrieving runbpq.sh.  Something is wrong"
+   echo "ERROR: Aborting"
+   exit 1;
+fi
+
+#### Get bpq32.cfg
+echo "##### get bpq32.cfg"
+cd $START_DIR/pibpq/src
+if [ -f bpq32.cfg ];
+then
+	cp bpq32 /home/pi/linbpq
+	cd home/pi/linbpq
+	chmod 0644 bpq32
+	chown pi:pi bpq32
+	echo "##### bpq32.cfg found successfully"
+   echo "#####"
+else
+   echo "ERROR: Failure retrieving bpq32.cfg.  Something is wrong"
+   echo "ERROR: Aborting"
+   exit 1;
+fi
 
 echo "$(date "+%Y %m %d %T %Z"): $scriptname: PIBPQInstallation Completed" >> $WL2KPI_INSTALL_LOGFILE
 echo "$(date "+%Y %m %d %T %Z"):$scriptname: script FINISHED" >> $WL2KPI_INSTALL_LOGFILE

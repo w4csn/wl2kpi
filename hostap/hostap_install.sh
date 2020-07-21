@@ -29,9 +29,9 @@ echo -e "=== Install hostap on an RPi 3"
 # Be sure we're running as root
 chk_root
 
-is_rpi3
-if [ $? -eq "0" ] ; then
-   echo -e "Not running on an RPi 3 ... exiting"
+chk_rpi_hardware >/dev/null 2>&1
+if [ $HAS_WIFI -eq 0 ] ; then
+   echo -e "Must a Pi with WIFI: $HARDWARE  ... exiting"
    exit 1
 fi
 
