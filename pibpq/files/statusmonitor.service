@@ -1,0 +1,10 @@
+[Unit]
+Description=STATUS MONITOR background service see /var/log/statusmonitorservice.log
+
+[Service]
+ExecStart=/usr/local/sbin/statusmonitor.sh
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
