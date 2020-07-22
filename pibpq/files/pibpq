@@ -1,26 +1,17 @@
 #!/bin/bash
-#### This script is copyright Tadd Torborg KA2DEW 2014, 2015, 2016, 2017
-##### Please leave this copyright notice in the document and if changes are made,
-##### indicate at the copyright notice as to what the intent of the changes was.
-##### Thanks. - Tadd Raleigh NC
+## This script should be called pibpq and should be located in /usr/local/sbin.
+## If the PIBPQ script is not found there, then complain and exit.
 
-############## This script should be called tarpn and should be located in /usr/local/sbin.
-############## If the TARPN script is not found there, then complain and exit.
+LOGFILE="/var/log/pibpq.log"
 
-TARPNCOMMANDLOGFILE="/var/log/tarpn_command.log"
-#    sudo echo -n "ERROR0: source URL file not found.  wait 1200 seconds starting @" >> TARPNCOMMANDLOGFILE
-#    sudo date >> TARPNCOMMANDLOGFILE
-
-
+### Functions ###
 ####### This function asks the user to type in a new source URL
 ask_user_for_source_url() {
 
    cd ~
    rm -f /home/pi/test.txt;
    echo "test" > /home/pi/test.txt
-
    rm -f /home/pi/testfile_txt;
-
    _success=0
 
    while [ $_success -eq 0 ];
@@ -133,143 +124,14 @@ echo_sleep_countdown() {
 }
 
 
-################################################################################################
-################################################################################################
-################################################################################################
-################################################################################################
-echo "#### =TARPN vb027 =" #  --VERSION--########################################################
-################################################################################################
-################################################################################################
-################################################################################################
-################################################################################################
-### v117 -- add help messages for i2c-assign  i2c-get  and i2c-set
-### v118  2014-11-20 -- in sysinfo, check for flags showing last updateapps
-### v119  2014-11-20 -- minor tweak to sysinfo
-### v120  2014-12-15 --- in URL command, echo the current URL before asking for the new one.
-### v121  2014-12-28 -- Shorten some delays from 1 sec to 0.5 sec.  Add gpio -v to sysinfo.
-### v122  2015-02-21 -- fix bug in TARPN URL command.  Was deleting testfile before grepping it.  Also using wrong filename.
-### v123  2015-02-24 -- add Raspberry PI 2 B _value4="a21041"
-### v124  2015-03-01 -- improve display of FLAGS for install date and last-updateapps when called for in SYSINFO command.
-### v125  2015-04-15 -- support new version a01041 from a Raspberry PI 2 B v1.1 board.
-### v126  2015-05-07 -- Don't mention node.ini if we don't have to.  Refer to TARPN CONFIG instead.
-### v127  2015-05-08 -- Add uname -a   to sysinfo and to a naked tarpn run.   Also cat /etc/*-release
-### v128  2015-05-30 -- add a PS command.  Add dpkg to sysinfo
-### v130  2015-06-22 -- add support for 0013 Raspberry PI B+
-### v131  2015-08-04 -- Add perfupdater and percommand to /etc/inittab when system start is commanded.
-### v132  2015-08-30 -- debugging service start and service stop around perf operation
-### v133  2015-09-20 -- add /etc/inittab dump to sysinfo
-### vJ001 2015-10-15 -- Start work on JESSIE version.
-### vJ002 2015-10-15 -- Properly testing for JESSIE Raspbian and for tarpn.service
-### vJ003 2015-10-15 -- now testing for BPQ running as a service in background.ini
-### vJ004 2015-10-15 -- fix bug where background.ini's file path was wrong.
-### vJ005 2015-10-15 -- update the code for TARPN TEST to properly look for service enable.
-### vJ006 2015-10-15 -- update the code for service start/stop to use background.ini
-### vJ007 2015-10-15 -- fixed bug where test for service running expected tarpn_background.sh to have quit
-### vJ008 2015-10-15 -- change handling of last-updateapps in tarpn sysinfo
-### vJ009 2015-10-15 -- delete temp parsing file when done with it.
-### vJ010 2015-10-17 -- add touch /forcefsck during shutdown and during reboot to cause FSCK to run at startup
-### vJ011 2016-01-10 -- add support for Raspberry PI Zero
-### vJ012 2016-02-14 -- turn off dpkg in sysinfo -- add pi-shutdown service log
-### vJ013 2016-02-24 -- add printed comments around i2c-get and i2c-set
-### vJ014 2016-02-29 -- If PITNC utilities are not around when tarpn i2c is run, download the utilities.
-### vJ015 2016-02-29 -- do touch forcefsck every time this is run, if it doesn't already exist
-### vJ016 2016-03-04 -- Add support for Raspberry PI 3 B
-### vJ017 2016-03-04 -- Add support for Red B+ Chinese, old TNC-PI
-### vJ018 2016-03-09 -- rearrange the SYSINFO output
-### vJ019 2016-03-24 -- Add support for another version of Raspberry PI 3 B
-### vJ020 2016-06-16 -- SYSINFO now plays out /var/log/tarpn_pwrman.log and /var/log/tarpn.log, instead of the /usr/local/etc logs
-### vJ021 2016-06-19 -- fix Version number display.  Fix SYSINFO top where it was supposed to do more CRs and instead was printing the \ and n chars.
-### vJ022 2016-06-19 -- SYSINFO -- show comment before running df and ps.
-### vJ023 2016-06-24 -- Add information to the UPDATEAPPS error message about running while node is up
-### vJ024 2016-07-18 -- Add -w option (line wrap) to minicomm call for tarpn host
-### vJ025 2017-02-11 -- in SYSINFO add playout of the home.service and home.log files.  Add home start and home stop commands
-### vJ026 2017-02-12 -- Fix bug in tarpn home start
-### vJ027 2017-02-12 -- Put a check to make sure the UPDATEAPPS command isn't spelled UPDATE APPS
-### vJ028 2017-02-13 -- Add command nc4fg to download the latest version of Fin's program
-### vJ029 2017-02-14 -- Move nc4fg to tarpn home update.  add tarpn-home version to tarpn home and to sysinfo
-### vJ030 2017-03-07 -- Fix typo in error message for i2c-set
-### vJ031 2017-03-26 -- Add a few CPU and OS items to the TARPN SYSINFO.
-### vJ032 2017-07-09 -- If TARPN HOME ini file doesn't exist.  Try to create it.
-### vJ033 2017-06-11 -- Change the port for tarpn host to com7 from com4.
-### vJ034 2017-06-11 -- Work on trying to create /usr/local/etc/home.ini for the first time.  Permission denied?
-### vJ035 2017-06-21 -- add comment about i2c-assign and the Raspberry PI 3
-### vJ036 2017-06-23 -- Fix bug in my check for Raspberry PI 3 in i2c-assign
-### vJ037 2017-07-10 -- Add a test for home_background.sh   If not exist, print failure when "tarpn home" is typed.
-### vJ038 2017-07-29 -- working on adding support for home v1.5  -- add check for python configparser
-### vJ039 2017-07-29 -- home v1.5 support - fix a minor bug in the python configparser check.
-### vJ040 2017-07-30 -- debug parsing in TARPN HOME command.
-### vJ041 2017-08-05 -- add run-before / all-good startup function.
-### vJ042 2017-08-05 -- Improve the TARPN prompt.
-### vJ043 2017-08-11 -- Fix tarpn service start and stop description in tarpn help. Change expected max temp to 67 from 85.
-### vJ044 2017-08-13 -- Add board-recognition for Raspberry PI 2 v1.2
-### vJ045 2017-08-13 -- attempt to fix error in line 828, is raspberry_pi_3  for tarpn i2c-assign
-### vJ046 2017-08-19 -- Fix incomplete-installation instructions.  remove unused functions.  Add delays to the source-url display.
-### vs001 2017-08-22 -- Update for STRETCH OS
-### vs002 2017-08-22 -- Remove an unnecessary error message in TARPN HOME
-### vs003 2017-08-24 -- Fix SYSINFO so it doesn't stop after printing each service status.
-### vs004 2017-09-11 -- Add a couple of more models of Raspberry PI
-### vs005 2017-09-13 -- Move Raspberry PI check and supported PI check outside of the ag.dat  section
-### vs006 2017-09-14 -- print pretty-name of the OS when user types  tarpn
-### vs007 2017-09-18 -- Fix bug where hardware type check was done inside of the Already Started jump.
-### vs008 2017-09-18 -- add text identification to board type "0010"  B+ v1.2
-### vs008 2017-09-18 -- Insist that I2C-ASSIGN use addresses from 3 to 9.
-### vs009 2017-09-18 -- Add message to i2c-assign that raspi-config might fix it serial port access.
-### vs010 2017-09-21 -- don't let i2c-set put the i2c address to 0, 1 or 2.
-### vs011 2017-09-25 -- changes from vs010 that were not propertly versioned or checked in.
-### vs012 2017-09-27 -- update tarpn-tx to use port 8010 -- this also changed in boilerplate.cfg
-### vs013 2018-01-22 -- add /opt/vc/bin/vcgencmd version  GET FIRMWARE VERSION to SYSINFO
-### vs014 2018-03-19 -- add support for Raspberry PI 3 B+
-### vs015 2018-05-05 -- print Ethernet MAC address in tarpn <nosubcommand> response -- add tarpn lan  command
-### vs016 2018-05-05 -- add output of the SDcard unix epoch time. 
-### vs017 2018-05-19 -- rearrange TARPN HOME command so error messages are generated before the command is parsed. 
-### vs018 2018-07-23 -- move TARPN HOST minicom port to com8 from com7
-### vs019 2018-11-22 -- add statusmonitor service to sysinfo
-### vs020 2018-12-09 -- when running tarpn test, check for node.ini and url file before calling runbpq.  
-### vs021 2018-12-15 -- listen and linktest commands
-### vs022 2019-01-12 -- allow "root" to run this script but put a message about diagnostics only.  If not pi or root, abort. 
-### vs023 2019-01-13 -- delete remove_me_to_stop_server.txt, stopping TARPN-HOME, before any killall linbpq 
-### vs024 2019-01-14 -- Slow down the process of killing the node until 5 seconds after both setting background to off and deleting the delete-me-to-stop-tarpn-home file.
-### vs025 2019-01-22 -- Add TARPN HOME BUMP
-### vs026 2019-02-10 -- Remove useless tarpn lan command and add in tarpn ip command which will print the ip address of the Raspberry PI  
-### vs027 2019-02-11 -- Verify that the remove-me file is present before deleting it in 5 different places. 
-### vs028 2019-02-18 -- add the tarpn i2c-beep command.
-### vs029 2019-04-19 -- add a tarpn command log
-### vs030 2019-04-19 -- fix bugs in accessing the tarpn command log
-### vs031 2019-05-11 -- update i2c-assign so it doesn't use a parameter and it calls for a reboot twice (using pi_shutdown.sh) to write if raspberry pi 3
-### vs032 2019-05-11 -- do kludge at startup to see if i2c-assign needs to complete
-### vs033 2019-05-12 -- get rid of kludge at startup.  Make a new command  tarpn finish-i2c, to complete the i2c-assign process. 
-### vs034 2019-05-12 -- fix some permissions in finish-i2c
-### vs035 2019-05-12 -- if command is 'tarpn', echo the tarpn version # to the log file.
-### vs036 2019-05-13 -- Change the text for the i2c-assign command and finish-i2c commands.
-### vb001 2019-06-26 -- support Buster.
-### vb002 2019-07-03 -- add support for new PI board:  _valueB="a03111"   #### Raspberry PI 4B from PiHUT July 2019
-### vb003 2019-07-12 -- add support for new PI board:  _value4B2="b03111"   #### Raspberry PI 4B 2GB  Change a03111 to _value4B1 for the 1GB PI 4B
-### vb004 2019-07-13 == remove a bad character that got into the script.
-### vb005 2019-10-15 -- stop trying to get the version # from TARPN HOME.
-### vb006 2019-10-16 -- invert the error message for using tarpn from user root vs other-than-pi user.
-### vb007 2019-10-19 -- fix bug in i2c-assign where an extra 'fi' had crept in.      
-### vb008 2019-10-29 -- testing bug-fix in i2c-assign where mod of /boot/config.txt was not effective.      
-### vb009 2019-10-29 -- bug-fix completed i2c-assign, i hope.      
-### vb010 2019-10-30 -- remove some excess debug dialogs "ls /home/pi/config.*" outputs to log file  These were causing errors to the user terminal      
-### vb011 2019-10-30 -- add a 'async-get' command to read the registers from an async TNC-PI
-### vb012 2019-10-30 -- add a 'async-get' command to the tarpn help output. 
-### vb013 2019-11-10 -- add some diagnostic output in front of tarpn test 
-### vb014 2019-11-10 -- Improve the diagnostic output.
-### vb015 2019-11-16 -- add "sudo" in front of a couple of i2c commands in i2c-assign
-### vb016 2019-11-26 -- another stupid bug.  Also, use /dev/serial0 for talking to async if model 3 or newer   
-### vb017 2020-01-25 -- Add Raspberry PI 4B 4GB and add output of Device-tree/model in sysinfo.
-### vb018 2020-02-08 -- fix error message in i2c-set. 
-### vb019 2020-02-19 -- add the output of ls  /dev | grep -ettyACM -ettyUSB --color=never to tarpn test   
-### vb020 2020-05-03 -- Add a USB command to do ls  /dev | grep -ettyACM -ettyUSB --color=never 
-### vb021 2020-05-23 -- add more info to the tarpn IP command 
-### vb022 2020-05-24 -- improve the tarpn usb command 
-### vb024 2020-05-27 -- Add raspberry PI 4B V1.2 support 
-### vb025 2020-05-27 -- Add to generic help response to show the usb command
-### vb026 2020-05-27 -- improve USB scan in tarpn-test
-### vb027 2020-07-08 -- add daemon command.  
+
+ 
+### End Functios###
 
 
-################ START OF THE TARPN script
+####Main###
+echo "#### =PIBPQ v1 =" 
+### v1 2020-07-221 -- Initial Version. 
 
 ## Make sure the raspberry PI does an FSCK when it boots next time.
 sudo touch /forcefsck
@@ -279,7 +141,7 @@ sudo touch /forcefsck
 if [ $(whoami) != "pi" ]; then
    echo "Hello user " $(whoami);
    if [ $(whoami) != "root" ]; then
-      echo "The TARPN script should only be run by user pi"
+      echo "The PIBPQ script should only be run by user pi"
       exit 1
    else
       echo "Be careful starting this script from root.  Only do diagnostics from root!"
@@ -308,9 +170,6 @@ sudo rm -f $TEMP_PARSE_FILE
 
 
 ################################# SKIP THIS IF WE"VE BEEN HERE BEFORE ####################
-################################# SKIP THIS IF WE"VE BEEN HERE BEFORE ####################
-################################# SKIP THIS IF WE"VE BEEN HERE BEFORE ####################
-################################# SKIP THIS IF WE"VE BEEN HERE BEFORE ####################
 
 if [ -f /usr/local/etc/ag.dat ];
 then
@@ -319,7 +178,7 @@ else
    #echo "we have not run before"
    #echo "... checking some stuff"
 
-        if [ -f /usr/local/sbin/tarpn ];
+        if [ -f /usr/local/sbin/pibpq ];
         then
                 echo -n
         else
@@ -331,7 +190,7 @@ else
 
 ############## This script should be called tarp and should be located in /usr/local/sbin.
 ############## If another script was run, then complain and exit.
-        _name="/usr/local/sbin/tarpn"
+        _name="/usr/local/sbin/pibpq"
         if [ $_name == $0 ];
         then
                 echo -n
@@ -350,44 +209,10 @@ else
                 echo -n
         else
                 echo "ERROR#2!  /usr/local/sbin/runbpq.sh is missing.  This is bad.  "
-                echo "          There may be a version conflict.  This script thinks"
                 echo "          it should be located in /usr/local/sbin"
                 echo "ERROR!   Aborting"
                 exit 1;
         fi
-
-
-
-################ Find out if the TARPN install process was fully executed.
-################ if not, then finish the installation or complain about it.
-        cd ~
-        rm -f update.s*
-        rm -f testfile*
-
-        if [ -f /usr/local/sbin/tarpn_start2.flag ];
-        then
-           echo -n
-        else
-           if [ -f /usr/local/sbin/tarpn_start2.sh ];
-           then
-              echo "##### TARPN startup incomplete.  I will run TARPN_START2 which will"
-              echo "##### complete the installation.   This will also reboot again."
-              sleep 1;
-              /usr/local/sbin/tarpn_start2.sh
-              exit 0;
-            else
-               echo "##### Error.  Incomplete installation.  Please start installation again by"
-               echo "#####         using a freshly formatted SDCARD and NOOBS.  Follow the."
-               echo "#####         Set Up raspberry PI to be a TARPN Node--Make SDCARD"
-               echo "#####         instructions on the builders page of tarpn.net."
-               echo "#####         If this has already failed, please send an email"
-               echo "#####         to the TARPN groups.io.  It is likely that either the"
-               echo "#####         script author made a mistake, or the software involved"
-               echo "#####         has changed in some way to make the scripts fail.  Thanks."
-               exit 1;
-            fi
-        fi
-
 ##### We made it this far.  Therefore we can save the flag which means we don't need to test and configure again.
    sudo touch /usr/local/etc/ag.dat
 fi

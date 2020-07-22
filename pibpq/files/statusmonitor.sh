@@ -19,8 +19,6 @@ check_process() {
 
 
 LOGFILE="/var/log/statusmonitor.log"
-SOURCE_URL="/usr/local/sbin/source_url.txt"
-NODE_INIT="/home/pi/node.ini"
 BAD_LINK_WAV="/home/pi/badlinksound.wav"
 ######################################################################################## VERSION INFO ####################################################################################################
 #### 11-22-2018 s101  Create to keep the check-bbs app running once in a while
@@ -34,32 +32,6 @@ date >> $LOGFILE
 uptime >> $LOGFILE
 
 
-###### Make sure we have a listed URL on the Internet for getting updates and configuration.  If not, wait 3 minutes and then exit
-if [ -f $SOURCE_URL ];
-then
-    echo -n "source URL is " >> $LOGFILE
-    cat $SOURCE_URL >> $LOGFILE
-else
-    echo -n "ERROR0: source URL file not found.  wait 1200 seconds starting @" >> $LOGFILE
-    date >> $LOGFILE
-    sleep 1200
-    echo -n "ERROR0: exit script @ " >> $LOGFILE
-    date >> $LOGFILE
-    exit 1
-fi
-
-###### Make sure we have a node.ini config file.  If not, wait 3 minutes and then exit
-if [ -f $NODE_INIT ];
-then
-    echo "got NODE_INIT" >> $LOGFILE
-else
-    echo -n "ERROR1: NODE INIT file not found.  wait 1200 seconds starting @" >> $LOGFILE
-    date >> $LOGFILE
-    sleep 1200
-    echo -n "ERROR1: exit script @ " >> $LOGFILE
-    date >> $LOGFILE
-    exit 1
-fi
 
 ####### Check Node background service.  If not enabled, don't do the statusmonitoring. 
 if grep -q "BACKGROUND:ON" /usr/local/etc/background.ini; then
@@ -74,7 +46,7 @@ else
 fi
 
 
-###### Check to see that th enode is actually running. 
+###### Check to see that the node is actually running. 
 check_process "linbpq"
 if [ $? -ge 1 ]; then
     echo "BPQ node is running"  >> $LOGFILE
@@ -138,7 +110,7 @@ do
    ### See if the operator wants a WAV file played if the log file has a bad link
    if [ -f $BAD_LINK_WAV ];
       then
-      if tail -1 /var/log/tarpn_linkstatus.log | grep -q "BAD"; then
+      if tail -1 /var/log/pibpq_linkstatus.log | grep -q "BAD"; then
          aplay $BAD_LINK_WAV
       fi
    fi

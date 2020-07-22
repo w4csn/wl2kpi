@@ -7,7 +7,6 @@ echo "------"                 >> $LOGFILE;
 echo "RUNBPQ: Start of runbpq script" >> $LOGFILE;
 
 ## Version
-echo "---- =RUNBPQ v1 =" #  --VERSION--#########
 echo "----  RUNBPQ  v1"      >> $LOGFILE;
 ##  Version B008 -- 2020-07-21 Initial Version
 
@@ -22,7 +21,7 @@ ls -lrat >> $LOGFILE;
 sleep 1;
 if [ -f bpq32.cfg ];
 then
-   echo "### launching bpq"      >> $LOGFILE;
+   echo "### launching linbpq"      >> $LOGFILE;
    chmod +x linbpq
    sudo setcap "CAP_NET_RAW=ep CAP_NET_BIND_SERVICE=ep" linbpq
    echo "#####"
