@@ -129,7 +129,7 @@ echo_sleep_countdown() {
 ### End Functios###
 
 
-####Main###
+#### Main ###
 echo "#### =PIBPQ v1 =" 
 ### v1 2020-07-221 -- Initial Version. 
 
@@ -158,45 +158,21 @@ then
         echo -n
 else
         echo "This script does not support the Linux version reported in /etc"
-        echo "In order to get the proper TARPN code, please refer to the web site"
-        echo "as if you were building a new system.   Please read the requirements"
-        echo "for the TARPN installation.   Quitting now."
-        sudo rm /usr/local/etc/ag.dat
+        echo "for the PIBPQ installation.   Quitting now."
         cat /etc/*-release
         sudo rm -f $TEMP_PARSE_FILE
         exit 1
 fi
 sudo rm -f $TEMP_PARSE_FILE
 
-
-################################# SKIP THIS IF WE"VE BEEN HERE BEFORE ####################
-
-if [ -f /usr/local/etc/ag.dat ];
-then
-   echo -n
-else
-   #echo "we have not run before"
-   #echo "... checking some stuff"
-
-        if [ -f /usr/local/sbin/pibpq ];
-        then
-                echo -n
-        else
-                echo "ERROR#0!  TARPN Installation failure.  Please send mail to the TARPN"
-                echo "          email reflector."
-                echo "ERROR!    Aborting"
-                exit 1;
-        fi
-
-############## This script should be called tarp and should be located in /usr/local/sbin.
+############## This script should be called pibpq and should be located in /usr/local/sbin.
 ############## If another script was run, then complain and exit.
         _name="/usr/local/sbin/pibpq"
         if [ $_name == $0 ];
         then
                 echo -n
         else
-                echo "ERROR#0!  TARPN Installation failure.  Please send mail to the TARPN"
-                echo "          email reflector."
+                echo "ERROR#0!  PIBPQ Installation failure."
                 echo "ERROR!    Aborting"
                 exit 1;
         fi
@@ -213,9 +189,7 @@ else
                 echo "ERROR!   Aborting"
                 exit 1;
         fi
-##### We made it this far.  Therefore we can save the flag which means we don't need to test and configure again.
-   sudo touch /usr/local/etc/ag.dat
-fi
+
 
 _is_raspberry_pi_3=0;
 ################ Check to see if this version of Raspberry PI is supported.
@@ -358,21 +332,21 @@ if [ $_version_ok -ne $_good_result ]; then
     sleep 1
     echo
     echo "you have an unexpected version of Raspberry PI"
-    echo "TARPN is not supported on this version, so far.  Send to TARPN newsgroup or KA2DEW"
+    echo "PIBPQ is not supported on this version, so far."
     rm -f $temp_parsing_file;
-    cat /proc/cpuinfo > $TARPNCOMMANDLOGFILE
-    echo -n "unexpected version of Raspberry PI" >> $TARPNCOMMANDLOGFILE
-    date >> $TARPNCOMMANDLOGFILE
+    cat /proc/cpuinfo > $LOGFILE
+    echo -n "unexpected version of Raspberry PI" >> $LOGFILE
+    date >> $LOGFILE
     exit 0
     fi
 sudo mv /home/pi/hardware.txt /usr/local/etc/hardware.txt
 
 rm -f $temp_parsing_file;
 
-echo -n "tarpn $1 $2 $3 $4           @" >> $TARPNCOMMANDLOGFILE
-date >> $TARPNCOMMANDLOGFILE
+echo -n "pibpq $1 $2 $3 $4           @" >> $LOGFILE
+date >> $LOGFILE
 
-############################################## TARPN SYSINFO
+############################################## PIBPQ SYSINFO
 if [ foo$1 = "foosysinfo" ];
 then
    echo -e "\n\n\n\n\n\n\n\nSYSINFO"
@@ -382,16 +356,16 @@ then
    echo
    echo
    echo -e "###########################################################"
-   echo "##### TARPN SERVICE############################"
+   echo "##### PIBPQ SERVICE############################"
    sudo systemctl status tarpn.service > ~/sysctl_status.txt
    cat ~/sysctl_status.txt
    rm ~/sysctl_status.txt
 
    echo -e "\n\n\n\n\n\n\n\n###########################################################"
 
-   echo "##### last 50 lines of /var/log/tarpn.log"
+   echo "##### last 50 lines of /var/log/pibpq.log"
    echo "#####"
-   tail -n50 /var/log/tarpn.log
+   tail -n50 /var/log/pibpq.log
 
 
    echo -e "\n\n\n\n\n\n\n\n###########################################################"
@@ -414,21 +388,19 @@ then
 
    echo -e "\n\n\n\n\n\n\n\n###########################################################"
 
-   echo "##### last 50 lines of /var/log/tarpn_pwrman.log"
+   echo "##### last 50 lines of /var/log/pibpq_pwrman.log"
    echo "#####"
-   tail -n50 /var/log/tarpn_pwrman.log
+   tail -n50 /var/log/pibpq_pwrman.log
 
    echo -e "\n\n\n\n\n\n\n\n###########################################################"
 
-   echo -e "###########################################################"
-   echo "##### TARPN HOME############################"
-
-   sudo systemctl status home.service > ~/sysctl_status.txt
-   cat ~/sysctl_status.txt
-   rm ~/sysctl_status.txt
-
-   echo -e "\n\n\n\n\n\n\n\n###########################################################"
-   tail -n100 /var/log/home.log
+   #echo -e "###########################################################"
+   #echo "##### TARPN HOME############################"
+   #sudo systemctl status home.service > ~/sysctl_status.txt
+   #cat ~/sysctl_status.txt
+   #rm ~/sysctl_status.txt
+   #echo -e "\n\n\n\n\n\n\n\n###########################################################"
+   #tail -n100 /var/log/home.log
 
    echo -e "\n\n\n\n###########################################################"
    echo "USB devices:"
@@ -475,10 +447,10 @@ then
    echo "/opt/vc/bin/vcgencmd measure_temp        get CPU temperature"
    /opt/vc/bin/vcgencmd measure_temp
 
-   echo -e "\n\n\n\n###########################################################"
-   echo "###############################################"
-   echo -n "source URL:"
-   cat /usr/local/sbin/source_url.txt
+   #echo -e "\n\n\n\n###########################################################"
+   #echo "###############################################"
+   #echo -n "source URL:"
+   #cat /usr/local/sbin/source_url.txt
 
    echo -e "\n\n\n\n###########################################################"
    echo "###############################################"
@@ -486,104 +458,50 @@ then
    uptime
    echo -n "Up Since: "
    uptime -s
-   echo -e "\n\n\n\n###########################################################"
-   echo "Check flags to see when updateapps and installs were run:"
-   ls -l /usr/local/sbin/*.flag > ~/temp.foo
-   echo -n "TARPN Install Started on:  "
-   grep tarpn_start1dl.flag ~/temp.foo | cut -b27-39
-   echo -n "TARPN Install Completed on:"
-   grep tarpn_start2.flag ~/temp.foo | cut -b27-39
-   echo -n "UpdateApps Last started:   "
-   if [ -f /usr/local/sbin/last_update_apps_start.flag ];
-   then
-       grep last_update_apps_start.flag ~/temp.foo | cut -b27-39
-   else
-       echo "NEVER"
-   fi
-   echo -n "UpdateApps Last completed: "
-   if [ -f /usr/local/sbin/last_update_apps_completed.flag ];
-   then
-       grep last_update_apps_completed.flag ~/temp.foo | cut -b27-39
-   else
-       echo "NEVER"
-   fi
-   rm ~/temp.foo
+   #echo -e "\n\n\n\n###########################################################"
+   #echo "Check flags to see when updateapps and installs were run:"
+   #ls -l /usr/local/sbin/*.flag > ~/temp.foo
+   #echo -n "TARPN Install Started on:  "
+   #grep tarpn_start1dl.flag ~/temp.foo | cut -b27-39
+   #echo -n "TARPN Install Completed on:"
+   #grep tarpn_start2.flag ~/temp.foo | cut -b27-39
+   #echo -n "UpdateApps Last started:   "
+   #if [ -f /usr/local/sbin/last_update_apps_start.flag ];
+   #then
+   #    grep last_update_apps_start.flag ~/temp.foo | cut -b27-39
+   #else
+   #    echo "NEVER"
+   #fi
+   #echo -n "UpdateApps Last completed: "
+   #if [ -f /usr/local/sbin/last_update_apps_completed.flag ];
+   #then
+   #    grep last_update_apps_completed.flag ~/temp.foo | cut -b27-39
+   #else
+   #    echo "NEVER"
+   #fi
+   #rm ~/temp.foo
    echo
    echo -e "\n\n\n\n###########################################################"
    echo "script versions:"
 
    grep "\--VERSION--" /usr/local/sbin/runbpq.sh | cut -d= -f2
 
-   grep "\--VERSION--" /usr/local/sbin/tarpn_start2.sh | cut -d= -f2
+   #grep "\--VERSION--" /usr/local/sbin/tarpn_start2.sh | cut -d= -f2
 
-   grep "\--VERSION--" /home/pi/bpq/make_local_cfg.sh | cut -d= -f2
+   #grep "\--VERSION--" /home/pi/bpq/make_local_cfg.sh | cut -d= -f2
 
-   grep "\--VERSION--" /home/pi/bpq/configure_node_ini.sh | cut -d= -f2
+   #grep "\--VERSION--" /home/pi/bpq/configure_node_ini.sh | cut -d= -f2
 
    echo -n "pi_shutdown_background.sh "
    grep "\--VERSION--" /usr/local/sbin/pi_shutdown_background.sh | cut -d- -f6
 
-   grep "tarpn_background" /usr/local/sbin/tarpn_background.sh | cut -d= -f2
+   grep "pibpq_background" /usr/local/sbin/pibpq_background.sh | cut -d= -f2
 
-   echo -n "home_background.sh "
-   grep "\--VERSION--" /usr/local/sbin/home_background.sh | cut -d- -f6
-
-   #grep getElementById /usr/local/sbin/home_web_app/index.html | grep About | cut -d\> -f4
-   /home/pi/bpq/linbpq -v
+      /home/pi/bpq/linbpq -v
    echo -e "\n\n\n\n###########################################################"
    ##dpkg -l | grep '^i'
   exit 0;
 fi
-
-############################################## TARPN UPDATE
-if [ foo$1 = "fooupdate" ];
-then
-   if [ foo$2 = "foo" ];
-   then
-      echo "#####"
-   else
-      sleep 0.5
-      echo "The UPDATE command has no parameters. "
-      sleep 1
-      echo "cancelling..."
-      sleep 1
-      exit 1
-   fi
-   echo "##### UPDATE --  get latest versions of scripts."
-   sudo rm -f /usr/local/sbin/update.sh*;
-
-   ### Establish a source URL for acquiring updated materials
-   if [ -f /usr/local/sbin/source_url.txt ];
-   then
-       echo -n;
-   else
-       echo "ERROR0: source URL file not found."
-       echo "ERROR0:"
-       echo "ERROR0: Aborting"
-       exit 1
-   fi
-   _source_url=$( cat /usr/local/sbin/source_url.txt );
-
-   echo -n "Source URL="
-   echo $_source_url
-
-   cd /home/pi;
-   wget -o /dev/null $_source_url/update.sh;
-   if [ -f update.sh ];
-   then
-      chmod +x update.sh;
-      sudo mv update.sh /usr/local/sbin/update.sh;
-      echo "#####         calling UPDATE.SH"
-      exec /usr/local/sbin/update.sh;
-
-   else
-      echo "#####  ERROR!  Something is wrong.  Do we have internet?"
-      echo "#####  ERROR!  connection?  We need that for update."
-      exit 1;
-   fi
-   exit 0
-fi
-
 
 
 ################ Check to make sure the tarpn service is running.
@@ -597,7 +515,7 @@ then
 else
    echo "ERROR!  tarpn.service is not running!"
    cat $TEMP_PARSE_FILE2;
-   echo "Do your command again or re-install TARPN"
+   echo "Do your command again or re-install PIBPQ"
    sudo rm -f $TEMP_PARSE_FILE2
    exit 1
 fi
@@ -609,7 +527,7 @@ sudo rm -f $TEMP_PARSE_FILE2
 ####### if = foo, then no argument.
 ####### if no argument, then give status of the node
 if [ foo$1 = "foo" ]; then
-   grep -e "=TARPN" /usr/local/sbin/tarpn | cut -d= -f2 | head -n1 >> $TARPNCOMMANDLOGFILE
+   grep -e "=PIBPQ" /usr/local/sbin/pibpq | cut -d= -f2 | head -n1 >> $LOGFILE
    grep "BACKGROUND:" /usr/local/etc/background.ini > $TEMP_PARSE_FILE2
 
    check_process "linbpq"
@@ -623,20 +541,6 @@ if [ foo$1 = "foo" ]; then
       echo "BPQ node background Service is (AUTO)"
    else
       echo "BPQ node background Service STOPPED"
-   fi
-
-
-   check_process "python"
-   if [ $? -ge 1 ]; then
-      echo -n "##### TARPN HOME is running.     "
-   else
-      echo -n "##### TARPN HOME is NOT running. "
-   fi
-
-  if grep -q "BACKGROUND:ON" /usr/local/etc/home.ini; then
-      echo "TARPN HOME is set to START"
-   else
-      echo "TARPN HOME is not enabled."
    fi
 
 
@@ -696,9 +600,8 @@ if [ $1 = "help" ]; then
    echo "            by the G8BPQ software.  Config can only be run if the node"
    echo "            is not running."
    echo
-   echo "home     -- Start, Stop, Bump, or Upgrade the HOME service. "
    echo
-   echo "test     -- Immediately read the node.ini file and launch BPQ node as user"
+   echo "test     -- Immediately launch BPQ node as user"
    echo "            application.  This is useful for seeing if there are any errors"
    echo "            in node.ini or the resulting configuration for the node."
    echo "            Always test the node if any changes are made before starting the"
@@ -775,18 +678,11 @@ if [ $1 = "help" ]; then
    echo "            are installed.  The features of this command will no doubt"
    echo "            be expanded as time goes on."
    echo
-   echo "update   -- This goes out to the Internet and pulls down the latest copies of"
-   echo "            the tarpn command program, and several functions called out by the"
-   echo "            tarpn command.  A side effect of this command is that the G8BPQ"
-   echo "            node is kicked.  If it is set to auto it will start up again."
-   echo "            If it was run using tarpn test, it will count-down and then quit."
    echo
    echo "updateapps- Go out to the Internet and pull down the latest versions of several"
    echo "            applications, drivers, and utilities.  This command takes a"
    echo "            while to execute."
    echo
-   echo "url      -- Specifies what web ULR the node executables and scripts will come"
-   echo "            from.  This is changed to select a new version of the node software."
    echo
    echo "reboot   -- Shuts down and restarts the Raspberry PI OS."
    echo "            Initiates file system check FSCK when booting."
@@ -795,12 +691,12 @@ if [ $1 = "help" ]; then
    echo
    echo "listen   -- Indefinitely displays INFO frame packets from specified port#."
    echo
-   echo "Terrestrial Amateur Radio Packet Node"
+   echo "PI LINBPQ Packet Node"
    exit 0
 fi;
 
 
-############################################## TARPN LAN
+############################################## PIBPQ LAN
 if [ $1 = "ip" ];
 then
    echo -n "My IP address is " 
@@ -813,29 +709,14 @@ then
    exit 0;
 fi
 
-############################################## TARPN CONFIG
-if [ $1 = "config" ];
-then
-   /home/pi/bpq/configure_node_ini.sh
-   exit 0;
-fi
-
-############################################## TARPN PS
+############################################## PIBPQ PS
 if [ $1 = "ps" ];
 then
    ps auf
    exit 0;
 fi
 
-############################################## TARPN URL
-if [ $1 = "url" ];
-then
-   ask_user_for_source_url
-   exit 0;
-fi
-
-
-############################################## TARPN I2C
+############################################## PIBPQ I2C
 if [ $1 = "i2c" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -886,7 +767,7 @@ then
 fi
 
 
-############################################## TARPN LINKTEST
+############################################## PIBPQ LINKTEST
 if [ $1 = "linktest" ];
 then
    if [ foo$2 = "foo" ];
@@ -925,7 +806,7 @@ then
    exit 0
 fi
 
-############################################## TARPN LISTEN
+############################################## PIBPQ LISTEN
 if [ $1 = "listen" ];
 then
    if [ foo$2 = "foo" ];
@@ -959,13 +840,13 @@ then
       exit 0
    else
       echo "ERROR!  LISTEN cannot be run without the G8BPQ node software."
-      echo "        Start the node in another window using TARPN TEST."
-      echo "        or run the node as a service using TARPN SERVICE START."
+      echo "        Start the node in another window using PIBPQ TEST."
+      echo "        or run the node as a service using PIBPQ SERVICE START."
       exit 1
    fi
 fi
 
-############################################## TARPN ASYNC-GET
+############################################## PIBPQ ASYNC-GET
 if [ $1 = "async-get" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -982,8 +863,7 @@ then
       /usr/local/sbin/pitnc_getparams 0 0 
    else
       echo "ERROR!  Critical utility is not found.  Please capture your terminal session."
-      echo "        and grap the contents of the tarpn sysinfo"
-      echo "        Email to Tadd, KA2DEW.  Thanks!"
+      echo "        and grap the contents of the PIBPQ sysinfo"
       exit 1
    fi
 
@@ -992,7 +872,7 @@ fi
 
 
 
-############################################## TARPN I2C-ASSIGN
+############################################## PIBPQ I2C-ASSIGN
 if [ $1 = "i2c-assign" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -1032,12 +912,12 @@ then
 
 
       if [ $_is_raspberry_pi_3 -ne 0 ]; then
-          echo -n "i2c-assign called from a Raspberry PI 3B or later     @" >> $TARPNCOMMANDLOGFILE
-          date >> $TARPNCOMMANDLOGFILE
+          echo -n "i2c-assign called from a Raspberry PI 3B or later     @" >> $LOGFILE
+          date >> $LOGFILE
 
          
           sleep 1
-          grep "dtoverlay" /boot/config.txt >> $TARPNCOMMANDLOGFILE
+          grep "dtoverlay" /boot/config.txt >> $LOGFILE
           if grep -q "dtoverlay=pi3-disable-bt" /boot/config.txt; then
               echo "##### it looks like we should have access to the async serial port.. Good."
               sudo /usr/local/sbin/pitnc_setparams /dev/serial0 0 7 9
@@ -1046,7 +926,7 @@ then
               sleep 4
               sudo i2cdetect -y 1
           else
-              echo "##### dtoverlay=pi3-disable-bt  not found in config.txt. "  >> $TARPNCOMMANDLOGFILE
+              echo "##### dtoverlay=pi3-disable-bt  not found in config.txt. "  >> $LOGFILE
               echo "##### This Raspberry PI was not set up for access to the TNC-PI async bus. "
               echo "##### dtoverlay=pi3-disable-bt  not found in config.txt.   "
               echo "#####"
@@ -1069,29 +949,29 @@ then
               sleep 2
               echo "#####"
               sleep 2
-              echo "##### Put it there. "  >> $TARPNCOMMANDLOGFILE
+              echo "##### Put it there. "  >> $LOGFILE
               sudo rm -f /home/pi/config.work
-              echo "Deleted /home/pi/config.work "  >> $TARPNCOMMANDLOGFILE
+              echo "Deleted /home/pi/config.work "  >> $LOGFILE
               sudo cp /boot/config.txt /home/pi/config.work
-              echo "copied config.txt to home/pi/config.work "  >> $TARPNCOMMANDLOGFILE
+              echo "copied config.txt to home/pi/config.work "  >> $LOGFILE
               sudo chown pi /home/pi/config.work
-              echo "changed ownership of home/pi/config.work to pi"  >> $TARPNCOMMANDLOGFILE
+              echo "changed ownership of home/pi/config.work to pi"  >> $LOGFILE
               echo "dtoverlay=pi3-disable-bt" >> config.work
-              echo "added dtoverlay..disable bluetooth to end of config.work"  >> $TARPNCOMMANDLOGFILE
+              echo "added dtoverlay..disable bluetooth to end of config.work"  >> $LOGFILE
               sudo chown root /home/pi/config.work
-              echo "changed ownership of /home/pi/config.work back to root"  >> $TARPNCOMMANDLOGFILE
+              echo "changed ownership of /home/pi/config.work back to root"  >> $LOGFILE
               sudo mv /home/pi/config.work /boot
-              echo "moved /home/pi/config.work to /boot"  >> $TARPNCOMMANDLOGFILE
+              echo "moved /home/pi/config.work to /boot"  >> $LOGFILE
               sudo mv /boot/config.work /boot/config.txt
-              echo "moved /boot/config.work to /boot/config.txt"  >> $TARPNCOMMANDLOGFILE
+              echo "moved /boot/config.work to /boot/config.txt"  >> $LOGFILE
               sudo rm -f /home/pi/config.work
-              echo "deleted /boot/config.work"  >> $TARPNCOMMANDLOGFILE
+              echo "deleted /boot/config.work"  >> $LOGFILE
               sudo systemctl disable hciuart
               sudo systemctl disable serial-getty@ttyAMA0.service
               echo "######"
               echo "######"
               echo "###### You'll need to do"
-              echo "###### tarpn reboot."
+              echo "###### pibpq reboot."
               echo "###### now."
               echo "######"
               echo "######"
@@ -1099,8 +979,8 @@ then
               exit 1
           fi
       fi
-      echo -n "tarpn i2c-assign doing a setparams to uart           @" >> $TARPNCOMMANDLOGFILE
-      date >> $TARPNCOMMANDLOGFILE
+      echo -n "tarpn i2c-assign doing a setparams to uart           @" >> $LOGFILE
+      date >> $LOGFILE
       echo "Assigning I2C address 9 to the ASYNC TNC-PI."
       echo "Unfortunately there isn't much error checking on this."
       echo "If you see retrying messages, then this isn't working."
@@ -1136,7 +1016,7 @@ then
 fi
 
 
-############################################## TARPN I2C-BEEP
+############################################## PIBPQ I2C-BEEP
 if [ $1 = "i2c-beep" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -1193,7 +1073,7 @@ then
 fi
 
 
-############################################## TARPN I2C-SET
+############################################## PIBPQ I2C-SET
 if [ $1 = "i2c-set" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -1293,15 +1173,13 @@ then
       echo "done"
    else
       echo "ERROR!  Critical utility is not found.  Please capture your terminal session."
-      echo "        and grap the contents of the tarpn sysinfo"
-      echo "        Email to Tadd, KA2DEW.  Thanks!"
       exit 1
    fi
 
    exit 0;
 fi
 
-############################################## TARPN I2C-GET
+############################################## PIBPQ I2C-GET
 if [ $1 = "i2c-get" ];
 then
    if [ -f /home/pi/pitnc_getparams ];
@@ -1345,8 +1223,6 @@ then
       echo "done"
    else
       echo "ERROR!  Critical utility is not found.  Please capture your terminal session."
-      echo "        and grap the contents of the tarpn sysinfo"
-      echo "        Email to Tadd, KA2DEW.  Thanks!"
       exit 1
    fi
 
@@ -1361,18 +1237,14 @@ fi
    # "            tarpn i2c-get 16   reads all from TNC-PI at i2c address 16 decimal."
 
 
-############################################## TARPN TX
+############################################## PIBPQ TX
 if [ $1 = "tx" ];
 then
    check_process "linbpq"
    if [ $? -ge 1 ]; then
-       if grep -q "NO-HOST-MODE" /home/pi/bpq/bpq32.cfg; then
-         echo "##### HOST mode is disabled.  Set local-op-callsign  in tarpn config."
-         exit 0
-       fi
        echo "#####  Use control ] and then quit<return> to exit."
        echo "#####  When this starts, just type your callsign and the telnet password"
-       echo "#####  listed in the tarpn config."
+       echo "#####  listed in the pibpq config."
        telnet 127.0.1.1 8010
            exit 1;
         else
@@ -1382,13 +1254,9 @@ then
 fi
 
 
-############################################## TARPN HOST
+############################################## PIBPQ HOST
 if [ $1 = "host" ];
 then
-   if grep -q "NO-HOST-MODE" /home/pi/bpq/bpq32.cfg; then
-     echo "##### HOST mode is disabled.  Set local-op-callsign using tarpn config"
-     exit 0
-   fi
    check_process "piminicom"
    if [ $? -ge 1 ]; then
       sudo killall piminicom
@@ -1404,9 +1272,7 @@ then
          cd ~
          exit 0;
       else
-          echo "#####  Error: Minicom is missing a critical script.  You will either have"
-          echo "#####         to hand rebuild the install, or start from a fresh OS install"
-          echo "#####         and tarpn-start."
+          echo "#####  Error: Minicom is missing a critical script."
           exit 1
       fi
    else
@@ -1415,55 +1281,7 @@ then
    fi
 fi
 
-
-############################################## TARPN UPDATEAPPS
-if [ $1 = "updateapps" ];
-then
-   echo "#####"
-   echo "##### UPDATEAPPS --  get latest versions of apps and utilities"
-
-   ### Establish a source URL for acquiring updated materials
-   if [ -f /usr/local/sbin/source_url.txt ];
-   then
-       echo -n;
-   else
-       echo "ERROR0: source URL file not found."
-       echo "ERROR0:"
-       echo "ERROR0: Aborting"
-       exit 1
-   fi
-   _source_url=$( cat /usr/local/sbin/source_url.txt );
-
-   echo -n "Source URL="
-   echo $_source_url
-
-   check_process "linbpq"
-   if [ $? -ge 1 ]; then
-      echo "##### ERROR  updateapps cannot run if the node is up."
-      echo "#####        Try  tarpn service stop"
-      exit 1;
-   fi
-
-   sudo rm -f /usr/local/sbin/updateapps.sh*;
-   cd /home/pi;
-   wget -o /dev/null $_source_url/updateapps.sh;
-   if [ -f updateapps.sh ];
-   then
-      chmod +x updateapps.sh;
-      sudo mv updateapps.sh /usr/local/sbin/updateapps.sh;
-      echo "#####         calling UPDATEAPPS.SH"
-      exec /usr/local/sbin/updateapps.sh;
-   else
-      echo "#####  ERROR!  Something is wrong.  Do we have internet?"
-      echo "#####  ERROR!  connection?  We need that for updateapps."
-      exit 1;
-   fi
-
-
-   exit 0
-fi
-
-############################################## TARPN DAEMON
+############################################## PIBPQ DAEMON
 if [ $1 = "daemon" ]; then
    echo "#####            This function starts a continuous 'TAIL' of the"
    echo "                 daemon log file.  This is equivalent of doing"
@@ -1473,7 +1291,7 @@ if [ $1 = "daemon" ]; then
    tail -f /var/log/daemon.log
    exit 0
 fi
-############################################## TARPN DAEMON
+############################################## PIBPQ DAEMON
 if [ $1 = "damon" ]; then
    echo "#####            This function starts a continuous 'TAIL' of the"
    echo "                 daemon log file.  This is equivalent of doing"
@@ -1483,7 +1301,7 @@ if [ $1 = "damon" ]; then
    tail -f /var/log/daemon.log
    exit 0
 fi
-############################################## TARPN DAEMON
+############################################## PIBPQ DAEMON
 if [ $1 = "damen" ]; then
    echo "#####            This function starts a continuous 'TAIL' of the"
    echo "                 daemon log file.  This is equivalent of doing"
@@ -1493,7 +1311,7 @@ if [ $1 = "damen" ]; then
    tail -f /var/log/daemon.log
    exit 0
 fi
-############################################## TARPN DAEMON
+############################################## PIBPQ DAEMON
 if [ $1 = "daemen" ]; then
    echo "#####            This function starts a continuous 'TAIL' of the"
    echo "                 daemon log file.  This is equivalent of doing"
@@ -1504,13 +1322,7 @@ if [ $1 = "daemen" ]; then
    exit 0
 fi
 
-
-
-
-
-
-
-############################################## TARPN CONSPY
+############################################## PIBPQ CONSPY
 if [ $1 = "conspy" ]; then
    echo "#####            After conspy starts, hit a few RETURNs to get"
    echo "                 down to the bottom of the text.  You may have to"
@@ -1525,7 +1337,7 @@ if [ $1 = "conspy" ]; then
    exit 0
 fi
 
-############################################## TARPN REBOOT
+############################################## PIBPQ REBOOT
 if [ $1 = "reboot" ]; then
    echo "#####"
    echo "##### REBOOT --  Shutting down, doing file system check and rebooting."
@@ -1535,7 +1347,7 @@ if [ $1 = "reboot" ]; then
    exit 0
 fi
 
-############################################## TARPN SHUTDOWN
+############################################## PIBPQ SHUTDOWN
 if [ $1 = "shutdown" ]; then
    echo "#####"
    echo "##### SHUTDOWN --  Shutting down, holding.  Do manual power cycle to restart."
@@ -1545,12 +1357,7 @@ if [ $1 = "shutdown" ]; then
    exit 0
 fi
 
-
-
-
-
-
-############################################## TARPN USB
+############################################## PIBPQ USB
 if [ $1 = "usb" ]; then
    echo "#####"
    echo "##### USB -- Show ttyUSB and ttyACM devices (NinoTNC) found in /dev"
@@ -1559,60 +1366,15 @@ if [ $1 = "usb" ]; then
    ls  /dev | grep -ettyACM -ettyUSB --color=never
    echo "#####   --- end"
    echo 
-   echo "#####  List of tty ports called out in node.ini"
-   echo "#####"
-   echo "#####  --- start"
-if grep -q "ninotnc_port05:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 5 is enabled"
-   grep portdev05: /home/pi/node.ini;
-fi
-if grep -q "ninotnc_port06:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 6 is enabled"
-   grep portdev06: /home/pi/node.ini;
-fi
-if grep -q "ninotnc_port07:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 7 is enabled"
-   grep portdev07: /home/pi/node.ini;
-fi
-if grep -q "ninotnc_port08:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 8 is enabled"
-   grep portdev08: /home/pi/node.ini;
-fi
-if grep -q "ninotnc_port09:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 9 is enabled"
-   grep portdev09: /home/pi/node.ini;
-fi
-if grep -q "ninotnc_port10:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 10 is enabled"
-   grep portdev10: /home/pi/node.ini;
-fi
-if grep -q "usb-port-11:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 11 is enabled"
-   grep portdev11: /home/pi/node.ini;
-fi
-if grep -q "usb-port-12:ENABLE" /home/pi/node.ini;
-then
-   #echo "port 12 is enabled"
-   grep portdev12: /home/pi/node.ini;
-fi
-   echo "#####   --- end"
-
    echo "#####"
    exit 0
 fi
 
-############################################## TARPN TEST
+############################################## PIBPQ TEST
 if [ $1 = "test" ]; then
    echo "#####"
    echo "##### TEST --  Starts BPQ node immediately and runs it in the foreground until"
-   echo "#####          a control C is issued in this window, or until a   tarpn stop"
+   echo "#####          a control C is issued in this window, or until a   pibpq stop"
    echo "#####          command is issued in another window."
    #### Check that linbpq is already running
    echo
@@ -1623,29 +1385,11 @@ if [ $1 = "test" ]; then
     else
        if grep -q "BACKGROUND:ON" /usr/local/etc/background.ini; then
           echo "##### ERROR!   BPQ node is already scheduled for to run as a service (automatic).  "
-          echo "#####       Before doing test you must do    tarpn service stop"
+          echo "#####       Before doing test you must do    pibpq service stop"
           exit 1
        fi
     fi
-    ### Grab the path saved in SOURCE URL for acquiring updated materials
-    if [ -f /usr/local/sbin/source_url.txt ];
-    then
-        echo "source url exists"
-    else
-       echo "### ERROR0: source URL file not found."
-       echo "### ERROR0: Aborting"
-       exit 1
-    fi
-
-
-    ######## Check to see if we have a node.ini configuration file -- if not, then abort the entire process
-    if [ -f "/home/pi/node.ini" ];
-    then
-        echo "node.ini exists."
-    else
-        echo "### ERROR: node.ini not found in /home/pi.  Please do tarpn config"
-        exit 1
-    fi;
+fi;
     echo "tarpn usb "
     echo "#####"
     echo "##### Show ttyUSB and ttyACM devices (NinoTNC) found in /dev"
@@ -1654,51 +1398,6 @@ if [ $1 = "test" ]; then
     ls  /dev | grep -ettyACM -ettyUSB --color=never
     echo "#####   ------------- end"
     echo 
-    echo "#####  List of tty ports called out in node.ini"
-    echo "#####"
-    echo "#####  ------------- start"
-    if grep -q "ninotnc_port05:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 5 is enabled"
-       grep portdev05: /home/pi/node.ini;
-    fi
-    if grep -q "ninotnc_port06:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 6 is enabled"
-       grep portdev06: /home/pi/node.ini;
-    fi
-    if grep -q "ninotnc_port07:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 7 is enabled"
-       grep portdev07: /home/pi/node.ini;
-    fi
-    if grep -q "ninotnc_port08:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 8 is enabled"
-       grep portdev08: /home/pi/node.ini;
-    fi
-    if grep -q "ninotnc_port09:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 9 is enabled"
-       grep portdev09: /home/pi/node.ini;
-    fi
-    if grep -q "ninotnc_port10:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 10 is enabled"
-       grep portdev10: /home/pi/node.ini;
-    fi
-    if grep -q "usb-port-11:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 11 is enabled"
-       grep portdev11: /home/pi/node.ini;
-    fi
-    if grep -q "usb-port-12:ENABLE" /home/pi/node.ini;
-    then
-       #echo "port 12 is enabled"
-       grep portdev12: /home/pi/node.ini;
-    fi
-    echo "#####   ------------- end"
-
     echo "##### "
     echo "##### Show I2C addresses"
     echo "Scanning for attached TNC-PIs"
@@ -1718,20 +1417,20 @@ fi
  #
  # "service  -- Check or control the operation of the G8BPQ node as a background"
  # "            service.  Use this with: start  or  stop"
- # "            tarpn service start    will write to INITTAB and will configure the"
+ # "            pibpq service start    will write to INITTAB and will configure the"
  # "                                   operating system to automatically launch"
  # "                                   G8BPQ node every time it comes up and will"
  # "                                   launch it again if it quits or is killed."
- # "            tarpn service stop     will delete G8BPQ from the INITTAB so the"
+ # "            pibpq service stop     will delete G8BPQ from the INITTAB so the"
  # "                                   next time the OS boots it will NOT start the"
  # "                                   node automatically."
-############################################## TARPN SERVICE
+############################################## PIBPQ SERVICE
 if [ $1 = "service" ]; then
    if [ foo$2 = "foo" ]; then
-      echo "##### tarpn service"
+      echo "##### pibpq service"
       echo "2 options are available"
-      echo "tarpn service start"
-      echo "tarpn service stop"
+      echo "pibpq service start"
+      echo "pibpq service stop"
       echo
       if grep -q "BACKGROUND:ON" /usr/local/etc/background.ini; then
         echo "#####  BPQ node is being run as a Service (AUTO)"
@@ -1749,17 +1448,12 @@ if [ $1 = "service" ]; then
 
 
    if [ $2 = "stop" ]; then
-        echo "#### tarpn service stop"
+        echo "#### pibpq service stop"
         sleep 1
         #### Check that linbpq is turned on in background.ini
         if grep -q "BACKGROUND:ON" /usr/local/etc/background.ini; then
              echo "##### BPQ node was scheduled for automatic.  Turning off..."
-             ### stop the TARPN-HOME python program
              sudo sed -i "s=BACKGROUND:ON=BACKGROUND:OFF=" /usr/local/etc/background.ini
-             if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-             then
-                sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-             fi
              echo "##### BPQ node background service mode has been turned off"
              sleep 5
              check_process "linbpq"
@@ -1784,7 +1478,7 @@ if [ $1 = "service" ]; then
    fi
 
    if [ $2 = "start" ]; then
-      echo "#### tarpn service start"
+      echo "#### pibpq service start"
       sleep 1
       ###Start LinBPQ on bootup and respawn it should it crash
       #BPQ:2345:respawn:/usr/local/sbin/runbpq.sh >/dev/tty2
@@ -1801,7 +1495,7 @@ if [ $1 = "service" ]; then
 
       echo "#####"
       echo "#####    Do not start BPQ as a service until"
-      echo "#####    you have tested it with tarpn test"
+      echo "#####    you have tested it with pibpq test"
       echo "#####"
       sleep 1
       check_process "linbpq"
@@ -1810,13 +1504,7 @@ if [ $1 = "service" ]; then
          if [ $? -ge 1 ]; then
             sudo killall piminicom
          fi
-         ### stop the TARPN-HOME python program
-         if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-         then
-            sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-         fi
-         sleep 5
-         #### now kill off linbpq
+         #### kill off linbpq
          sudo killall linbpq
          echo "##### KILL has been issued for BPQ node."
          check_process "python"
@@ -1830,14 +1518,8 @@ if [ $1 = "service" ]; then
       echo_sleep_countdown
       check_process "linbpq"
       if [ $? -ge 1 ]; then
-         ### stop the TARPN-HOME python program
-         if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-         then
-            sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-            sleep 5
-         fi
          sleep 5
-         #### now kill off linbpq
+         #### kill off linbpq
          check_process "piminicom"
          if [ $? -ge 1 ]; then
              sudo killall piminicom
@@ -1857,17 +1539,17 @@ if [ $1 = "service" ]; then
        exit 0;
    fi
    if [ $2 = "help" ]; then
-      echo "#### tarpn service help"
+      echo "#### pibpq service help"
       echo "2 options are available"
-      echo "tarpn service start"
-      echo "tarpn service stop"
+      echo "pibpq service start"
+      echo "pibpq service stop"
       exit 1;
    fi
       echo "##### ERROR"
-      echo "##### tarpn service   --- unknown option"
+      echo "##### pibpq service   --- unknown option"
       echo "2 options are available"
-      echo "tarpn service start"
-      echo "tarpn service stop"
+      echo "pibpq service start"
+      echo "pibpq service stop"
       exit 1;
    fi
 
@@ -1886,13 +1568,7 @@ if [ $1 = "kill" ]; then
    echo "#####          If the BPQ node is set to run automatically this"
    echo "#####          will cause it to terminate and reload, with the"
    echo "#####          side effect of reloading nodes.ini and rebuilding."
-
-   ### stop the TARPN-HOME python program
-   if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-   then
-      sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-      sleep 5
-   fi
+ 
    sleep 0.5
    echo "#####"
    sleep 1
@@ -1921,308 +1597,7 @@ if [ $1 = "kill" ]; then
         fi
 fi
 
- # "            tarpn home          get information about this TARPN-HOME"
- # "            tarpn home start    sets a token to begin running TARPN-HOME."
- # "            tarpn home stop     removes the run-token for TARPN-HOME."
- # "            tarpn home update   downloads the latest verision."
-############################################## TARPN-HOME
-if [ $1 = "home" ]; then
-   if [ -f /usr/local/sbin/home_background.sh ];
-   then
-      sudo touch /usr/local/sbin/testForHomeBackGround
-   else
-      echo "/usr/local/sbin/home_background.sh does not appear to exist!"
-      echo "please send this text to tarpn groups.io    We have a problem."
-      exit 1;
-   fi
-
-
-#   echo -ne "##### HOME web-app version: "
-#   grep getElementById /usr/local/sbin/home_web_app/index.html | grep About | cut -d\> -f4
-
-   ###echo "--- tarpn home command -- test for configparser"
-   sudo rm -f /home/pi/home_test_file.txt
-   dpkg-query -W -f='${binary:Package} ${Version}\t${Maintainer}\n' python-configparser | wc -l  > /home/pi/home_test_file.txt;
-   _count=$( cat /home/pi/home_test_file.txt );
-   sudo rm -f /home/pi/home_test_file.txt
-   _value=1
-   if [ $_value -ne $_count ]; then
-      echo "ERROR: tarpn home:"
-      echo "       tarpn home will not run without python-configparser library!"
-      echo "       run the command   tarpn updateapps    to fix this. "
-      echo "       updateapps may take a while. "
-      exit 1;
-   fi
-
-
-   ###echo "--- tarpn home command -- config parser ok. Check for home.ini file"
-
-   if [ -f /usr/local/etc/home.ini ];
-   then
-      if grep -q "BACKGROUND:ON" /usr/local/etc/home.ini; then
-         echo "#####  HOME is set to run in the background"
-       else
-         echo "#####  HOME is not set to run in the background"
-       fi
-   else
-        echo "##### home.ini did not exist.  Trying to create it"
-        rm -rF /home/pi/home.ini
-        echo "BACKGROUND:OFF" > /home/pi/home.ini
-        sudo mv /home/pi/home.ini /usr/local/etc/home.ini
-        cd /usr/local/etc
-        ls -lrat
-        sudo chown root home.ini
-        ls -lrat
-        #sudo echo "BACKGROUND:OFF" >> /usr/local/etc/home.ini
-        if [ -f /usr/local/etc/home.ini ];
-        then
-           echo "##### File is now created -- try your command agsin"
-        else
-           echo "##### File not created.  This is a problem."
-           exit 1;
-        fi
-   fi
-
-
-   ###echo "--- tarpn home command -- test for no command parameter"
-   if [ foo$2 = "foo" ]; then
-      echo "4 options are available"
-      echo "tarpn home start"
-      echo "tarpn home stop"
-      echo "tarpn home update"
-      echo "tarpn home bump  -- this causes a restart of the TARPN-HOME python application"
-      echo "home_background.sh is present"
-      exit 0
-   fi
-
-   ############################################## TARPN NC4FG
-   if [ $2 = "bump" ]; then
-      echo "#####"
-      echo "##### tarpn home bump --  try to stop the TARPN HOME app."
-      if grep -q "BACKGROUND:ON" /usr/local/etc/home.ini; then
-         echo "##### HOME is set to run in the background.  Turning off..."
-         sudo sed -i "s=BACKGROUND:ON=BACKGROUND:OFF=" /usr/local/etc/home.ini
-         echo "##### HOME background has been turned off"
-         echo "####"
-         echo "#### Telling the TARPN-HOME web-app to stop"
-         if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-         then
-            sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-            sleep 5
-         fi
-         check_process "python"
-         if [ $? -ge 1 ]; then
-             echo "#### python web-server app for TARPN-HOME is running"
-             echo "#### give it 5 seconds to stop"
-             sleep 5
-         fi
-         check_process "python"
-         if [ $? -ge 1 ]; then
-             echo "#### still running after 5 seconds.  Give it 5 more."
-             sleep 5
-         fi
-         check_process "python"
-         if [ $? -ge 1 ]; then
-             echo "#### still running after 10 seconds.  Give it 5 more."
-             sleep 5
-         fi
-         check_process "python"
-         if [ $? -ge 1 ]; then
-             echo "#### After 15 seconds, python web-server app for TARPN-HOME"
-             echo "#### is still running.  Do a KILLALL."
-             sudo killall python
-             sleep 1
-         fi
-         if [ $? -ge 1 ]; then
-             echo "#### After killall, it is STILL running.  I give up."
-             exit 1
-         fi
-         echo "#### Killall stopped it.  Now let it start up again." 
-         sudo sed -i "s=BACKGROUND:OFF=BACKGROUND:ON=" /usr/local/etc/home.ini
-         echo "####   it should start up again."
-      else
-         echo "##### HOME is not set to run automatically.  BUMP ignored."
-      fi
-      exit 1;
-   fi
-
-   ############################################## TARPN NC4FG
-   if [ $2 = "update" ]; then
-      echo "#####"
-      echo "##### tarpn home update --  get latest versions of TARPN-HOME program"
-
-      ### Establish a source URL for acquiring updated materials
-      if [ -f /usr/local/sbin/source_url.txt ];
-      then
-          echo -n;
-      else
-          echo "ERROR0: source URL file not found."
-          echo "ERROR0:"
-          echo "ERROR0: Aborting"
-          exit 1
-      fi
-      _source_url=$( cat /usr/local/sbin/source_url.txt );
-
-      echo -n "Source URL="
-      echo $_source_url
-
-      sudo rm -f /usr/local/sbin/nc4fg.sh*;
-      cd /home/pi;
-      wget -o /dev/null $_source_url/nc4fg.sh;
-      if [ -f nc4fg.sh ];
-      then
-         chmod +x nc4fg.sh;
-         sudo mv nc4fg.sh /usr/local/sbin/nc4fg.sh;
-         echo "#####         calling NC4FG.SH"
-         exec /usr/local/sbin/nc4fg.sh;
-      else
-         echo "#####  ERROR!  Something is wrong.  Do we have internet?"
-         echo "#####  ERROR!  connection?  We need that for nc4fg."
-         exit 1;
-      fi
-      exit 0;
-   fi
-
-   if [ $2 = "stop" ]; then
-      echo "#### tarpn home stop"
-      sleep 1
-  #### Check that linbpq is turned on in background.ini
-      if grep -q "BACKGROUND:ON" /usr/local/etc/home.ini; then
-         echo "##### HOME is set to run in the background.  Turning off..."
-         sudo sed -i "s=BACKGROUND:ON=BACKGROUND:OFF=" /usr/local/etc/home.ini
-         echo "##### HOME background has been turned off"
-      else
-         echo "ERROR1! TARPN-HOME was apparently not scheduled to run automatically"
-         echo "       Exit with no changes"
-      fi
-      if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-      then
-         sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-         sleep 5
-      fi
-      check_process "python"
-      if [ $? -ge 1 ]; then
-          sudo killall python
-      fi
-      exit 1;
-   fi
-
-
-   if [ $2 = "start" ]; then
-      echo "#### tarpn home start"
-      sleep 1
-
-  #### Check to make sure TARPN-HOME is NOT turned on already
-      if grep -q "BACKGROUND:ON" /usr/local/etc/home.ini; then
-         echo "##### ERROR!   TARPN-HOME is already scheduled to run.  "
-         sleep 1
-         exit 1
-      fi
-      rm -f $TEMP_PARSE_FILE2
-
-      echo "#####"
-      echo "#####    Starting TARPN-HOME"
-      echo "#####"
-      echo "##### HOME is not set to run in the background.  Turning on..."
-         sudo sed -i "s=BACKGROUND:OFF=BACKGROUND:ON=" /usr/local/etc/home.ini
-         echo "##### HOME background has been set to ON"
-         echo "##### If NODE is up, you can access HOME by setting"
-         echo "##### your web browser to your node IP:8085."
-      sleep 1
-          exit 0;
-   fi
-
-   ###echo "--- tarpn home command -- not start -- was it help?"
-   if [ $2 = "help" ]; then
-      echo "#### tarpn home help"
-      echo "4 options are available"
-      echo "tarpn home start"
-      echo "tarpn home stop"
-      echo "tarpn home update"
-      echo "tarpn home bump  -- if tarpn-home is set to run automatically, this restarts it"
-      exit 1;
-   fi
-   ###echo "--- tarpn home command -- unrecognized parameter?"
-   echo "##### ERROR"
-   echo "##### tarpn home   --- unknown option"
-   echo "4 options are available"
-   echo "tarpn home start"
-   echo "tarpn home stop"
-   echo "tarpn home update"
-   echo "tarpn home bump"
-   exit 1;
-fi
-
-
-
-
-if [ $1 = "stop" ]; then
-   echo "#####"
-   echo "#####   STOP??   Do you mean   tarpn service stop"
-   echo "#####            or maybe      tarpn home stop   ??"
-   echo "#####"
-   exit 1;
-   fi
-
-if [ $1 = "kill" ]; then
-   echo "#####"
-   echo "#####"
-   echo "##### KILL  -- Immediately do a KILL of the BPQ node process.  "
-   echo "#####          If the BPQ node is set to run automatically this"
-   echo "#####          will cause it to terminate and reload, with the"
-   echo "#####          side effect of reloading nodes.ini and rebuilding."
-   echo "#####"
-   sleep 1
-   #### Check that linbpq is turned on in inittab.
-   if grep -q "BACKGROUND:ON" /usr/local/etc/background.ini; then
-      echo "##### BPQ node is scheduled for automatic."
-   fi
-
-   check_process "linbpq"
-   if [ $? -ge 1 ]; then
-       check_process "piminicom"
-       if [ $? -ge 1 ]; then
-          sudo killall piminicom
-       fi
-       #### now kill off linbpq
-       sudo killall linbpq
-       ### stop the TARPN-HOME python program
-       if [ -f /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt ];
-       then
-          sudo rm -rf /usr/local/sbin/home_web_app/remove_me_to_stop_server.txt
-          sleep 5
-       fi
-       #### now kill off python
-       check_process "python"
-       if [ $? -ge 1 ]; then
-           sudo killall python
-       fi
-       echo "##### KILL has been issued for BPQ node and TARPN HOME."
-       exit 0;
-   else
-       echo "##### ERROR! BPQ node does not appear to be running."
-       rm -f ~/temp_resetbpq;
-       exit 1;
-   fi
-fi
-
-##########################
-if [ $1 = "stopauto" ]; then
-   echo "#####"
-   echo "#####"
-   echo "##### STOPAUTO  -- This command is replaced by   tarpn service stop"
-   exit 1;
-fi
-
-##########################
-if [ $1 = "makeauto" ]; then
-   echo "#####"
-   echo "#####"
-   echo "##### MAKEAUTO  -- This command is replaced by  tarpn service start."
-   exit 1;
-fi
-
-
+ 
 echo "##### ERROR!   argument not recognized. "
 echo "#####          Use tarpn help for a list of arguments."
 exit 0
